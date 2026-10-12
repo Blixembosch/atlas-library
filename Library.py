@@ -879,20 +879,63 @@ def get_pool_df(evening_filters=True):
 
 # V0.9 CHANGE: öneri havuzu = henüz hiç okunmamış (ve onay beklemeyen) kitaplar.
 # Okunmamış kitap kalmadıysa (veya kategoride kalmadıysa) tüm havuza düşer.
-# V1.2 CHANGE: kategori seçilmediyse, öncelikli seri (ör. Cin Ali) bir tur bitene kadar önerilir.
 def get_unread_pool(cat=None):
   df = get_pool_df()
   pending_ids = {l["book_id"] for l in rows("reading_log") if is_pending(l)}
-  explicit = bool(cat) and cat != "Tümü"
-  if explicit:
+  if cat and cat != "Tümü":
     df = df[df["category"] == cat]
-  else:
-    pri = priority_books(df)
-    pri_unread = pri[(pri["read_count"] == 0) & (~pri["id"].isin(pending_ids))]
-    if len(pri_unread) > 0:
-      return pri_unread
   unread = df[(df["read_count"] == 0) & (~df["id"].isin(pending_ids))]
   return unread if len(unread) > 0 else df
+
+
+# V1.2 CHANGE: öncelikli seri (ör. Cin Ali) tur bitene kadar GÜNDE EN FAZLA N kitap önerilir
+# (varsayılan 1); öneri listesinin geri kalanı diğer okunmamış kitaplardan gelir.
+def priority_per_day():
+  try:
+    return max(0, int(get_setting("priority_per_day", "1")))
+  except (TypeError, ValueError):
+    return 1
+
+
+def priority_quota_left():
+  """Bugün öncelikli seriden henüz okunmayan/onay beklemeyen kota."""
+  if priority_mode() == "off":
+    return 0
+  books = get_books_df()
+  books = books[books["is_school"] == 0]
+  ids = set(priority_books(books)["id"])
+  today = datetime.now(TZ).date().isoformat()
+  used = sum(
+      1 for l in rows("reading_log")
+      if l.get("book_id") in ids and (l.get("read_at") or "")[:10] == today
+  )
+  return max(priority_per_day() - used, 0)
+
+
+def recommend_books(n, cat=None):
+  """n kitap önerir. Kategori seçildiyse o kategoriden; değilse öncelikli seriden en fazla
+  günlük kota kadar + kalan yerler diğer okunmamış kitaplardan."""
+  if cat and cat != "Tümü":
+    pool = get_unread_pool(cat)
+    return sample_books(pool, n) if len(pool) > 0 else []
+  base = get_pool_df()
+  if len(base) == 0:
+    return []
+  pending_ids = {l["book_id"] for l in rows("reading_log") if is_pending(l)}
+  unread = base[(base["read_count"] == 0) & (~base["id"].isin(pending_ids))]
+  pri = priority_books(base)
+  pri_unread = pri[(pri["read_count"] == 0) & (~pri["id"].isin(pending_ids))]
+  if priority_mode() == "off" or len(pri_unread) == 0:
+    pool = unread if len(unread) > 0 else base
+    return sample_books(pool, n)
+  k = min(priority_quota_left(), n, len(pri_unread))
+  picks = sample_books(pri_unread, k) if k > 0 else []
+  rest = unread[~unread["id"].isin(pri_unread["id"])]
+  if len(rest) == 0:
+    rest = base[~base["id"].isin(pri_unread["id"])]
+  if n - k > 0 and len(rest) > 0:
+    picks += sample_books(rest, n - k)
+  return picks
 
 
 # V0.9 CHANGE: ekranda zaten gösterilen kitapları tekrar önermemeye çalışır
@@ -904,13 +947,13 @@ def sample_books(pool, n):
 
 
 def spin_wheel():
-  pool = get_unread_pool()
-  if len(pool) == 0:
-    return
   gs = goal_status()
   # V0.9 CHANGE: çark bugünün kalan hedefi kadar kitap önerir (hedef bittiyse 1 bonus)
   n = gs["remaining"] if gs["remaining"] > 0 else 1
-  st.session_state.current_featured_books = sample_books(pool, n)
+  picks = recommend_books(n)  # V1.2 CHANGE: günde en fazla 1 Cin Ali + diğerleri
+  if not picks:
+    return
+  st.session_state.current_featured_books = picks
   st.session_state.featured_note = (
       f"🎡 Çark bugün için {n} kitap seçti!"
       if gs["remaining"] > 0
@@ -919,18 +962,15 @@ def spin_wheel():
 
 
 def random_pick():
-  pool = get_unread_pool()
-  if len(pool) > 0:
-    st.session_state.current_featured_books = sample_books(pool, 4)
+  picks = recommend_books(4)  # V1.2 CHANGE
+  if picks:
+    st.session_state.current_featured_books = picks
     st.session_state.featured_note = ""
 
 
 def pick_category(cat):
   st.session_state.home_active_category = cat
-  pool = get_unread_pool(cat)
-  st.session_state.current_featured_books = (
-      sample_books(pool, 4) if len(pool) > 0 else []
-  )
+  st.session_state.current_featured_books = recommend_books(4, cat)  # V1.2 CHANGE
   st.session_state.featured_note = ""
 
 
@@ -1252,7 +1292,7 @@ if active_page == "Ana Sayfa":
   if _pp and _pp[0] < _pp[1]:
     st.caption(
         f"🔤 İlk okuma turu: {_pp[0]}/{_pp[1]} kitap okundu. Tur bitene kadar çark ve rastgele "
-        "öneriler bu kitaplardan gelir."
+        f"öneriler günde {priority_per_day()} kitap bu seriden, kalanı diğer kitaplardan seçer."
     )
   st.caption(
       "🌙 Saat 19:00’dan sonra uyku öncesi huzur için Aktivite"
@@ -1292,9 +1332,7 @@ if active_page == "Ana Sayfa":
   featured_books = st.session_state.current_featured_books
   if not featured_books or len(featured_books) == 0:
     # V0.9 CHANGE: ilk açılışta da önce okunmamış kitaplar, günlük hedef kadar
-    default_pool = get_unread_pool(active_cat_label)
-    if len(default_pool) > 0:
-      featured_books = sample_books(default_pool, min(gs["goal"], len(default_pool)))
+    featured_books = recommend_books(gs["goal"], active_cat_label)  # V1.2 CHANGE
     st.session_state.current_featured_books = featured_books
 
   if featured_books:
@@ -1686,7 +1724,12 @@ elif active_page == "Yönetici Paneli":
           format_func=lambda k: PRIORITY_MODES[k],
           key="priority_mode_sel",
       )
+      sel_quota = st.number_input(
+          "Tur bitene kadar günde en fazla kaç kitap bu seriden önerilsin?",
+          min_value=0, max_value=5, value=priority_per_day(), step=1, key="priority_quota_sel",
+      )
       if st.button("Ayarları Kaydet", key="save_rec_settings"):
+        set_setting("priority_per_day", int(sel_quota))
         set_setting("rec_languages", ",".join(sel_langs) if sel_langs else ",".join(DEFAULT_REC_LANGS))
         set_setting("evening_no_dutch", "1" if sel_evening else "0")
         set_setting("priority_mode", sel_mode)
