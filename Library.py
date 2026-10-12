@@ -204,7 +204,17 @@ ADMIN_CSS = """
 div.stButton>button,div.stFormSubmitButton>button{background:#1E293B;color:#fff!important;border-radius:8px;box-shadow:none;border:none;}
 div.stButton>button:hover{transform:none;background:#334155;}
 [data-testid="stMetric"]{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px 18px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
-.stTabs [data-baseweb="tab"]{font-weight:600;}
+/* V1.3 CHANGE: modern sekmeler. Üst seviye = hap (segment) görünümü, alt seviye = ince çizgi */
+.stTabs [data-baseweb="tab-list"]{gap:4px;background:#EEF2F7;padding:4px;border-radius:14px;border-bottom:none;}
+.stTabs [data-baseweb="tab"]{font-weight:600;height:auto;padding:8px 18px;border-radius:10px;color:#475569;}
+.stTabs [aria-selected="true"]{background:#fff;color:#4F7CFF!important;box-shadow:0 1px 4px rgba(15,23,42,.12);}
+.stTabs [data-baseweb="tab-highlight"],.stTabs [data-baseweb="tab-border"]{display:none;}
+.stTabs [data-baseweb="tab-panel"] [data-baseweb="tab-list"]{background:transparent;padding:0;border-radius:0;gap:2px;border-bottom:1px solid #e2e8f0;}
+.stTabs [data-baseweb="tab-panel"] [data-baseweb="tab"]{border-radius:8px 8px 0 0;padding:6px 14px;font-size:.88rem;font-weight:500;}
+.stTabs [data-baseweb="tab-panel"] [aria-selected="true"]{background:transparent;box-shadow:none;border-bottom:2px solid #4F7CFF;border-radius:0;font-weight:700;}
+.adm-pill{display:inline-block;border-radius:99px;padding:2px 12px;font-size:.8rem;font-weight:700;}
+.adm-pill.ok{background:#DCFCE7;color:#166534;}
+[data-testid="stMetric"]{padding:10px 14px!important;}
 .admin-head{border-bottom:1px solid #e2e8f0;margin-bottom:16px;padding-bottom:8px;}
 .admin-head h2{margin:0;font-size:1.4rem;color:#0F172A;}
 .admin-head p{margin:0;color:#64748b;font-size:.85rem;}
@@ -1048,7 +1058,7 @@ with st.sidebar:
           f'<div class="side-card"><span>📚 Toplam Kitap</span><b>{total_books}</b></div>',
           f'<div class="side-card"><span>🔥 Bu Ay ({current_month_name})</span><b>{month_read_count}</b></div>',
           f'<div class="side-card"><span>⭐ Bu Yıl ({current_year})</span><b>{year_read_count}</b></div>',
-          '<div class="side-ver">Atlas v1.2</div>',
+          '<div class="side-ver">Atlas v1.3</div>',
       ]),
       unsafe_allow_html=True,
   )
@@ -1661,22 +1671,30 @@ elif active_page == "Yönetici Paneli":
           _penalty("admin_pin_fails")
           st.error("PIN kodu hatalı!")
   else:
-    st.success("🔐 Yönetici Oturumu Açık")
-    if not APP_PASSWORD:
-      st.warning("🔓 Uygulama giriş şifresi tanımlı değil. Secrets içine APP_PASSWORD ekleyin.")
-    # V1.1 CHANGE: veri senkronu durumu (yalnızca yönetici görür)
+    # V1.3 CHANGE: sade başlık satırı: oturum + senkron durumu + çıkış tek satırda
     _sync_on, _sync_txt = cloud_db.describe()
-    try:
-      _secret_keys = ", ".join(sorted(str(k) for k in st.secrets.keys()))
-    except Exception:
-      _secret_keys = "okunamadı"
-    (st.success if _sync_on else st.warning)(
-        f"☁️ {_sync_txt}"
-        + ("" if _sync_on else f"\n\nSecrets'ta görünen anahtar adları: {_secret_keys}")
+    hdr_l, hdr_r = st.columns([6, 1])
+    hdr_l.markdown(
+        '🔐 **Yönetici oturumu açık** &nbsp; '
+        + (
+            '<span class="adm-pill ok">☁️ GitHub senkronu açık</span>'
+            if _sync_on else ""
+        ),
+        unsafe_allow_html=True,
     )
-    if st.button("Çıkış Yap"):
+    with hdr_r:
+      _logout = st.button("Çıkış Yap", key="admin_logout", use_container_width=True)
+    if _logout:
       st.session_state.admin_logged_in = False
       st.rerun()
+    if not _sync_on:
+      try:
+        _secret_keys = ", ".join(sorted(str(k) for k in st.secrets.keys()))
+      except Exception:
+        _secret_keys = "okunamadı"
+      st.warning(f"☁️ {_sync_txt}\n\nSecrets'ta görünen anahtar adları: {_secret_keys}")
+    if not APP_PASSWORD:
+      st.warning("🔓 Uygulama giriş şifresi tanımlı değil. Secrets içine APP_PASSWORD ekleyin.")
 
     missing_n = int((books_df["cover_url"].isna() | (books_df["cover_url"] == "")).sum())
     k1, k2, k3, k4, k5, k6 = st.columns(6)
@@ -1687,8 +1705,37 @@ elif active_page == "Yönetici Paneli":
     k5.metric("Kapağı Eksik", missing_n)
     k6.metric("Atlas'ın Kendi Okuduğu", own_counts["total"])  # V1.1 CHANGE
 
+    st.markdown("---")
+
+    # V1.3 CHANGE: 15 sekme yerine 5 grup; her grubun altında ilgili alt sekmeler.
+    # Tüm işlevler korunur, yalnızca yerleşim sadeleşti.
+    g_onay, g_kitap, g_kapak, g_duzen, g_sistem = st.tabs([
+        f"⏳ Onaylar ({len(pending_logs)})",
+        "📚 Kitaplar",
+        f"🎨 Kapaklar{f' ({missing_n})' if missing_n else ''}",
+        "🧭 Öneri & Düzen",
+        "⚙️ Sistem",
+    ])
+    with g_onay:
+      adm_tab_pending, adm_tab4 = st.tabs(["Bekleyenler", "↩ Son okumayı geri al"])
+    with g_kitap:
+      adm_tab1, adm_tab_school, adm_tab2, adm_tab_delete = st.tabs(
+          ["➕ Yeni kitap", "🏫 Okul kitabı", "✏️ Düzenle", "🗑️ Sil"]
+      )
+    with g_kapak:
+      adm_tab3, adm_missing_covers = st.tabs(["Kapak düzenle", f"Eksik görseller ({missing_n})"])
+    with g_duzen:
+      adm_tab_settings, adm_tab_catreview, adm_tab_lang, adm_tab_outgrown = st.tabs(
+          ["🎛️ Ayarlar", "🔎 Kategori incelemesi", "🌐 Dil & Tür", "🎒 Yaşı geçti"]
+      )
+    with g_sistem:
+      adm_tab5, adm_tab6, adm_tab8, adm_tab7 = st.tabs(
+          ["📊 Özet", "📝 Loglar", "💾 Yedek & Geri yükle", "🧹 Sıfırla"]
+      )
+
     # V0.9 CHANGE: günlük hedef ayarı
-    with st.expander("🎯 Günlük hedef ayarı"):
+    with adm_tab_settings:
+      st.markdown("##### 🎯 Günlük hedef")
       goal_input = st.number_input(
           "Günde kaç kitap?",
           min_value=1,
@@ -1703,7 +1750,9 @@ elif active_page == "Yönetici Paneli":
         st.rerun()
 
     # V1.2 CHANGE: öneri ayarları
-    with st.expander("🎛️ Öneri ayarları"):
+    with adm_tab_settings:
+      st.markdown("---")
+      st.markdown("##### 🎛️ Öneri ayarları")
       lang_opts = sorted({str(x) for x in books_df["language"].fillna("Türkçe") if str(x).strip()} | set(DEFAULT_REC_LANGS))
       sel_langs = st.multiselect(
           "Hangi dillerdeki kitaplar önerilsin?",
@@ -1735,42 +1784,6 @@ elif active_page == "Yönetici Paneli":
         set_setting("priority_mode", sel_mode)
         st.toast("Öneri ayarları kaydedildi.", icon="🎛️")
         st.rerun()
-
-    st.markdown("---")
-
-    (
-        adm_tab_pending,
-        adm_tab_school,
-        adm_tab1,
-        adm_tab2,
-        adm_tab3,
-        adm_missing_covers,
-        adm_tab4,
-        adm_tab5,
-        adm_tab6,
-        adm_tab7,
-        adm_tab8,
-        adm_tab_delete,
-        adm_tab_outgrown,
-        adm_tab_catreview,
-        adm_tab_lang,
-    ) = st.tabs([
-        f"⏳ Onay Bekleyenler ({len(pending_logs)})",  # V0.9 CHANGE
-        "🏫 Okul Kitabı Ekle",
-        "➕ Yeni Kitap",
-        "✏️ Düzenle",
-        "🎨 Kapaklar",
-        "🖼️ Eksik Görseller",
-        "↩ Geri Al",
-        "📊 Özet",
-        "📝 Loglar",
-        "🧹 Sıfırla",
-        "💾 DB Yedek",
-        "🗑️ Kitap Sil",
-        "🎒 Yaşı Geçti",
-        "🔎 Kategori İncelemesi",
-        "🌐 Dil & Tür",
-    ])
 
     # V0.9 CHANGE: çocuğun "Okudum" dediği kayıtlar burada onaylanır / reddedilir
     with adm_tab_pending:
