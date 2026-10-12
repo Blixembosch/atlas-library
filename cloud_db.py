@@ -237,9 +237,7 @@ class Sync:
       return "warn", self.message
     if self._dirty:
       return "saving", "☁️ Kaydediliyor…"
-    mins = int((self.clock() - self.last_ok) // 60)
-    when = "az önce" if mins < 1 else f"{mins} dk önce"
-    return "ok", f"☁️ Veriler kaydedildi · {_local(self.last_ok, '%H:%M')} ({when})"
+    return "ok", f"☁️ Veriler kaydedildi · {_local(self.last_ok, '%H:%M')}"
 
   # -- adımlar --
   def check(self):
