@@ -1,10 +1,13 @@
 from datetime import date, datetime, timedelta
+import hmac  # V1.1 CHANGE: şifre karşılaştırma
 import html
 import os
 from pathlib import Path
 import random
 import shutil  # V0.9 CHANGE: DB geri yükleme
 import sqlite3
+import sys
+import time
 import tempfile  # V0.9 CHANGE: DB geri yükleme
 import uuid
 from zoneinfo import ZoneInfo
@@ -16,8 +19,22 @@ st.set_page_config(
     page_title="Atlas'ın Sihirli Kütüphanesi", page_icon="🏰", layout="wide"
 )
 
-DB_NAME = "atlas_library.db"
 BASE = Path(__file__).parent
+sys.path.insert(0, str(BASE))
+import cloud_db  # V1.1 CHANGE: kalıcı veritabanı (GitHub data branch)
+
+# V1.1 CHANGE: Cloud diski geçici; veritabanı GitHub'daki `data` branch'inden kurulur ve
+# değişiklikler arka planda oraya yazılır. [github] db_sync = true yoksa yerel dosya kullanılır.
+try:
+  cloud_db.ensure_started()
+except cloud_db.CloudSyncUnavailable as _e:
+  st.error(
+      "☁️ Veritabanına şu an ulaşılamıyor, bu yüzden uygulama güvenlik için açılmadı "
+      "(eski veriyle açılırsa güncel verinin üzerine yazılabilir). Birkaç saniye sonra "
+      f"sayfayı yenileyin. Ayrıntı: {_e}"
+  )
+  st.stop()
+DB_NAME = str(cloud_db.active_path())
 SEED = BASE / "data" / "books.csv"
 TZ = ZoneInfo("Europe/Amsterdam")
 
@@ -60,6 +77,7 @@ section[data-testid="stSidebar"] div.stButton>button:hover{border-color:var(--pr
 .hero-right{flex:0 1 260px;min-width:200px;color:#fff;font-size:.85rem;}
 .hero-right .xp-track{height:8px;margin:4px 0 2px;}
 .hero-right .xp-text{color:#fff;opacity:.9;font-size:.75rem;}
+.hero-own{margin-top:6px;background:rgba(255,255,255,.18);border-radius:99px;padding:2px 10px;display:inline-block;font-size:.78rem;}
 .hero-goalline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:#fff;margin:2px 0;}
 .hero-goalline b{font-size:.95rem;}
 .hero-title{font-size:1.35rem;font-weight:900;color:#fff;margin-bottom:2px;}
@@ -135,6 +153,50 @@ div[class*="st-key-catON_"] button{border:2px solid #4F7CFF;}
 """,
     unsafe_allow_html=True,
 )
+
+
+# V1.1 CHANGE: şifreler koddan çıkarıldı; Streamlit Cloud > Settings > Secrets içinde durur:
+#   ADMIN_PIN = "..."      (yönetici paneli)
+#   APP_PASSWORD = "..."   (uygulama giriş şifresi)
+def _secret(key):
+  try:
+    v = st.secrets.get(key, "")
+  except Exception:
+    return ""
+  return "" if v is None else str(v)
+
+
+def _safe_eq(a, b):
+  return hmac.compare_digest(str(a).encode("utf-8"), str(b).encode("utf-8"))
+
+
+def _penalty(counter_key):
+  """Yanlış denemelerde artan bekleme (kaba kuvvet denemelerini yavaşlatır)."""
+  n = st.session_state.get(counter_key, 0) + 1
+  st.session_state[counter_key] = n
+  time.sleep(min(n, 5))
+
+
+APP_PASSWORD = _secret("APP_PASSWORD")
+if APP_PASSWORD and not st.session_state.get("app_unlocked", False):
+  _l1, _l2, _l3 = st.columns([1, 1.2, 1])
+  with _l2:
+    st.markdown(
+        '<div style="text-align:center;margin-top:12vh"><div style="font-size:4rem">🏰</div>'
+        '<h2>Atlas\'ın Sihirli Kütüphanesi</h2></div>',
+        unsafe_allow_html=True,
+    )
+    with st.form("app_login_form"):
+      _pw = st.text_input("Giriş şifresi", type="password", key="app_pw_input")
+      _go = st.form_submit_button("Giriş", use_container_width=True)
+    if _go:
+      if _safe_eq(_pw, APP_PASSWORD):
+        st.session_state.app_unlocked = True
+        st.rerun()
+      else:
+        _penalty("app_pw_fails")
+        st.error("Şifre hatalı.")
+  st.stop()
 
 ADMIN_CSS = """
 <style>
@@ -343,7 +405,7 @@ def db():
       " is_school INTEGER DEFAULT 0, is_outgrown INTEGER DEFAULT 0); "
       "CREATE TABLE IF NOT EXISTS reading_log(id INTEGER PRIMARY KEY"
       " AUTOINCREMENT,book_id TEXT,status TEXT,read_at TEXT,cycle INTEGER"
-      " DEFAULT 1); "
+      " DEFAULT 1, by_atlas INTEGER DEFAULT 0); "
       # V0.9 CHANGE: günlük hedef gibi ayarlar için
       "CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY, value TEXT);"
   )
@@ -356,6 +418,11 @@ def db():
     con.commit()
   if "is_school" not in columns:
     cursor.execute("ALTER TABLE books ADD COLUMN is_school INTEGER DEFAULT 0")
+    con.commit()
+  # V1.1 CHANGE: okumayı Atlas'ın kendisinin okuyup okumadığı (varsayılan: hayır)
+  cursor.execute("PRAGMA table_info(reading_log)")
+  if "by_atlas" not in [c["name"] for c in cursor.fetchall()]:
+    cursor.execute("ALTER TABLE reading_log ADD COLUMN by_atlas INTEGER DEFAULT 0")
     con.commit()
   # V1.0 CHANGE: yaşı geçen kitaplar için bayrak (öneri havuzundan çıkar)
   if "is_outgrown" not in columns:
@@ -633,13 +700,37 @@ def approved_logs(logs):
   return [l for l in logs if not is_pending(l)]
 
 
-def approve_reading(log_id):
+# V1.1 CHANGE: Atlas'ın kendi okudukları (onay sırasında yönetici işaretler; boşsa okumamış)
+def atlas_logs(logs):
+  return [l for l in approved_logs(logs) if int(l.get("by_atlas") or 0) == 1]
+
+
+def period_counts(logs):
+  now = datetime.now(TZ)
+  out = {"total": 0, "year": 0, "month": 0}
+  for l in logs:
+    out["total"] += 1
+    try:
+      dt = datetime.fromisoformat(l.get("read_at"))
+    except (TypeError, ValueError):
+      continue
+    if dt.year == now.year:
+      out["year"] += 1
+      if dt.month == now.month:
+        out["month"] += 1
+  return out
+
+
+def approve_reading(log_id, by_atlas=False):
   con = sqlite3.connect(DB_NAME)
   row = con.execute(
       "SELECT book_id, status FROM reading_log WHERE id = ?", (log_id,)
   ).fetchone()
   if row and row[1] == "pending":
-    con.execute("UPDATE reading_log SET status = 'read' WHERE id = ?", (log_id,))
+    con.execute(
+        "UPDATE reading_log SET status = 'read', by_atlas = ? WHERE id = ?",
+        (1 if by_atlas else 0, log_id),
+    )
     con.execute(
         "UPDATE books SET read_count = read_count + 1 WHERE id = ?", (row[0],)
     )
@@ -919,6 +1010,7 @@ def show_book_detail(b_id):
         selected_time = st.time_input(
             "Okunan Saat Seçin", value=datetime.now(TZ).time()
         )
+        manual_atlas = st.checkbox("👦 Atlas kendisi okudu", key=f"manual_atlas_{b_id}")  # V1.1 CHANGE
         if st.form_submit_button(
             "📝 Bu Tarihle Okundu Olarak Kaydet", use_container_width=True
         ):
@@ -928,9 +1020,9 @@ def show_book_detail(b_id):
               "UPDATE books SET read_count = read_count + 1 WHERE id = ?", (b_id,)
           )
           con.execute(
-              "INSERT INTO reading_log (book_id, status, read_at, cycle) VALUES"
-              " (?, 'read', ?, 1)",
-              (b_id, combined_dt),
+              "INSERT INTO reading_log (book_id, status, read_at, cycle, by_atlas) VALUES"
+              " (?, 'read', ?, 1, ?)",
+              (b_id, combined_dt, 1 if manual_atlas else 0),
           )
           con.commit()
           con.close()
@@ -987,6 +1079,20 @@ def book_card(b, prefix, cover_h=170):
     show_book_detail(b["id"])
 
 
+# V1.1 CHANGE: Atlas'ın kendi okuduğu okumalar ayrı sayaçta (toplam okumaya da dahildir)
+own_counts = period_counts(atlas_logs(rows("reading_log")))
+
+# V1.1 CHANGE: veri kaydı durumu ve kilitleme
+with st.sidebar:
+  _cs = cloud_db.status()
+  if _cs:
+    _lvl, _txt = _cs
+    (st.caption if _lvl != "warn" else st.warning)(_txt)
+  if APP_PASSWORD and st.button("🔒 Kilitle", key="lock_app", use_container_width=True):
+    st.session_state.app_unlocked = False
+    st.session_state.admin_logged_in = False
+    st.rerun()
+
 # --- SAYFA YÖNETİMİ ---
 active_page = st.session_state.nav_page
 
@@ -1028,7 +1134,9 @@ if active_page == "Ana Sayfa":
             f'<div class="hero-goalline"><span>🎯</span><div class="goal-slots">{slots}</div>',
             f'<b>{min(gs["done"], gs["goal"])}/{gs["goal"]}</b>{streak_html}</div>',
             f'<div class="goal-msg">{goal_msg}</div></div>',
-            f'<div class="hero-right"><b>⭐ Seviye {lvl["level"]}</b>{level_bar_html(lvl)}</div></div>',
+            f'<div class="hero-right"><b>⭐ Seviye {lvl["level"]}</b>{level_bar_html(lvl)}'
+            f'<div class="hero-own">👦 Kendi okuduklarım: <b>{own_counts["total"]}</b>'
+            f' · bu ay <b>{own_counts["month"]}</b></div></div></div>',
         ]),
         unsafe_allow_html=True,
     )
@@ -1094,14 +1202,14 @@ if active_page == "Ana Sayfa":
     bid = l.get("book_id")
     if bid in title_map and bid not in seen:
       seen.add(bid)
-      recent.append((title_map[bid], (l.get("read_at") or "")[:10], bid in school_ids))
+      recent.append((title_map[bid], (l.get("read_at") or "")[:10], bid in school_ids, int(l.get("by_atlas") or 0) == 1))
     if len(recent) == 5:
       break
   if recent:
     st.markdown(
         "".join(
-            f'<div class="recent-item"><div>{"🏫" if sch else "📖"} <b>{html.escape(str(t))}</b></div><span>{d}</span></div>'
-            for t, d, sch in recent
+            f'<div class="recent-item"><div>{"🏫" if sch else "📖"} <b>{html.escape(str(t))}</b>{" &nbsp;👦" if own else ""}</div><span>{d}</span></div>'
+            for t, d, sch, own in recent
         ),
         unsafe_allow_html=True,
     )
@@ -1255,6 +1363,18 @@ elif active_page == "Okuma Yolculuğu":
     lang_cols[2].markdown(lang_card_html("🌍 Diğer", lang_sum["Diğer"]), unsafe_allow_html=True)
   st.caption("Her okuma kaydı bir kez sayılır (aynı kitabı tekrar okumak da dahil).")
 
+  # V1.1 CHANGE: Atlas'ın kendi okudukları
+  st.markdown("---")
+  st.markdown("#### 👦 Kendi Başıma Okuduklarım")
+  own_c1, own_c2 = st.columns(2)
+  own_c1.markdown(lang_card_html("👦 Atlas okudu", own_counts), unsafe_allow_html=True)
+  own_share = own_counts["total"] / max(len(logs_data), 1)
+  own_c2.progress(
+      min(own_share, 1.0),
+      text=f"Tüm okumaların %{round(own_share * 100)}'ini kendim okudum",
+  )
+  own_c2.caption("Anne/baba onaylarken 'Atlas okudu' işaretlediği kitaplar. Bunlar toplam okumaya da dahildir.")
+
   st.markdown("---")
   st.markdown("#### 📊 Kategoriye Göre Okuma Dağılımı")
 
@@ -1332,6 +1452,36 @@ elif active_page == "Rozetler":
       )
 
 
+  # V1.1 CHANGE: Atlas'ın kendi okuduğu kitaplara göre rozetler
+  st.markdown("---")
+  st.markdown("#### 👦 Kendi Başına Okuyan Rozetleri")
+  own_total = own_counts["total"]
+  own_badges = [
+      ("📘", "Kendi Kitabım", "İlk kitabını kendin okudun!", 1),
+      ("🚀", "Bağımsız Okur", "5 kitabı kendin okudun!", 5),
+      ("🦸", "Okuma Kahramanı", "10 kitabı kendin okudun!", 10),
+      ("🏅", "Süper Okur", "25 kitabı kendin okudun!", 25),
+  ]
+  ob_cols = st.columns(4)
+  for idx, (icon, title, desc, req) in enumerate(own_badges):
+    with ob_cols[idx % 4]:
+      unlocked = own_total >= req
+      bg = "#eff6ff" if unlocked else "#f8fafc"
+      border_c = "#bfdbfe" if unlocked else "#e2e8f0"
+      status_txt = "✅ KAZANILDI!" if unlocked else f"🔒 {req} kendi okuma"
+      st.markdown(
+          f"""
+            <div style="background: {bg}; border: 1px solid {border_c}; border-radius: 20px; padding: 16px; text-align: center; margin-bottom: 15px;">
+                <div style="font-size: 2.8rem;">{icon}</div>
+                <h4 style="color: #1e293b; margin: 5px 0; font-weight: 800;">{title}</h4>
+                <p style="color: #64748b; font-size: 0.8rem; margin-bottom: 8px;">{desc}</p>
+                <b style="font-size: 0.8rem; color: {'#1d4ed8' if unlocked else '#94a3b8'};">{status_txt}</b>
+            </div>
+        """,
+          unsafe_allow_html=True,
+      )
+
+
 # 5. YÖNETİCİ PANELİ
 elif active_page == "Yönetici Paneli":
   st.markdown(ADMIN_CSS, unsafe_allow_html=True)
@@ -1342,37 +1492,42 @@ elif active_page == "Yönetici Paneli":
   )
 
   if not st.session_state.admin_logged_in:
-    try:
-      expected_pin = (
-          st.secrets.get("ADMIN_PIN", "1234")
-          if hasattr(st, "secrets")
-          else "1234"
+    # V1.1 CHANGE: PIN artık kodda yok; Streamlit Secrets içindeki ADMIN_PIN kullanılır.
+    expected_pin = _secret("ADMIN_PIN")
+    if not expected_pin:
+      st.error(
+          "Yönetici PIN'i tanımlı değil. Streamlit Cloud > Settings > Secrets içine "
+          '`ADMIN_PIN = "seçtiğin-pin"` satırını ekle (yerelde .streamlit/secrets.toml).'
       )
-    except Exception:
-      expected_pin = "1234"
-
-    entered_pin = st.text_input(
-        "Yönetici Giriş PIN Kodu", type="password", key="admin_pin_input"
-    )
-    if entered_pin == expected_pin:
-      st.session_state.admin_logged_in = True
-      st.success("Giriş başarılı! Yönetici paneli aktif.")
-      st.rerun()
-    elif entered_pin:
-      st.error("PIN kodu hatalı!")
+    else:
+      with st.form("admin_login_form"):
+        entered_pin = st.text_input(
+            "Yönetici Giriş PIN Kodu", type="password", key="admin_pin_input"
+        )
+        go_admin = st.form_submit_button("Giriş")
+      if go_admin:
+        if _safe_eq(entered_pin, expected_pin):
+          st.session_state.admin_logged_in = True
+          st.rerun()
+        else:
+          _penalty("admin_pin_fails")
+          st.error("PIN kodu hatalı!")
   else:
     st.success("🔐 Yönetici Oturumu Açık")
+    if not APP_PASSWORD:
+      st.warning("🔓 Uygulama giriş şifresi tanımlı değil. Secrets içine APP_PASSWORD ekleyin.")
     if st.button("Çıkış Yap"):
       st.session_state.admin_logged_in = False
       st.rerun()
 
     missing_n = int((books_df["cover_url"].isna() | (books_df["cover_url"] == "")).sum())
-    k1, k2, k3, k4, k5 = st.columns(5)
+    k1, k2, k3, k4, k5, k6 = st.columns(6)
     k1.metric("Toplam Kitap", total_books)
     k2.metric("Okuma Kaydı", len(logs_data))
     k3.metric("Bu Ay", month_read_count)
     k4.metric("Onay Bekleyen", len(pending_logs))  # V0.9 CHANGE
     k5.metric("Kapağı Eksik", missing_n)
+    k6.metric("Atlas'ın Kendi Okuduğu", own_counts["total"])  # V1.1 CHANGE
 
     # V0.9 CHANGE: günlük hedef ayarı
     with st.expander("🎯 Günlük hedef ayarı"):
@@ -1429,20 +1584,26 @@ elif active_page == "Yönetici Paneli":
       if not pending_logs:
         st.success("Bekleyen okuma yok 🎉")
       else:
+        st.caption(
+            "Her okuma için **Atlas okudu** kutusunu işaretleyebilirsiniz. İşaretlemezseniz "
+            "Atlas okumamış sayılır (anne/baba okudu). İkisi de toplam okumaya ve XP'ye eklenir; "
+            "Atlas'ın kendi okuduğu ayrı sayaçta görünür."
+        )
         if st.button("✅ Hepsini Onayla", key="approve_all", use_container_width=True):
           for pl in pending_logs:
-            approve_reading(pl["id"])
+            approve_reading(pl["id"], bool(st.session_state.get(f"atlas_chk_{pl['id']}", False)))
           st.toast(f"{len(pending_logs)} okuma onaylandı.", icon="✅")
           st.rerun()
         pend_titles = dict(zip(books_df["id"], books_df["title"]))
         for pl in sorted(pending_logs, key=lambda x: x.get("read_at") or ""):
-          pc1, pc2, pc3 = st.columns([5, 1.3, 1.3])
+          pc1, pc_a, pc2, pc3 = st.columns([4, 1.7, 1.2, 1.2])
           pc1.write(
               f"📖 **{pend_titles.get(pl['book_id'], '(silinmiş kitap)')}** —"
               f" {(pl.get('read_at') or '')[:16].replace('T', ' ')}"
           )
+          atlas_flag = pc_a.checkbox("👦 Atlas okudu", key=f"atlas_chk_{pl['id']}")
           if pc2.button("✅ Onayla", key=f"approve_{pl['id']}"):
-            approve_reading(pl["id"])
+            approve_reading(pl["id"], atlas_flag)
             st.rerun()
           if pc3.button("✖ Reddet", key=f"reject_{pl['id']}"):
             reject_reading(pl["id"])
@@ -1468,6 +1629,7 @@ elif active_page == "Yönetici Paneli":
         )
         sch_date = st.date_input("Okunduğu Tarih", value=datetime.now(TZ).date())
         sch_time = st.time_input("Okunduğu Saat", value=datetime.now(TZ).time())
+        sch_atlas = st.checkbox("👦 Atlas kendisi okudu", key="sch_atlas")  # V1.1 CHANGE
 
         if st.form_submit_button("Okul Kitabını Ekle"):
           final_title = quick_title.strip()
@@ -1523,8 +1685,8 @@ elif active_page == "Yönetici Paneli":
               )
             # V0.9 CHANGE: okuma kaydı da hemen oluşturulur -> aylık/yıllık sayıma girer
             con.execute(
-                "INSERT INTO reading_log (book_id, status, read_at, cycle) VALUES (?, 'read', ?, 1)",
-                (bid, read_iso),
+                "INSERT INTO reading_log (book_id, status, read_at, cycle, by_atlas) VALUES (?, 'read', ?, 1, ?)",
+                (bid, read_iso, 1 if sch_atlas else 0),
             )
             con.commit()
             con.close()
