@@ -24,12 +24,16 @@ import sqlite3
 import tempfile
 import threading
 import time
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 try:  # Streamlit olmadan da (test) import edilebilsin
   import requests
 except Exception:  # pragma: no cover
   requests = None
 
+# Tüm saatler (commit mesajı, çakışma dosyası, durum yazısı) uygulamayla aynı: Amsterdam
+TZ = ZoneInfo("Europe/Amsterdam")
 DB_FILE_NAME = "atlas_library.db"
 REPO_PATH = "db/atlas_library.sql"
 MAIN_TABLE = "books"
@@ -42,6 +46,10 @@ BACKOFF_STEPS = (5, 10, 20, 40, 60)
 
 class CloudSyncUnavailable(RuntimeError):
   """GitHub'a ulaşılamadı veya tohumlama doğrulanamadı; uygulama açılmamalı."""
+
+
+def _local(ts, fmt):
+  return datetime.fromtimestamp(ts, TZ).strftime(fmt)
 
 
 class Conflict(Exception):
@@ -231,7 +239,7 @@ class Sync:
       return "saving", "☁️ Kaydediliyor…"
     mins = int((self.clock() - self.last_ok) // 60)
     when = "az önce" if mins < 1 else f"{mins} dk önce"
-    return "ok", f"☁️ Veriler kaydedildi · {when}"
+    return "ok", f"☁️ Veriler kaydedildi · {_local(self.last_ok, '%H:%M')} ({when})"
 
   # -- adımlar --
   def check(self):
@@ -270,7 +278,7 @@ class Sync:
         self._dirty = False
         self.message = ""
         return True
-      msg = "db: kayıt güncellendi"
+      msg = f"db: kayıt güncellendi · {_local(self.clock(), '%Y-%m-%d %H:%M')} Amsterdam"
       try:
         self.sha = self.remote.put(text, msg, sha=self.sha)
       except Conflict:
@@ -291,7 +299,7 @@ class Sync:
       return True
 
   def _save_conflict(self, text):
-    stamp = time.strftime("%Y%m%d-%H%M%S", time.gmtime(self.clock()))
+    stamp = _local(self.clock(), "%Y%m%d-%H%M%S")  # Amsterdam saati
     path = f"db/conflicts/{stamp}.sql"
     try:
       self.remote.put(text, "db: çakışma kopyası", path=path)
@@ -301,7 +309,8 @@ class Sync:
     self.stopped = True
     self.message = (
         "⚠️ GitHub'daki veri başka yerden değişmiş; eşitleme durduruldu. "
-        f"Yerel kopya: {where}. Uygulamayı yeniden başlatmadan önce yöneticiye haber verin."
+        f"Yerel kopya: {where}. Streamlit'te Reboot app yapın (güncel veri GitHub'dan gelir); "
+        "eksik kayıt görürseniz yöneticiye haber verin."
     )
 
   def flush(self):
@@ -343,7 +352,7 @@ class Sync:
 # --------------------------------------------------------------------------
 # Süreç başına bir kez başlatma
 # --------------------------------------------------------------------------
-_STATE = {"sync": None, "path": None, "ready": False}
+_STATE = {"sync": None, "path": None, "ready": False, "reason": ""}
 _LOCK = threading.Lock()
 
 
@@ -374,7 +383,11 @@ def ensure_started(cfg=None, local_db=None, session=None, clock=time.time,
     local_db = Path(local_db) if local_db else _default_local_db()
 
     if not cfg.get("db_sync"):
-      _STATE.update(sync=None, path=local_db, ready=True)
+      reason = (
+          "Secrets içinde [github] bölümü bulunamadı" if not cfg
+          else "[github] içinde db_sync = true yok"
+      )
+      _STATE.update(sync=None, path=local_db, ready=True, reason=reason)
       return None
 
     for key in ("token", "repo"):
@@ -443,6 +456,14 @@ def status():
   """Kenar çubuğu için (düzey, metin) ya da yerel modda None."""
   s = _STATE["sync"]
   return s.status() if s else None
+
+
+def describe():
+  """Yönetici paneli için: senkron açık mı, değilse nedeni (değerleri değil, sadece durumu)."""
+  sy = _STATE["sync"]
+  if sy:
+    return True, f"GitHub senkronu AÇIK · repo: {sy.remote.repo} · branch: {sy.remote.branch}"
+  return False, f"GitHub senkronu KAPALI (yerel dosya) · neden: {_STATE.get('reason') or 'başlatılmadı'}"
 
 
 def reset_for_tests():
