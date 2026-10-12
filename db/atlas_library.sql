@@ -1,6 +1,6 @@
 BEGIN TRANSACTION;
 CREATE TABLE books(id TEXT PRIMARY KEY,title TEXT NOT NULL,publisher TEXT,pages INTEGER,author TEXT,isbn TEXT,age TEXT,category TEXT,subcategory TEXT,cover_url TEXT,language TEXT DEFAULT 'Türkçe',read_count INTEGER DEFAULT 0,created_at TEXT, is_school INTEGER DEFAULT 0, is_outgrown INTEGER DEFAULT 0);
-INSERT INTO "books" VALUES('BÇ-1','Almanca İlk Bin Sözcük','1001 Çiçek',64,'Heather Amery','','3+','Bilgi & Keşif','Dil & Kelime','https://covers.openlibrary.org/b/id/12229814-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
+INSERT INTO "books" VALUES('BÇ-1','Almanca İlk Bin Sözcük','1001 Çiçek',64,'Heather Amery','','3+','Bilgi & Keşif','Dil & Kelime','https://covers.openlibrary.org/b/id/12229814-L.jpg','German',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('BÇ-2','Ayıcık Kızgın Değil','1001 Çiçek',24,'Louison Nielman','','3+','Değerler','Duygular & Sosyal Gelişim','https://covers.openlibrary.org/b/id/12223527-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('BÇ-3','Büyük Bilim İnsanı Galileo','1001 Çiçek',40,'Gerry Bailey; Karen Foster','9786053410720','7+','Bilgi & Keşif','Bilim & Teknoloji','https://img.kitapyurdu.com/v1/getImage/fn:11645071/wi:500/wh:2afded8f9','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('BÇ-4','Denizler Altında Yirmi Bin Fersah','1001 Çiçek',24,'Jules Verne','9786053414292','3+','Hikaye','Doğa & Hayvanlar','https://cdn.kitapsec.com/image/urun/2018/01/04/d1515061959.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
@@ -148,7 +148,7 @@ INSERT INTO "books" VALUES('KKÇ-7','Mustafa Kemal Atatürk ve Sanat','Kırmız�
 INSERT INTO "books" VALUES('KKÇ-8','Mustafa Kemal Atatürk ve Sofra','Kırmızı Kedi Çocuk',28,'Yılmaz Özdil','','3+','Bilgi & Keşif','Tarih & Kültür','https://covers.openlibrary.org/b/id/12120815-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('KKÇ-9','Mustafa Kemal Atatürk ve Spor','Kırmızı Kedi Çocuk',28,'Yılmaz Özdil','','3+','Bilgi & Keşif','Tarih & Kültür','https://covers.openlibrary.org/b/id/12120816-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('KKÇ-10','Mustafa Kemal Atatürk ve Temizlik','Kırmızı Kedi Çocuk',28,'Yılmaz Özdil','','3+','Bilgi & Keşif','Tarih & Kültür','https://covers.openlibrary.org/b/id/12218727-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
-INSERT INTO "books" VALUES('KL-1','Kom, kleine slaapmuisjes, tijd om op te staan!','Kluitman',32,'Katja Alves','9789020614572','3+','Hikaye','Dil & Kelime','https://wscovers1.tlsecure.com/cover?action=img&source=88105&ean=9789020614572&size=l&title=Kom,%20kleine%20%20slaapmuisjes,%20tijd%20om%20op%20te%20staan!&format=img+&size=L','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
+INSERT INTO "books" VALUES('KL-1','Kom, kleine slaapmuisjes, tijd om op te staan!','Kluitman',32,'Katja Alves','9789020614572','3+','Hikaye','Dil & Kelime','https://wscovers1.tlsecure.com/cover?action=img&source=88105&ean=9789020614572&size=l&title=Kom,%20kleine%20%20slaapmuisjes,%20tijd%20om%20op%20te%20staan!&format=img+&size=L','Dutch',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('MÇ-1','Elmer ve Wilbur','Mikado Çocuk',32,'David McKee','','3+','Hikaye','Macera & Mizah','https://www.canyayinlari.com/productimages/121241/big/9786256377165_front_cover.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('NC-1','100 First Words Nature','Nosy Crow',16,'Edward Underwood; Sarah Carpenter','9781788009980','3+','Doğa & Hayvanlar','Dil & Kelime','https://m.media-amazon.com/images/I/51PIF-VR8TL._SX342_SY445_ML2_.jpg','English',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('RH-1','Ahtapot ile Sessiz Balina','RedHouse',32,'Gökçe Gökçeer','9786256998629','7+','Hikaye','Doğa & Hayvanlar','https://cdn.cimri.io/image/1200x1200/ahtapot-ile-sessiz-balina-gokce-gokceer_646805071.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
@@ -354,6 +354,7 @@ INSERT INTO "reading_log" VALUES(21,'TİB-17','read','2026-10-12T19:32:05',1,0);
 INSERT INTO "reading_log" VALUES(22,'TB-49','read','2026-10-12T19:32:26',1,0);
 CREATE TABLE recommendations(period_key TEXT PRIMARY KEY,book_ids TEXT,created_at TEXT,mode TEXT);
 CREATE TABLE settings(key TEXT PRIMARY KEY, value TEXT);
+INSERT INTO "settings" VALUES('lang_migrated_v1','1');
 DELETE FROM "sqlite_sequence";
 INSERT INTO "sqlite_sequence" VALUES('reading_log',22);
 COMMIT;
