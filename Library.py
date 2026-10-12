@@ -4,6 +4,7 @@ import html
 import os
 from pathlib import Path
 import random
+import re
 import shutil  # V0.9 CHANGE: DB geri yükleme
 import sqlite3
 import sys
@@ -327,6 +328,35 @@ CATEGORY_REVIEW = {
 }
 
 
+# V1.2 CHANGE: Hollandaca kitapları başlık/yayınevinden otomatik algıla (Türkçe ile karışmayan kelimeler)
+_NL_WORDS = {
+    "een", "het", "naar", "voor", "mijn", "groot", "zoek", "gaat", "verstopt",
+    "kleine", "kamperen", "camping", "slaapmuisjes", "beertjes", "tijd", "staan",
+    "school", "samen", "vrienden", "dapper", "willewete", "nijntje", "mama",
+    "opa", "oma", "niet", "jij", "drie", "olifant",
+}
+_NL_PUBLISHERS = {
+    "kluitman", "studio 100", "borre educatief", "de vuurvlinder", "zwijsen",
+    "lemniscaat", "gottmer", "querido", "clavis", "ploegsma", "leopold",
+    "mercis", "van holkema & warendorf", "deltas", "veltman",
+}
+
+
+def looks_dutch(title, publisher=""):
+  words = set(re.findall(r"[a-zçğıöşü']+", str(title).lower()))
+  return bool(words & _NL_WORDS) or str(publisher).strip().lower() in _NL_PUBLISHERS
+
+
+def foreign_learning_language(title):
+  """Yabancı dil öğreten kitaplar (Almanca / İngilizce) için dil adı, yoksa None."""
+  t = str(title).lower()
+  if "almanca" in t or "deutsch" in t:
+    return "German"
+  if "first words" in t or "i̇ngilizce" in t or "ingilizce" in t:
+    return "English"
+  return None
+
+
 def akilli_kategori_belirle(title, author, subcategory=""):
   # V1.0 CHANGE: anahtar kelime tahmini ("kg", "dünya", "sayı"... hepsini Bilim yapıyordu)
   # kaldırıldı; yalnızca Cin Ali serisi İlk Okuma olarak kalır.
@@ -468,6 +498,20 @@ def db():
         "UPDATE books SET language = 'Dutch' WHERE is_school = 1"
         " AND (language IS NULL OR language != 'Dutch')"
     )
+    con.commit()
+
+  # V1.2 CHANGE: bir kerelik dil düzeltmesi (sonradan yöneticinin değiştirdiği dil ezilmez)
+  if not con.execute("SELECT 1 FROM settings WHERE key = 'lang_migrated_v1'").fetchone():
+    for b in con.execute("SELECT id, title, publisher, language FROM books").fetchall():
+      new_lang = None
+      fl = foreign_learning_language(b["title"])
+      if fl:
+        new_lang = fl
+      elif (b["language"] in (None, "", "Türkçe")) and looks_dutch(b["title"], b["publisher"]):
+        new_lang = "Dutch"
+      if new_lang and new_lang != b["language"]:
+        con.execute("UPDATE books SET language = ? WHERE id = ?", (new_lang, b["id"]))
+    con.execute("INSERT OR REPLACE INTO settings (key, value) VALUES ('lang_migrated_v1', '1')")
     con.commit()
 
   # V1.0 CHANGE: kategori artık her açılışta ezilmez; yönetici seçimi kalıcıdır.
@@ -775,22 +819,78 @@ def goal_status():
   }
 
 
-def get_pool_df():
+# V1.2 CHANGE: öneri ayarları (yönetici panelinden değiştirilir)
+DEFAULT_REC_LANGS = ["Türkçe", "Dutch"]
+PRIORITY_MODES = {
+    "off": "Kapalı (öncelik yok)",
+    "ilk_okuma": "İlk Okuma kategorisi (Cin Ali serisi)",
+    "okuma_becerisi": "Okuma becerisi serileri (Cin Ali + İlk Okuma Kitabım Elif/Çağlar)",
+}
+
+
+def rec_languages():
+  raw = get_setting("rec_languages", ",".join(DEFAULT_REC_LANGS))
+  langs = [x.strip() for x in str(raw).split(",") if x.strip()]
+  return langs or DEFAULT_REC_LANGS
+
+
+def evening_no_dutch():
+  return str(get_setting("evening_no_dutch", "1")) == "1"
+
+
+def priority_mode():
+  m = str(get_setting("priority_mode", "ilk_okuma"))
+  return m if m in PRIORITY_MODES else "ilk_okuma"
+
+
+def priority_books(df):
+  mode = priority_mode()
+  if mode == "ilk_okuma":
+    return df[df["category"] == "İlk Okuma"]
+  if mode == "okuma_becerisi":
+    return df[df["subcategory"].astype(str) == "Okuma Becerisi"]
+  return df.iloc[0:0]
+
+
+def priority_progress():
+  """(okunan, toplam) öncelikli seri için; öncelik kapalıysa None."""
+  if priority_mode() == "off":
+    return None
+  df = get_pool_df(evening_filters=False)
+  pri = priority_books(df)
+  if len(pri) == 0:
+    return None
+  return int((pri["read_count"] > 0).sum()), len(pri)
+
+
+def get_pool_df(evening_filters=True):
   df = get_books_df()
   df = df[df["is_school"] == 0]  # V0.9 CHANGE: okul kitapları öneri havuzunda yok
   df = df[df["is_outgrown"] == 0]  # V1.0 CHANGE: yaşı geçen kitaplar asla önerilmez
-  if datetime.now(TZ).hour >= 19:
+  # V1.2 CHANGE: yalnızca seçili dillerdeki kitaplar önerilir (varsayılan Türkçe + Dutch;
+  # Almanca/İngilizce dil kitapları şimdilik önerilmez)
+  df = df[df["language"].fillna("Türkçe").isin(rec_languages())]
+  if evening_filters and datetime.now(TZ).hour >= 19:
     df = df[df["category"] != "Aktivite"]
+    if evening_no_dutch():  # V1.2 CHANGE: akşam okumalarında Dutch kitaplar önerilmez
+      df = df[df["language"].fillna("Türkçe") != "Dutch"]
   return df
 
 
 # V0.9 CHANGE: öneri havuzu = henüz hiç okunmamış (ve onay beklemeyen) kitaplar.
 # Okunmamış kitap kalmadıysa (veya kategoride kalmadıysa) tüm havuza düşer.
+# V1.2 CHANGE: kategori seçilmediyse, öncelikli seri (ör. Cin Ali) bir tur bitene kadar önerilir.
 def get_unread_pool(cat=None):
   df = get_pool_df()
-  if cat and cat != "Tümü":
-    df = df[df["category"] == cat]
   pending_ids = {l["book_id"] for l in rows("reading_log") if is_pending(l)}
+  explicit = bool(cat) and cat != "Tümü"
+  if explicit:
+    df = df[df["category"] == cat]
+  else:
+    pri = priority_books(df)
+    pri_unread = pri[(pri["read_count"] == 0) & (~pri["id"].isin(pending_ids))]
+    if len(pri_unread) > 0:
+      return pri_unread
   unread = df[(df["read_count"] == 0) & (~df["id"].isin(pending_ids))]
   return unread if len(unread) > 0 else df
 
@@ -908,7 +1008,7 @@ with st.sidebar:
           f'<div class="side-card"><span>📚 Toplam Kitap</span><b>{total_books}</b></div>',
           f'<div class="side-card"><span>🔥 Bu Ay ({current_month_name})</span><b>{month_read_count}</b></div>',
           f'<div class="side-card"><span>⭐ Bu Yıl ({current_year})</span><b>{year_read_count}</b></div>',
-          '<div class="side-ver">Atlas v1.0</div>',
+          '<div class="side-ver">Atlas v1.2</div>',
       ]),
       unsafe_allow_html=True,
   )
@@ -1148,7 +1248,17 @@ if active_page == "Ana Sayfa":
     hb1.button("🎡 Sihirli Çark", key="hero_wheel", on_click=spin_wheel, use_container_width=True)
     hb2.button("📚 Rastgele Öner", key="hero_random", on_click=random_pick, use_container_width=True)
 
-  st.caption("🌙 Saat 19:00’dan sonra uyku öncesi huzur için Aktivite haricindeki tüm kitaplar seçilir.")
+  _pp = priority_progress()
+  if _pp and _pp[0] < _pp[1]:
+    st.caption(
+        f"🔤 İlk okuma turu: {_pp[0]}/{_pp[1]} kitap okundu. Tur bitene kadar çark ve rastgele "
+        "öneriler bu kitaplardan gelir."
+    )
+  st.caption(
+      "🌙 Saat 19:00’dan sonra uyku öncesi huzur için Aktivite"
+      + (" ve Dutch kitaplar" if evening_no_dutch() else "")
+      + " haricindeki kitaplar seçilir."
+  )
 
   st.markdown("#### ✨ Keşfetmek İstediğin Dünyayı Seç")
   categories = [
@@ -1516,6 +1626,16 @@ elif active_page == "Yönetici Paneli":
     st.success("🔐 Yönetici Oturumu Açık")
     if not APP_PASSWORD:
       st.warning("🔓 Uygulama giriş şifresi tanımlı değil. Secrets içine APP_PASSWORD ekleyin.")
+    # V1.1 CHANGE: veri senkronu durumu (yalnızca yönetici görür)
+    _sync_on, _sync_txt = cloud_db.describe()
+    try:
+      _secret_keys = ", ".join(sorted(str(k) for k in st.secrets.keys()))
+    except Exception:
+      _secret_keys = "okunamadı"
+    (st.success if _sync_on else st.warning)(
+        f"☁️ {_sync_txt}"
+        + ("" if _sync_on else f"\n\nSecrets'ta görünen anahtar adları: {_secret_keys}")
+    )
     if st.button("Çıkış Yap"):
       st.session_state.admin_logged_in = False
       st.rerun()
@@ -1544,6 +1664,35 @@ elif active_page == "Yönetici Paneli":
         st.toast(f"Günlük hedef {int(goal_input)} kitap olarak kaydedildi.", icon="🎯")
         st.rerun()
 
+    # V1.2 CHANGE: öneri ayarları
+    with st.expander("🎛️ Öneri ayarları"):
+      lang_opts = sorted({str(x) for x in books_df["language"].fillna("Türkçe") if str(x).strip()} | set(DEFAULT_REC_LANGS))
+      sel_langs = st.multiselect(
+          "Hangi dillerdeki kitaplar önerilsin?",
+          options=lang_opts,
+          default=[x for x in rec_languages() if x in lang_opts],
+          key="rec_langs_sel",
+      )
+      sel_evening = st.checkbox(
+          "Akşam (19:00 sonrası) Dutch kitaplar önerilmesin",
+          value=evening_no_dutch(),
+          key="evening_no_dutch_chk",
+      )
+      mode_keys = list(PRIORITY_MODES.keys())
+      sel_mode = st.selectbox(
+          "Bir tur bitene kadar önce önerilecek seri",
+          mode_keys,
+          index=mode_keys.index(priority_mode()),
+          format_func=lambda k: PRIORITY_MODES[k],
+          key="priority_mode_sel",
+      )
+      if st.button("Ayarları Kaydet", key="save_rec_settings"):
+        set_setting("rec_languages", ",".join(sel_langs) if sel_langs else ",".join(DEFAULT_REC_LANGS))
+        set_setting("evening_no_dutch", "1" if sel_evening else "0")
+        set_setting("priority_mode", sel_mode)
+        st.toast("Öneri ayarları kaydedildi.", icon="🎛️")
+        st.rerun()
+
     st.markdown("---")
 
     (
@@ -1561,6 +1710,7 @@ elif active_page == "Yönetici Paneli":
         adm_tab_delete,
         adm_tab_outgrown,
         adm_tab_catreview,
+        adm_tab_lang,
     ) = st.tabs([
         f"⏳ Onay Bekleyenler ({len(pending_logs)})",  # V0.9 CHANGE
         "🏫 Okul Kitabı Ekle",
@@ -1576,6 +1726,7 @@ elif active_page == "Yönetici Paneli":
         "🗑️ Kitap Sil",
         "🎒 Yaşı Geçti",
         "🔎 Kategori İncelemesi",
+        "🌐 Dil & Tür",
     ])
 
     # V0.9 CHANGE: çocuğun "Okudum" dediği kayıtlar burada onaylanır / reddedilir
@@ -1714,6 +1865,13 @@ elif active_page == "Yönetici Paneli":
         if st.form_submit_button("Kütüphaneye Kaydet"):
           if new_t:
             bid = "MAN-" + uuid.uuid4().hex[:8].upper()
+            # V1.2 CHANGE: başlık/yayınevi Hollandaca görünüyorsa ve dil boş/Türkçe bırakıldıysa Dutch ata
+            if new_lang.strip().lower() in ("", "türkçe", "turkce") and looks_dutch(new_t, new_p):
+              new_lang = "Dutch"
+              st.toast("Kitap Hollandaca göründüğü için dili Dutch olarak atandı.", icon="🇳🇱")
+            _fl = foreign_learning_language(new_t)
+            if _fl and new_lang.strip().lower() in ("", "türkçe", "turkce"):
+              new_lang = _fl
             con = sqlite3.connect(DB_NAME)
             con.execute(
                 "INSERT INTO books (id, title, author, publisher, isbn, category, age, pages, language, cover_url, read_count, created_at, is_school) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, 0)",
@@ -2107,6 +2265,34 @@ elif active_page == "Yönetici Paneli":
           con.close()
           st.success(f"{len(view)} kitabın kategorisi güncellendi.")
           st.rerun()
+
+    # V1.2 CHANGE: dil x tür dağılımı ve her kitabın önerilip önerilmediği
+    with adm_tab_lang:
+      st.subheader("🌐 Dil ve Tür Listesi")
+      lt = home_df.copy()
+      lt["language"] = lt["language"].fillna("Türkçe")
+      recl = set(rec_languages())
+      lt["Önerilir mi"] = lt.apply(
+          lambda r: "Hayır (yaşı geçti)" if int(r["is_outgrown"]) == 1
+          else ("Hayır (dil kapalı)" if r["language"] not in recl else "Evet"),
+          axis=1,
+      )
+      st.caption("Önerilecek diller: " + ", ".join(sorted(recl)) + "  ·  Değiştirmek için yukarıdaki '🎛️ Öneri ayarları'.")
+      st.markdown("**Dil × Tür (kitap sayısı)**")
+      pivot = pd.crosstab(lt["language"], lt["category"], margins=True, margins_name="Toplam")
+      st.dataframe(pivot, use_container_width=True)
+      lang_pick = st.selectbox("Dile göre listele", ["Tümü"] + sorted(lt["language"].unique()), key="lang_tab_pick")
+      show = lt if lang_pick == "Tümü" else lt[lt["language"] == lang_pick]
+      show = show.sort_values(["language", "category", "title"])[["id", "title", "language", "category", "subcategory", "age", "Önerilir mi"]]
+      show.columns = ["ID", "Kitap", "Dil", "Tür", "Alt tür", "Yaş", "Önerilir mi"]
+      st.dataframe(show, use_container_width=True, hide_index=True)
+      st.download_button(
+          "⬇️ Listeyi CSV indir",
+          data=show.to_csv(index=False).encode("utf-8-sig"),
+          file_name="kitap_listesi_dil_tur.csv",
+          mime="text/csv",
+          key="lang_tab_csv",
+      )
 
     with adm_tab_delete:
       st.subheader("🗑️ Kütüphaneden Kitap Sil")
