@@ -204,14 +204,14 @@ ADMIN_CSS = """
 div.stButton>button,div.stFormSubmitButton>button{background:#1E293B;color:#fff!important;border-radius:8px;box-shadow:none;border:none;}
 div.stButton>button:hover{transform:none;background:#334155;}
 [data-testid="stMetric"]{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px 18px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
-/* V1.3 CHANGE: modern sekmeler. Üst seviye = hap (segment) görünümü, alt seviye = ince çizgi */
-.stTabs [data-baseweb="tab-list"]{gap:4px;background:#EEF2F7;padding:4px;border-radius:14px;border-bottom:none;}
-.stTabs [data-baseweb="tab"]{font-weight:600;height:auto;padding:8px 18px;border-radius:10px;color:#475569;}
-.stTabs [aria-selected="true"]{background:#fff;color:#4F7CFF!important;box-shadow:0 1px 4px rgba(15,23,42,.12);}
-.stTabs [data-baseweb="tab-highlight"],.stTabs [data-baseweb="tab-border"]{display:none;}
-.stTabs [data-baseweb="tab-panel"] [data-baseweb="tab-list"]{background:transparent;padding:0;border-radius:0;gap:2px;border-bottom:1px solid #e2e8f0;}
-.stTabs [data-baseweb="tab-panel"] [data-baseweb="tab"]{border-radius:8px 8px 0 0;padding:6px 14px;font-size:.88rem;font-weight:500;}
-.stTabs [data-baseweb="tab-panel"] [aria-selected="true"]{background:transparent;box-shadow:none;border-bottom:2px solid #4F7CFF;border-radius:0;font-weight:700;}
+/* V1.3 CHANGE: modern sekmeler. Seçili sekme = yumuşak dolgu (çizgi/yeşil vurgu yok) */
+[data-baseweb="tab-highlight"],[data-baseweb="tab-border"]{display:none!important;height:0!important;background:transparent!important;}
+[data-baseweb="tab-list"]{gap:4px;background:#EEF2F7;padding:4px;border-radius:14px;border-bottom:none!important;}
+[data-baseweb="tab"]{font-weight:600;height:auto;padding:8px 18px;border-radius:10px;color:#64748B;border-bottom:none!important;}
+[data-baseweb="tab"][aria-selected="true"]{background:#E3EAFF!important;color:#3B5BDB!important;box-shadow:none!important;border-bottom:none!important;}
+[data-baseweb="tab-panel"] [data-baseweb="tab-list"]{background:transparent;padding:0;border-radius:0;gap:6px;}
+[data-baseweb="tab-panel"] [data-baseweb="tab"]{border-radius:99px;padding:5px 14px;font-size:.88rem;font-weight:500;background:#F4F6FA;}
+[data-baseweb="tab-panel"] [data-baseweb="tab"][aria-selected="true"]{background:#DCE5FF!important;color:#3B5BDB!important;font-weight:700;}
 .adm-pill{display:inline-block;border-radius:99px;padding:2px 12px;font-size:.8rem;font-weight:700;}
 .adm-pill.ok{background:#DCFCE7;color:#166534;}
 [data-testid="stMetric"]{padding:10px 14px!important;}
