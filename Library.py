@@ -230,23 +230,15 @@ CATEGORIES = [
 ]
 
 
-# V1.3 CHANGE: ücretsiz (internetsiz) otomatik kategori taraması: alt tür, anahtar kelime ve
-# seri tutarlılığına bakar. İlk Okuma kategorisine/kategorisinden asla dokunmaz (öncelikli seri).
-_SCAN_SUB = {
-    "Bilim & Teknoloji": "Bilim", "Matematik": "Bilim",
-    "Doğa & Hayvanlar": "Doğa & Hayvanlar", "Duygular & Sosyal Gelişim": "Değerler",
-    "Macera & Mizah": "Hikaye", "Meslekler": "Bilgi & Keşif", "Tarih & Kültür": "Bilgi & Keşif",
-    "Biyografi": "Bilgi & Keşif", "Genel Bilgi": "Bilgi & Keşif",
-    "Sanat & Yaratıcılık": "Bilgi & Keşif", "Finansal Okuryazarlık": "Bilgi & Keşif",
-    "Sağlık & Günlük Yaşam": "Bilgi & Keşif", "Bulmaca & Zekâ Oyunları": "Aktivite",
-    "Satranç": "Aktivite", "Yoga & Hareket": "Aktivite",
-}
+# V1.3 CHANGE: ücretsiz (internetsiz) otomatik kategori taraması: anahtar kelime ve seri tutarlılığına
+# bakar (alt tür verisi güvenilir olmadığı için kullanılmaz). İlk Okuma kategorisine/kategorisinden asla dokunmaz (öncelikli seri).
 _SCAN_KW_STRONG = ["satranç", "yoga", "boyama", "çıkartma", "bulmaca", "etkinlik", "labirent", "hamur"]
+# Sıra önemli: önce Bilim (bilim + teknik; 'araba/tren' gibi sözcükler hikâyelerde de geçtiği için yok), sonra Doğa, sonra Değerler.
 _SCAN_KW = {
-    "Doğa & Hayvanlar": ["hayvan", "orman", "kuş", "kedi", "köpek", "balık", "deniz", "arı", "kelebek",
-                         "dinozor", "ağaç", "böcek", "penguen", "doğa"],
-    "Bilim": ["uzay", "gezegen", "bilim", "deney", "robot", "atom", "elektrik", "enerji", "teknoloji",
-              "fizik", "kimya", "geometri"],
+    "Bilim": ["uzay", "gezegen", "roket", "bilim", "deney", "robot", "atom", "elektrik", "enerji", "teknoloji",
+              "fizik", "kimya", "geometri", "bilgisayar", "mühendis", "icat"],
+    "Doğa & Hayvanlar": ["hayvan", "orman", "kuş", "kedi", "köpek", "balık", "kelebek", "dinozor",
+                         "ağaç", "böcek", "penguen", "doğa"],
     "Değerler": ["sevgi", "dostluk", "paylaş", "cesaret", "saygı", "dürüst", "nezaket", "kıskanç", "öfke"],
 }
 _SCAN_RANK = {"yüksek": 3, "orta": 2, "düşük": 1}
@@ -278,18 +270,16 @@ def auto_category_scan(df):
     t = _tr_lower(r["title"])
     if any(w in t for w in _SCAN_KW_STRONG):
       add(r, "Aktivite", "Başlıkta etkinlik/oyun sözcüğü var", "yüksek")
-    sub = _SCAN_SUB.get(str(r["subcategory"]))
-    if sub:
-      add(r, sub, f"Alt tür '{r['subcategory']}' bu kategoriyle eşleşir", "orta")
     p = str(r["title"]).split(":")[0].strip() if ":" in str(r["title"]) else ""
     if p in maj:
       add(r, maj[p], f"'{p}' serisinin çoğu {maj[p]}", "orta")
-    if not sub:
-      for cat, ws in _SCAN_KW.items():
-        hit = [w for w in ws if w in t]
-        if hit:
-          add(r, cat, f"Başlıkta '{hit[0]}' geçiyor", "düşük")
-          break
+      continue  # seri kararı varsa tek tek kelimeye bakma
+    toks = re.findall(r"[a-zçğıöşü]+", t)
+    for cat, ws in _SCAN_KW.items():
+      hit = [w for w in ws if any(k.startswith(w) and len(k) <= len(w) + 3 for k in toks)]
+      if hit:
+        add(r, cat, f"Başlıkta '{hit[0]}' geçiyor", "düşük")
+        break
   res = sorted(out.values(), key=lambda x: (-_SCAN_RANK[x["Güven"]], x["Kitap"]))
   return res
 
@@ -1226,7 +1216,7 @@ with st.sidebar:
           f'<div class="side-card"><span>📚 Toplam Kitap</span><b>{total_books}</b></div>',
           f'<div class="side-card"><span>🔥 Bu Ay ({current_month_name})</span><b>{month_read_count}</b></div>',
           f'<div class="side-card"><span>⭐ Bu Yıl ({current_year})</span><b>{year_read_count}</b></div>',
-          '<div class="side-ver">Atlas v1.3.2</div>',
+          '<div class="side-ver">Atlas v1.3.3</div>',
       ]),
       unsafe_allow_html=True,
   )
@@ -2505,7 +2495,7 @@ elif active_page == "Yönetici Paneli":
       st.markdown("---")
       st.markdown("##### 🤖 Otomatik tara (ücretsiz)")
       st.caption(
-          "Tüm kitapları alt tür, başlık sözcükleri ve seri tutarlılığına göre tarar; internet ya da "
+          "Tüm kitapları seri tutarlılığı ve başlık sözcüklerine göre tarar; internet ya da "
           "ücretli servis kullanmaz. Yalnızca öneri üretir: işaretlediklerinizi uygularsınız. "
           "İlk Okuma kategorisine hiç dokunulmaz."
       )
