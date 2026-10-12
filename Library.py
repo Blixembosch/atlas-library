@@ -1,5 +1,6 @@
 from datetime import date, datetime, timedelta
 import hmac  # V1.1 CHANGE: şifre karşılaştırma
+import json  # V1.3 CHANGE: öncelikli seri listesi
 import html
 import os
 from pathlib import Path
@@ -227,6 +228,96 @@ CATEGORIES = [
     "Hikaye", "Bilgi & Keşif", "Aktivite", "İlk Okuma",
     "Doğa & Hayvanlar", "Bilim", "Değerler",
 ]
+
+
+# V1.3 CHANGE: ücretsiz (internetsiz) otomatik kategori taraması: alt tür, anahtar kelime ve
+# seri tutarlılığına bakar. İlk Okuma kategorisine/kategorisinden asla dokunmaz (öncelikli seri).
+_SCAN_SUB = {
+    "Bilim & Teknoloji": "Bilim", "Matematik": "Bilim",
+    "Doğa & Hayvanlar": "Doğa & Hayvanlar", "Duygular & Sosyal Gelişim": "Değerler",
+    "Macera & Mizah": "Hikaye", "Meslekler": "Bilgi & Keşif", "Tarih & Kültür": "Bilgi & Keşif",
+    "Biyografi": "Bilgi & Keşif", "Genel Bilgi": "Bilgi & Keşif",
+    "Sanat & Yaratıcılık": "Bilgi & Keşif", "Finansal Okuryazarlık": "Bilgi & Keşif",
+    "Sağlık & Günlük Yaşam": "Bilgi & Keşif", "Bulmaca & Zekâ Oyunları": "Aktivite",
+    "Satranç": "Aktivite", "Yoga & Hareket": "Aktivite",
+}
+_SCAN_KW_STRONG = ["satranç", "yoga", "boyama", "çıkartma", "bulmaca", "etkinlik", "labirent", "hamur"]
+_SCAN_KW = {
+    "Doğa & Hayvanlar": ["hayvan", "orman", "kuş", "kedi", "köpek", "balık", "deniz", "arı", "kelebek",
+                         "dinozor", "ağaç", "böcek", "penguen", "doğa"],
+    "Bilim": ["uzay", "gezegen", "bilim", "deney", "robot", "atom", "elektrik", "enerji", "teknoloji",
+              "fizik", "kimya", "geometri"],
+    "Değerler": ["sevgi", "dostluk", "paylaş", "cesaret", "saygı", "dürüst", "nezaket", "kıskanç", "öfke"],
+}
+_SCAN_RANK = {"yüksek": 3, "orta": 2, "düşük": 1}
+
+
+def auto_category_scan(df):
+  d = df[df["is_school"] == 0]
+  out = {}
+
+  def add(r, cat, why, conf):
+    if cat == r["category"] or cat == "İlk Okuma" or r["category"] == "İlk Okuma":
+      return
+    old = out.get(r["id"])
+    if old is None or _SCAN_RANK[conf] > _SCAN_RANK[old["Güven"]]:
+      out[r["id"]] = {"ID": r["id"], "Kitap": r["title"], "Şimdi": r["category"],
+                      "Önerilen": cat, "Gerekçe": why, "Güven": conf}
+
+  # seri tutarlılığı: aynı ön ek (":" öncesi) taşıyan ≥4 kitapta çoğunluk kategori
+  pref = d["title"].map(lambda t: str(t).split(":")[0].strip() if ":" in str(t) else "")
+  maj = {}
+  for p, g in d[pref != ""].groupby(pref[pref != ""]):
+    if len(g) >= 4:
+      top = g["category"].value_counts()
+      if top.iloc[0] / len(g) >= 0.75:
+        maj[p] = top.index[0]
+  for _, r in d.iterrows():
+    if r["id"] in CATEGORY_REVIEW:  # zaten incelenmiş kitaplara dokunma
+      continue
+    t = _tr_lower(r["title"])
+    if any(w in t for w in _SCAN_KW_STRONG):
+      add(r, "Aktivite", "Başlıkta etkinlik/oyun sözcüğü var", "yüksek")
+    sub = _SCAN_SUB.get(str(r["subcategory"]))
+    if sub:
+      add(r, sub, f"Alt tür '{r['subcategory']}' bu kategoriyle eşleşir", "orta")
+    p = str(r["title"]).split(":")[0].strip() if ":" in str(r["title"]) else ""
+    if p in maj:
+      add(r, maj[p], f"'{p}' serisinin çoğu {maj[p]}", "orta")
+    if not sub:
+      for cat, ws in _SCAN_KW.items():
+        hit = [w for w in ws if w in t]
+        if hit:
+          add(r, cat, f"Başlıkta '{hit[0]}' geçiyor", "düşük")
+          break
+  res = sorted(out.values(), key=lambda x: (-_SCAN_RANK[x["Güven"]], x["Kitap"]))
+  return res
+
+
+def apply_category_changes(pairs):
+  """pairs = [(kitap_id, yeni_kategori)]; uygulamadan önce DB yedeği alır."""
+  try:
+    DATA_DIR = BASE / "data"
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    src = sqlite3.connect(DB_NAME)
+    dst = sqlite3.connect(DATA_DIR / "pre_category_review.db")
+    src.backup(dst)
+    dst.close()
+    src.close()
+  except Exception:
+    pass
+  con = sqlite3.connect(DB_NAME)
+  con.executemany("UPDATE books SET category = ? WHERE id = ?", [(c, i) for i, c in pairs])
+  con.commit()
+  con.close()
+
+
+# V1.3 CHANGE: tablolar içerik/pencere boyuna göre uzar (en fazla ~40 satır, sonra kaydırma)
+def show_table(df, **kw):
+  n = len(df)
+  h = int(min(max(38 + 35 * n, 110), 1450))
+  st.dataframe(df, use_container_width=True, height=h, **kw)
+
 
 # V1.0 CHANGE: kitap isimleri internette araştırılarak yapılan kategori incelemesi.
 # Yalnızca değişecek kitaplar: kitap_id -> (yeni kategori, gerekçe, güven)
@@ -853,18 +944,95 @@ def priority_mode():
   return m if m in PRIORITY_MODES else "ilk_okuma"
 
 
+# V1.3 CHANGE: öncelikli seriler artık listeden çoklu seçilir ve yeni seri eklenebilir.
+# Anahtar biçimi: "title:<başlık öneki>", "pub:<yayınevi>", "cat:<kategori>", "sub:<alt tür>"
+def _tr_lower(x):
+  return str(x).replace("İ", "i").replace("I", "ı").lower()
+
+
+def priority_keys():
+  raw = get_setting("priority_series", "__legacy__")
+  if raw == "__legacy__":  # V1.2'den gelen eski tek-seçenek ayarı
+    return {
+        "off": [],
+        "ilk_okuma": ["cat:İlk Okuma"],
+        "okuma_becerisi": ["sub:Okuma Becerisi"],
+    }[priority_mode()]
+  try:
+    v = json.loads(raw)
+    return [str(x) for x in v] if isinstance(v, list) else []
+  except Exception:
+    return []
+
+
+def priority_custom():
+  try:
+    v = json.loads(get_setting("priority_custom", "[]"))
+    return [str(x) for x in v] if isinstance(v, list) else []
+  except Exception:
+    return []
+
+
+def series_mask(df, key):
+  kind, _, val = str(key).partition(":")
+  if kind == "title":
+    v = _tr_lower(val)
+    return df["title"].map(lambda t: _tr_lower(t).startswith(v))
+  if kind == "pub":
+    return df["publisher"].fillna("") == val
+  if kind == "cat":
+    return df["category"] == val
+  if kind == "sub":
+    return df["subcategory"].astype(str) == val
+  return pd.Series(False, index=df.index)
+
+
+def series_label(key):
+  kind, _, val = str(key).partition(":")
+  return {
+      "title": f"📖 {val}",
+      "pub": f"🏢 {val} (yayınevi)",
+      "cat": f"📂 {val} (kategori)",
+      "sub": f"🏷️ {val} (alt tür)",
+  }.get(kind, str(key))
+
+
+def series_options(df):
+  """Veriden otomatik çıkarılan seri seçenekleri: {anahtar: (etiket, kitap sayısı)}."""
+  df = df[df["is_school"] == 0]
+  found = {}
+  prefixes = df["title"].map(lambda t: str(t).split(":")[0].strip() if ":" in str(t) else "")
+  for p, n in prefixes[prefixes != ""].value_counts().items():
+    if n >= 3:
+      found[f"title:{p}"] = int(n)
+  for p, n in df["publisher"].fillna("").value_counts().items():
+    if p and n >= 3:
+      found[f"pub:{p}"] = int(n)
+  for p, n in df["category"].fillna("").value_counts().items():
+    if p and n >= 3:
+      found[f"cat:{p}"] = int(n)
+  for p, n in df["subcategory"].fillna("").value_counts().items():
+    if p and n >= 3:
+      found[f"sub:{p}"] = int(n)
+  for k in priority_custom() + priority_keys():
+    if k not in found:
+      found[k] = int(series_mask(df, k).sum())
+  return {k: (series_label(k), n) for k, n in found.items()}
+
+
 def priority_books(df):
-  mode = priority_mode()
-  if mode == "ilk_okuma":
-    return df[df["category"] == "İlk Okuma"]
-  if mode == "okuma_becerisi":
-    return df[df["subcategory"].astype(str) == "Okuma Becerisi"]
-  return df.iloc[0:0]
+  keys = priority_keys()
+  if not keys:
+    return df.iloc[0:0]
+  m = pd.Series(False, index=df.index)
+  for k in keys:
+    m = m | series_mask(df, k)
+  return df[m]
 
 
 def priority_progress():
-  """(okunan, toplam) öncelikli seri için; öncelik kapalıysa None."""
-  if priority_mode() == "off":
+  """(okunan, toplam) öncelikli seriler için; öncelik kapalıysa None."""
+  if not priority_keys():
     return None
   df = get_pool_df(evening_filters=False)
   pri = priority_books(df)
@@ -909,7 +1077,7 @@ def priority_per_day():
 
 def priority_quota_left():
   """Bugün öncelikli seriden henüz okunmayan/onay beklemeyen kota."""
-  if priority_mode() == "off":
+  if not priority_keys():
     return 0
   books = get_books_df()
   books = books[books["is_school"] == 0]
@@ -935,7 +1103,7 @@ def recommend_books(n, cat=None):
   unread = base[(base["read_count"] == 0) & (~base["id"].isin(pending_ids))]
   pri = priority_books(base)
   pri_unread = pri[(pri["read_count"] == 0) & (~pri["id"].isin(pending_ids))]
-  if priority_mode() == "off" or len(pri_unread) == 0:
+  if not priority_keys() or len(pri_unread) == 0:
     pool = unread if len(unread) > 0 else base
     return sample_books(pool, n)
   k = min(priority_quota_left(), n, len(pri_unread))
@@ -1058,7 +1226,7 @@ with st.sidebar:
           f'<div class="side-card"><span>📚 Toplam Kitap</span><b>{total_books}</b></div>',
           f'<div class="side-card"><span>🔥 Bu Ay ({current_month_name})</span><b>{month_read_count}</b></div>',
           f'<div class="side-card"><span>⭐ Bu Yıl ({current_year})</span><b>{year_read_count}</b></div>',
-          '<div class="side-ver">Atlas v1.3</div>',
+          '<div class="side-ver">Atlas v1.3.2</div>',
       ]),
       unsafe_allow_html=True,
   )
@@ -1301,8 +1469,9 @@ if active_page == "Ana Sayfa":
   _pp = priority_progress()
   if _pp and _pp[0] < _pp[1]:
     st.caption(
-        f"🔤 İlk okuma turu: {_pp[0]}/{_pp[1]} kitap okundu. Tur bitene kadar çark ve rastgele "
-        f"öneriler günde {priority_per_day()} kitap bu seriden, kalanı diğer kitaplardan seçer."
+        f"🔤 Öncelikli seri turu ({', '.join(series_label(k).split(' ', 1)[1] for k in priority_keys())}): "
+        f"{_pp[0]}/{_pp[1]} kitap okundu. Tur bitene kadar çark ve rastgele "
+        f"öneriler günde {priority_per_day()} kitap bu serilerden, kalanı diğer kitaplardan seçer."
     )
   st.caption(
       "🌙 Saat 19:00’dan sonra uyku öncesi huzur için Aktivite"
@@ -1765,23 +1934,49 @@ elif active_page == "Yönetici Paneli":
           value=evening_no_dutch(),
           key="evening_no_dutch_chk",
       )
-      mode_keys = list(PRIORITY_MODES.keys())
-      sel_mode = st.selectbox(
-          "Bir tur bitene kadar önce önerilecek seri",
-          mode_keys,
-          index=mode_keys.index(priority_mode()),
-          format_func=lambda k: PRIORITY_MODES[k],
-          key="priority_mode_sel",
+      # V1.3 CHANGE: öncelikli seriler listeden çoklu seçilir; yeni seri eklenebilir
+      st.markdown("**Bir tur bitene kadar önce önerilecek seriler**")
+      _opts = series_options(books_df)
+      _cur = [k for k in priority_keys() if k in _opts]
+      sel_series = st.multiselect(
+          "Seriler (boş bırakırsanız öncelik kapalı olur)",
+          options=list(_opts.keys()),
+          default=_cur,
+          format_func=lambda k: f"{_opts[k][0]} · {_opts[k][1]} kitap",
+          key="priority_series_sel",
       )
+      ns1, ns2 = st.columns([3, 1])
+      new_series = ns1.text_input(
+          "Yeni seri ekle: kitap adı şununla başlasın",
+          placeholder="Örn: Cin Ali",
+          key="new_series_txt",
+      )
+      _ns = str(new_series or "").strip()
+      if _ns:
+        _n_match = int(series_mask(books_df[books_df["is_school"] == 0], f"title:{_ns}").sum())
+        ns1.caption(f"{_n_match} kitap eşleşiyor.")
+      with ns2:
+        _add = st.button("➕ Seriyi ekle", key="add_series_btn", use_container_width=True)
+      if _add and _ns:
+        _k = f"title:{_ns}"
+        if int(series_mask(books_df[books_df["is_school"] == 0], _k).sum()) == 0:
+          st.error("Bu başlıkla başlayan kitap bulunamadı.")
+        else:
+          _cust = priority_custom()
+          if _k not in _cust:
+            set_setting("priority_custom", json.dumps(_cust + [_k], ensure_ascii=False))
+          set_setting("priority_series", json.dumps(list(dict.fromkeys(priority_keys() + [_k])), ensure_ascii=False))
+          st.toast("Seri eklendi ve öncelikli yapıldı.", icon="➕")
+          st.rerun()
       sel_quota = st.number_input(
-          "Tur bitene kadar günde en fazla kaç kitap bu seriden önerilsin?",
+          "Tur bitene kadar günde en fazla kaç kitap bu serilerden önerilsin?",
           min_value=0, max_value=5, value=priority_per_day(), step=1, key="priority_quota_sel",
       )
       if st.button("Ayarları Kaydet", key="save_rec_settings"):
         set_setting("priority_per_day", int(sel_quota))
         set_setting("rec_languages", ",".join(sel_langs) if sel_langs else ",".join(DEFAULT_REC_LANGS))
         set_setting("evening_no_dutch", "1" if sel_evening else "0")
-        set_setting("priority_mode", sel_mode)
+        set_setting("priority_series", json.dumps(list(sel_series), ensure_ascii=False))
         st.toast("Öneri ayarları kaydedildi.", icon="🎛️")
         st.rerun()
 
@@ -2134,13 +2329,13 @@ elif active_page == "Yönetici Paneli":
               "Toplam Okunma": data["count"],
               "En Son Okunma": data["last_read"][:19].replace("T", " "),
           })
-        st.dataframe(pd.DataFrame(summary_data), use_container_width=True)
+        show_table(pd.DataFrame(summary_data))
       else:
         st.info("Kayıt yok.")
 
     with adm_tab6:
       st.subheader("📝 Ham Loglar")
-      st.dataframe(pd.DataFrame(rows("reading_log")), use_container_width=True)
+      show_table(pd.DataFrame(rows("reading_log")))
 
     with adm_tab7:
       st.subheader("🧹 Sıfırlama")
@@ -2299,28 +2494,43 @@ elif active_page == "Yönetici Paneli":
         st.write(f"**{len(diff_df)}** kitapta değişiklik öneriliyor.")
         only_conf = st.checkbox("Sadece 'yüksek' güvenli önerileri uygula", value=False, key="catrev_hi")
         view = diff_df[diff_df["Güven"] == "yüksek"] if only_conf else diff_df
-        st.dataframe(view, use_container_width=True, hide_index=True)
+        show_table(view, hide_index=True)
         ok_apply = st.checkbox("Önizlemeyi inceledim, uygulansın", key="catrev_ok")
         if st.button("✅ Kategorileri Uygula", key="catrev_apply", disabled=not ok_apply):
-          try:
-            DATA_DIR = BASE / "data"
-            DATA_DIR.mkdir(parents=True, exist_ok=True)
-            src = sqlite3.connect(DB_NAME)
-            dst = sqlite3.connect(DATA_DIR / "pre_category_review.db")
-            src.backup(dst)
-            dst.close()
-            src.close()
-          except Exception:
-            pass
-          con = sqlite3.connect(DB_NAME)
-          con.executemany(
-              "UPDATE books SET category = ? WHERE id = ?",
-              [(r["Önerilen"], r["ID"]) for _, r in view.iterrows()],
-          )
-          con.commit()
-          con.close()
+          apply_category_changes([(r["ID"], r["Önerilen"]) for _, r in view.iterrows()])
           st.success(f"{len(view)} kitabın kategorisi güncellendi.")
           st.rerun()
+
+      # V1.3 CHANGE: ücretsiz otomatik tarama
+      st.markdown("---")
+      st.markdown("##### 🤖 Otomatik tara (ücretsiz)")
+      st.caption(
+          "Tüm kitapları alt tür, başlık sözcükleri ve seri tutarlılığına göre tarar; internet ya da "
+          "ücretli servis kullanmaz. Yalnızca öneri üretir: işaretlediklerinizi uygularsınız. "
+          "İlk Okuma kategorisine hiç dokunulmaz."
+      )
+      if st.button("🔍 Otomatik Tara", key="catscan_run"):
+        st.session_state["catscan_rows"] = auto_category_scan(books_df)
+      _scan = st.session_state.get("catscan_rows")
+      if _scan is not None:
+        _scan = [r for r in _scan if r["ID"] in cur_cats and cur_cats[r["ID"]] != r["Önerilen"]]
+        if not _scan:
+          st.success("✅ Tarama sonucunda değişiklik önerisi yok.")
+        else:
+          sdf = pd.DataFrame(_scan)
+          sdf.insert(0, "Uygula", sdf["Güven"] == "yüksek")
+          st.write(f"**{len(sdf)}** öneri bulundu. Uygulamak istediklerinizi işaretleyin (varsayılan: yalnızca 'yüksek').")
+          edited_scan = st.data_editor(
+              sdf, hide_index=True, use_container_width=True,
+              height=int(min(max(38 + 35 * len(sdf), 110), 1450)),
+              disabled=[c for c in sdf.columns if c != "Uygula"], key="catscan_editor",
+          )
+          chosen = edited_scan[edited_scan["Uygula"]]
+          if st.button(f"✅ İşaretli {len(chosen)} öneriyi uygula", key="catscan_apply", disabled=len(chosen) == 0):
+            apply_category_changes([(r["ID"], r["Önerilen"]) for _, r in chosen.iterrows()])
+            st.session_state["catscan_rows"] = None
+            st.success(f"{len(chosen)} kitabın kategorisi güncellendi.")
+            st.rerun()
 
     # V1.2 CHANGE: dil x tür dağılımı ve her kitabın önerilip önerilmediği
     with adm_tab_lang:
@@ -2336,12 +2546,12 @@ elif active_page == "Yönetici Paneli":
       st.caption("Önerilecek diller: " + ", ".join(sorted(recl)) + "  ·  Değiştirmek için yukarıdaki '🎛️ Öneri ayarları'.")
       st.markdown("**Dil × Tür (kitap sayısı)**")
       pivot = pd.crosstab(lt["language"], lt["category"], margins=True, margins_name="Toplam")
-      st.dataframe(pivot, use_container_width=True)
+      show_table(pivot)
       lang_pick = st.selectbox("Dile göre listele", ["Tümü"] + sorted(lt["language"].unique()), key="lang_tab_pick")
       show = lt if lang_pick == "Tümü" else lt[lt["language"] == lang_pick]
       show = show.sort_values(["language", "category", "title"])[["id", "title", "language", "category", "subcategory", "age", "Önerilir mi"]]
       show.columns = ["ID", "Kitap", "Dil", "Tür", "Alt tür", "Yaş", "Önerilir mi"]
-      st.dataframe(show, use_container_width=True, hide_index=True)
+      show_table(show, hide_index=True)
       st.download_button(
           "⬇️ Listeyi CSV indir",
           data=show.to_csv(index=False).encode("utf-8-sig"),
