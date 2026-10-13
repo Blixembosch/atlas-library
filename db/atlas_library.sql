@@ -264,7 +264,7 @@ INSERT INTO "books" VALUES('TİB-16','Dünyayı Öğreniyorum: Arkadaşım İnş
 INSERT INTO "books" VALUES('TİB-17','Dünyayı Öğreniyorum: Arkadaşım Kamyon Şöförü','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://img.iskultur.com.tr/webp/2014/01/ark_kamyon_7-270x272.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-18','Dünyayı Öğreniyorum: Arkadaşım Kaptan','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://img.iskultur.com.tr/webp/2013/04/arkadasim-kaptan-1-270x270.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-19','Dünyayı Öğreniyorum: Arkadaşım Makinist','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://img.iskultur.com.tr/webp/2013/08/arkadasim-makinist-270x270.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
-INSERT INTO "books" VALUES('TİB-20','Dünyayı Öğreniyorum: Arkadaşım Otobüs Şöförü','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://img.iskultur.com.tr/webp/2014/01/arkadasim-otobus-soforu-270x270.png','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
+INSERT INTO "books" VALUES('TİB-20','Dünyayı Öğreniyorum: Arkadaşım Otobüs Şöförü','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://img.iskultur.com.tr/webp/2014/01/arkadasim-otobus-soforu-270x270.png','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-21','Dünyayı Öğreniyorum: Arkadaşım Öğretmen','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://img.iskultur.com.tr/webp/2021/10/arkadasim-ogretmen-270x271.png','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-22','Dünyayı Öğreniyorum: Arkadaşım Pilot','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://img.iskultur.com.tr/webp/2014/01/arkadasim-pilot-1-270x270.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-23','Dünyayı Öğreniyorum: Arkadaşım Postacı','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://covers.openlibrary.org/b/id/12226252-L.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
@@ -353,7 +353,7 @@ INSERT INTO "reading_log" VALUES(20,'TİB-54','read','2026-10-11T19:15:00',1,0);
 INSERT INTO "reading_log" VALUES(21,'TİB-17','read','2026-10-12T19:32:05',1,0);
 INSERT INTO "reading_log" VALUES(22,'TB-49','read','2026-10-12T19:32:26',1,0);
 INSERT INTO "reading_log" VALUES(23,'CA-2','read','2026-10-13T19:12:04',1,1);
-INSERT INTO "reading_log" VALUES(24,'TİB-20','pending','2026-10-13T19:12:09',1,0);
+INSERT INTO "reading_log" VALUES(24,'TİB-20','read','2026-10-13T19:12:09',1,0);
 CREATE TABLE recommendations(period_key TEXT PRIMARY KEY,book_ids TEXT,created_at TEXT,mode TEXT);
 CREATE TABLE settings(key TEXT PRIMARY KEY, value TEXT);
 INSERT INTO "settings" VALUES('lang_migrated_v1','1');
