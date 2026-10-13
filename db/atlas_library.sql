@@ -65,7 +65,7 @@ INSERT INTO "books" VALUES('BTK-1','Sihirli Kumbara','Butik Yayıncılık',32,'M
 INSERT INTO "books" VALUES('BTK-2','Sihirli Limonata','Butik Yayıncılık',32,'Mert Başaran','9786258471847','6+','Bilgi & Keşif','Finansal Okuryazarlık','https://m.media-amazon.com/images/I/51pT2pwItNL._SX342_SY445_ML2_.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('CÇ-1','Puhu Kuşu Kasabası','Cezve Çocuk',36,'Tuğba Coşkuner','9786052297407','3+','Hikaye','Doğa & Hayvanlar','https://covers.openlibrary.org/b/id/12118849-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('CA-1','Cin Ali’nin Atı','Cin Ali Yayınları',16,'Rasim Kaygusuz','','6+','İlk Okuma','Okuma Becerisi','https://cdn2.dokuzsoft.com/u/ekinyayinevi/img/b/c/i/cin-alinin-ati9d3f59b0996e7292586af7d077b11d2e.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
-INSERT INTO "books" VALUES('CA-2','Cin Ali’nin Topu','Cin Ali Yayınları',16,'Rasim Kaygusuz','','6+','İlk Okuma','Okuma Becerisi','https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1535017482i/41439462.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
+INSERT INTO "books" VALUES('CA-2','Cin Ali’nin Topu','Cin Ali Yayınları',16,'Rasim Kaygusuz','','6+','İlk Okuma','Okuma Becerisi','https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1535017482i/41439462.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('CA-3','Cin Ali’nin Topacı','Cin Ali Yayınları',16,'Rasim Kaygusuz','','6+','İlk Okuma','Okuma Becerisi','https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1535017632i/41439476.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('CA-4','Cin Ali’nin Karagözlü Kuzusu','Cin Ali Yayınları',16,'Rasim Kaygusuz','','6+','İlk Okuma','Okuma Becerisi','https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1535017764i/41439483.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('CA-5','Cin Ali’nin Oyuncakları','Cin Ali Yayınları',16,'Rasim Kaygusuz','','6+','İlk Okuma','Okuma Becerisi','https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1535018038i/41439494.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
@@ -352,7 +352,7 @@ INSERT INTO "reading_log" VALUES(19,'ABM-12','read','2026-10-11T19:14:00',1,0);
 INSERT INTO "reading_log" VALUES(20,'TİB-54','read','2026-10-11T19:15:00',1,0);
 INSERT INTO "reading_log" VALUES(21,'TİB-17','read','2026-10-12T19:32:05',1,0);
 INSERT INTO "reading_log" VALUES(22,'TB-49','read','2026-10-12T19:32:26',1,0);
-INSERT INTO "reading_log" VALUES(23,'CA-2','pending','2026-10-13T19:12:04',1,0);
+INSERT INTO "reading_log" VALUES(23,'CA-2','read','2026-10-13T19:12:04',1,1);
 INSERT INTO "reading_log" VALUES(24,'TİB-20','pending','2026-10-13T19:12:09',1,0);
 CREATE TABLE recommendations(period_key TEXT PRIMARY KEY,book_ids TEXT,created_at TEXT,mode TEXT);
 CREATE TABLE settings(key TEXT PRIMARY KEY, value TEXT);
