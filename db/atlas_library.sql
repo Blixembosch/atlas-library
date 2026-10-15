@@ -18,7 +18,7 @@ INSERT INTO "books" VALUES('BÇ-15','Panda Huzurlu ve Mutlu','1001 Çiçek',24,'
 INSERT INTO "books" VALUES('BÇ-16','Tavşan Sakin ve Rahat','1001 Çiçek',24,'Louison Nielman','','3+','Değerler','Duygular & Sosyal Gelişim','https://covers.openlibrary.org/b/id/12223541-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('BÇ-17','Van Gogh Arkadaşım Vincent','1001 Çiçek',36,'Anna Obiols','9786054525973','3+','Bilgi & Keşif','Sanat & Yaratıcılık','https://basaridagitim.com/content/images/product/9786054525973.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('BÇ-18','Yemek Vakti','1001 Çiçek',24,'Romain Sardou & Francesca Sardou','9786053416258','3+','Değerler','Sağlık & Günlük Yaşam','https://covers.openlibrary.org/b/id/12263544-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
-INSERT INTO "books" VALUES('ABM-1','Alfabe: Hayvanlar Aleminde','ABM',68,'Gloria Gülay Baltalı','9786257373487','4+','Doğa & Hayvanlar','Dil & Kelime','https://static.ticimax.cloud/cdn-cgi/image/width=0,quality=0/31343/uploads/urunresimleri/buyuk/alfabe-hayvanlar-aleminde-4-yas-resiml-0-2a3d.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
+INSERT INTO "books" VALUES('ABM-1','Alfabe: Hayvanlar Aleminde','ABM',68,'Gloria Gülay Baltalı','9786257373487','4+','Doğa & Hayvanlar','Dil & Kelime','https://static.ticimax.cloud/cdn-cgi/image/width=0,quality=0/31343/uploads/urunresimleri/buyuk/alfabe-hayvanlar-aleminde-4-yas-resiml-0-2a3d.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('ABM-2','Alpaka','ABM',32,'Alp Gökalp','9786055171247','3+','Doğa & Hayvanlar','Doğa & Hayvanlar','https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=85/31343/uploads/urunresimleri/buyuk/alpaka-4-yas-farkliliklara-saygi-temal-d1-cd8.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('ABM-3','Benim Kırmızı Arabam','ABM',40,'Peter Schössow','9786055171858','3+','Hikaye','Macera & Mizah','https://covers.openlibrary.org/b/id/12315947-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('ABM-4','Burası Benim Yerim','ABM',32,'Pippa Goodhart','9786052374092','3+','Değerler','Duygular & Sosyal Gelişim','https://static.ticimax.cloud/cdn-cgi/image/width=0,quality=0/31343/uploads/urunresimleri/buyuk/burasi-benim-yerim--7a6-06.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
@@ -188,7 +188,7 @@ INSERT INTO "books" VALUES('TB-5','Ben Rüzgârım','TÜBİTAK Yayınları',36,'
 INSERT INTO "books" VALUES('TB-6','Bilimle El Ele: Madde','TÜBİTAK Yayınları',44,'Lola M. Schaefer','9786053125549','7+','Bilim','Bilim & Teknoloji','https://yayinlar.tubitak.gov.tr/2457-large_default/bilimle-el-ele-madde.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TB-7','Bir Dağı Nasıl Oluşturursun? - 9 Basit Adım ve 100 Milyon Yıl Yeter!','TÜBİTAK Yayınları',64,'Amy Huntington','9786053125570','7+','Bilim','Macera & Mizah','https://yayinlar.tubitak.gov.tr/2568-home_default/bir-dagi-nasil-olusturursun-.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TB-8','Biz Mantarız','TÜBİTAK Yayınları',32,'Meryem Tuğba Pekşen','9786053126331','5+','Doğa & Hayvanlar','Doğa & Hayvanlar','https://yayinlar.tubitak.gov.tr/2781-home_default/biz-mantariz.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
-INSERT INTO "books" VALUES('TB-9','Büyükbabam Değişti','TÜBİTAK Yayınları',33,'Pam Pollack; Meg Belviso','','6+','Değerler','Duygular & Sosyal Gelişim','https://yayinlar.tubitak.gov.tr/2707-large_default/bueyuek-babam-degisti.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
+INSERT INTO "books" VALUES('TB-9','Büyükbabam Değişti','TÜBİTAK Yayınları',33,'Pam Pollack; Meg Belviso','','6+','Değerler','Duygular & Sosyal Gelişim','https://yayinlar.tubitak.gov.tr/2707-large_default/bueyuek-babam-degisti.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TB-10','Deniz Ne Kadar Derin?','TÜBİTAK Yayınları',24,'Anna Milbourne','','3+','Doğa & Hayvanlar','Doğa & Hayvanlar','https://yayinlar.tubitak.gov.tr/1330-large_default/deniz-ne-kadar-derin.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TB-11','Dünyanın En Güzel Öyküsü','TÜBİTAK Yayınları',48,'Şermin Korkusuz Aslan','9786053125839','5+','Bilim','Macera & Mizah','https://yayinlar.tubitak.gov.tr/2738-home_default/duenyanin-en-guezel-oeykuesue.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TB-12','En Büyük Tutkum Matematik','TÜBİTAK Yayınları',44,'Miguel Tanco','9786053124894','7+','Bilim','Matematik','https://yayinlar.tubitak.gov.tr/1920-home_default/en-bueyuek-tutkum-matematik.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
@@ -356,8 +356,8 @@ INSERT INTO "reading_log" VALUES(23,'CA-2','read','2026-10-13T19:12:04',1,1);
 INSERT INTO "reading_log" VALUES(24,'TİB-20','read','2026-10-13T19:12:09',1,0);
 INSERT INTO "reading_log" VALUES(25,'TB-32','read','2026-10-14T18:54:19',1,0);
 INSERT INTO "reading_log" VALUES(26,'DO-1','read','2026-10-14T18:54:28',1,0);
-INSERT INTO "reading_log" VALUES(27,'ABM-1','pending','2026-10-15T19:01:16',1,0);
-INSERT INTO "reading_log" VALUES(28,'TB-9','pending','2026-10-15T19:01:34',1,0);
+INSERT INTO "reading_log" VALUES(27,'ABM-1','read','2026-10-15T19:01:16',1,0);
+INSERT INTO "reading_log" VALUES(28,'TB-9','read','2026-10-15T19:01:34',1,0);
 CREATE TABLE recommendations(period_key TEXT PRIMARY KEY,book_ids TEXT,created_at TEXT,mode TEXT);
 CREATE TABLE settings(key TEXT PRIMARY KEY, value TEXT);
 INSERT INTO "settings" VALUES('lang_migrated_v1','1');
