@@ -270,7 +270,7 @@ INSERT INTO "books" VALUES('TİB-22','Dünyayı Öğreniyorum: Arkadaşım Pilot
 INSERT INTO "books" VALUES('TİB-23','Dünyayı Öğreniyorum: Arkadaşım Postacı','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://covers.openlibrary.org/b/id/12226252-L.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-24','Dünyayı Öğreniyorum: Arkadaşım Yarışçı','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://covers.openlibrary.org/b/id/12226255-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-25','Dünyayı Öğreniyorum: Arkdaşım Opera Sanatçısı','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://img.iskultur.com.tr/webp/2022/09/Arkadasim-Opera-Sanatcisi-270x276.png','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
-INSERT INTO "books" VALUES('TİB-26','Dünyayı Öğreniyorum: Arkdaşım Temizlik İşçisi','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://img.iskultur.com.tr/webp/2016/09/arkadasim-temizlik-iscisi-270x270.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
+INSERT INTO "books" VALUES('TİB-26','Dünyayı Öğreniyorum: Arkdaşım Temizlik İşçisi','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://img.iskultur.com.tr/webp/2016/09/arkadasim-temizlik-iscisi-270x270.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-27','Dünyayı Öğreniyorum: Büyük Araçlar','Türkiye İş Bankası Yayınları',24,'Frank Littek','','4+','Bilim','Doğa & Hayvanlar','https://img.iskultur.com.tr/webp/2020/09/buyuk-araclar-1-270x270.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-28','Dünyayı Öğreniyorum: Çiftlikteki Tarım Makineleri','Türkiye İş Bankası Yayınları',24,'Monika Wittmann','','4+','Bilim','Bilim & Teknoloji','https://img.iskultur.com.tr/webp/2019/06/ciftlikteki-tarim-makineleri-270x270.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-29','Dünyayı Öğreniyorum: Dağları Keşfet','Türkiye İş Bankası Yayınları',24,'Laura Leintz','','4+','Doğa & Hayvanlar','Doğa & Hayvanlar','https://covers.openlibrary.org/b/id/12253085-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
@@ -309,7 +309,7 @@ INSERT INTO "books" VALUES('TİB-61','İlk Okuma Kitabım: Elif Hastalandı','T�
 INSERT INTO "books" VALUES('TİB-62','İlk Okuma Kitabım: Elif’in İlk Harçlığı','Türkiye İş Bankası Yayınları',24,'Liane Schneider','','3+','Hikaye','Okuma Becerisi','https://img.iskultur.com.tr/webp/2017/01/elifin-ilk-harcligi-1-270x270.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-63','İlk Okuma Kitabım: Elif''in Kış Macerası','Türkiye İş Bankası Yayınları',24,'Liane Schneider','','3+','Hikaye','Okuma Becerisi','https://img.iskultur.com.tr/webp/2020/03/elifinkismacerasi-270x270.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-64','İlk Okuma Kitabım: Elif''in Uykusu Gelmiyor','Türkiye İş Bankası Yayınları',24,'Liane Schneider','','3+','Hikaye','Okuma Becerisi','https://img.iskultur.com.tr/webp/2020/05/elif-uykusu-gelmiyor-270x270.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
-INSERT INTO "books" VALUES('TİB-65','İlk Okuma Kitabım: Elif Kayak Yapmayı Öğreniyor','Türkiye İş Bankası Yayınları',24,'Liane Schneider','','3+','Hikaye','Okuma Becerisi','https://img.iskultur.com.tr/webp/2018/03/elif-kayak-yapmayi-ogreniyor-1-270x270.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
+INSERT INTO "books" VALUES('TİB-65','İlk Okuma Kitabım: Elif Kayak Yapmayı Öğreniyor','Türkiye İş Bankası Yayınları',24,'Liane Schneider','','3+','Hikaye','Okuma Becerisi','https://img.iskultur.com.tr/webp/2018/03/elif-kayak-yapmayi-ogreniyor-1-270x270.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-66','İlk Okuma Kitabım: Elif Saatleri Öğreniyor','Türkiye İş Bankası Yayınları',24,'Liane Schneider','','3+','Hikaye','Okuma Becerisi','https://img.iskultur.com.tr/webp/2021/06/elif-saatleri-ogreniyor-2-270x270.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-67','İlk Okuma Kitabım: Elif Uçağa Biniyor','Türkiye İş Bankası Yayınları',24,'Liane Schneider','','3+','Hikaye','Okuma Becerisi','https://img.iskultur.com.tr/webp/2018/03/elif-ucaga-biniyor-3-270x270.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-68','Kimin Burnu? Kimin Bunlar?','Türkiye İş Bankası Yayınları',24,'Sue Tarsky','9786257070621','3+','Doğa & Hayvanlar','Macera & Mizah','https://covers.openlibrary.org/b/id/12254960-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
@@ -363,8 +363,8 @@ INSERT INTO "reading_log" VALUES(33,'RH-19','read','2026-10-18T19:00:00',1,0);
 INSERT INTO "reading_log" VALUES(34,'TB-1','read','2026-10-18T19:15:00',1,0);
 INSERT INTO "reading_log" VALUES(35,'TİB-15','read','2026-10-20T19:00:00',1,0);
 INSERT INTO "reading_log" VALUES(37,'RH-17','read','2026-10-20T19:00:00',1,0);
-INSERT INTO "reading_log" VALUES(38,'TİB-26','pending','2026-10-21T19:08:30',1,0);
-INSERT INTO "reading_log" VALUES(39,'TİB-65','pending','2026-10-21T19:08:43',1,0);
+INSERT INTO "reading_log" VALUES(38,'TİB-26','read','2026-10-21T19:08:30',1,0);
+INSERT INTO "reading_log" VALUES(39,'TİB-65','read','2026-10-21T19:08:43',1,0);
 CREATE TABLE recommendations(period_key TEXT PRIMARY KEY,book_ids TEXT,created_at TEXT,mode TEXT);
 CREATE TABLE settings(key TEXT PRIMARY KEY, value TEXT);
 INSERT INTO "settings" VALUES('lang_migrated_v1','1');
