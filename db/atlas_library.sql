@@ -165,7 +165,7 @@ INSERT INTO "books" VALUES('RH-11','Kirpi ve Sergi','RedHouse',32,'Özge Bahar S
 INSERT INTO "books" VALUES('RH-12','Kurbağaya Özenen Tavşan Roka','RedHouse',44,'Aysun Berktay Özmen','9786052079188','3+','Hikaye','Doğa & Hayvanlar','https://covers.openlibrary.org/b/id/12315875-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('RH-13','Küçük Bir Nokta, Büyük Bir Fil','RedHouse',24,'Özge Özdemir','9786256998049','5+','Hikaye','Doğa & Hayvanlar','https://redhouse.com.tr/t/?src=%2Ffiles%2Furun_urunler%2Fimg%2Fkucuk-bir-nokta.png&w=400&h=400&zc=2','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('RH-14','Mutlu Tavşanlar','RedHouse',64,'Marie Nimier','9786059781299','6+','Değerler','Duygular & Sosyal Gelişim','https://covers.openlibrary.org/b/id/12251157-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
-INSERT INTO "books" VALUES('RH-15','Postacı Fare’nin Bir Günü','RedHouse',28,'Marianne Dubuc','9786052079911','3+','Hikaye','Doğa & Hayvanlar','https://covers.openlibrary.org/b/id/12213436-L.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
+INSERT INTO "books" VALUES('RH-15','Postacı Fare’nin Bir Günü','RedHouse',28,'Marianne Dubuc','9786052079911','3+','Hikaye','Doğa & Hayvanlar','https://covers.openlibrary.org/b/id/12213436-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('RH-16','Postacı Fare’nin Olağanüstü Yolculukları','RedHouse',24,'Marianne Dubuc','','3+','Hikaye','Doğa & Hayvanlar','https://redhouse.com.tr/t/?src=%2Ffiles%2Furun_urunler%2Fimg%2Fpostaci-farenin-oy-3d.png&w=200&zc=3','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('RH-17','Postacı Fare Tatilde','RedHouse',24,'Marianne Dubuc','','3+','Hikaye','Doğa & Hayvanlar','https://covers.openlibrary.org/b/id/12213437-L.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('RH-18','Sadece Üçe Kadar Sayabilen Adam','RedHouse',32,'Nuri Kurucu','9786257782920','5+','Hikaye','Matematik','https://redhouse.com.tr/t/?src=%2Ffiles%2Furun_urunler%2Fimg%2Fmicrosoftteams-image-7.png&w=400&h=400&zc=2','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
@@ -362,7 +362,6 @@ INSERT INTO "reading_log" VALUES(32,'CA-1','read','2026-10-14T19:15:00',1,1);
 INSERT INTO "reading_log" VALUES(33,'RH-19','read','2026-10-18T19:00:00',1,0);
 INSERT INTO "reading_log" VALUES(34,'TB-1','read','2026-10-18T19:15:00',1,0);
 INSERT INTO "reading_log" VALUES(35,'TİB-15','read','2026-10-20T19:00:00',1,0);
-INSERT INTO "reading_log" VALUES(36,'RH-15','read','2026-10-20T13:12:00',1,0);
 INSERT INTO "reading_log" VALUES(37,'RH-17','read','2026-10-20T19:00:00',1,0);
 CREATE TABLE recommendations(period_key TEXT PRIMARY KEY,book_ids TEXT,created_at TEXT,mode TEXT);
 CREATE TABLE settings(key TEXT PRIMARY KEY, value TEXT);
