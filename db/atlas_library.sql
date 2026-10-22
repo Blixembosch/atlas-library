@@ -367,12 +367,30 @@ INSERT INTO "reading_log" VALUES(38,'TİB-26','read','2026-10-21T19:08:30',1,0);
 INSERT INTO "reading_log" VALUES(39,'TİB-65','read','2026-10-21T19:08:43',1,0);
 INSERT INTO "reading_log" VALUES(40,'BÇ-5','read','2026-10-22T22:32:28',1,0);
 INSERT INTO "reading_log" VALUES(41,'TİB-13','read','2026-10-22T22:32:45',1,0);
+CREATE TABLE reading_memories (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    book_id TEXT NOT NULL,
+                    note TEXT NOT NULL,
+                    favorite_quote TEXT DEFAULT '',
+                    photo_url TEXT DEFAULT '',
+                    rating INTEGER DEFAULT 5,
+                    created_at TEXT NOT NULL,
+                    FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
+                );
 CREATE TABLE recommendations(period_key TEXT PRIMARY KEY,book_ids TEXT,created_at TEXT,mode TEXT);
 CREATE TABLE settings(key TEXT PRIMARY KEY, value TEXT);
 INSERT INTO "settings" VALUES('lang_migrated_v1','1');
 INSERT INTO "settings" VALUES('rec_languages','Türkçe');
 INSERT INTO "settings" VALUES('evening_no_dutch','0');
 INSERT INTO "settings" VALUES('priority_mode','ilk_okuma');
+CREATE INDEX idx_reading_log_book_id ON reading_log(book_id);
+CREATE INDEX idx_reading_log_read_at ON reading_log(read_at);
+CREATE INDEX idx_reading_log_status ON reading_log(status);
+CREATE INDEX idx_books_category ON books(category);
+CREATE INDEX idx_books_language ON books(language);
+CREATE INDEX idx_books_is_school ON books(is_school);
+CREATE INDEX idx_books_is_outgrown ON books(is_outgrown);
+CREATE INDEX idx_memories_book_id ON reading_memories(book_id);
 DELETE FROM "sqlite_sequence";
 INSERT INTO "sqlite_sequence" VALUES('reading_log',41);
 COMMIT;
