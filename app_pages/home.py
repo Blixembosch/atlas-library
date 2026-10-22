@@ -21,7 +21,12 @@ from services.recommendation_service import (
     spin_wheel,
     random_pick,
 )
-from ui.components import render_hero, book_card
+from ui.components import (
+    render_hero,
+    hero_left_html,
+    hero_right_html,
+    book_card,
+)
 from ui.audio import play_celebration
 
 
@@ -50,32 +55,37 @@ def render_home_page() -> None:
 
     # Hero Kutusu ve Aksiyon Butonları (Tek Bir Kart İçinde)
     with st.container(key="hero_box"):
-        render_hero(gs, lvl, own_counts)
+        col_hl, col_hr = st.columns([1.55, 1.1], gap="large")
+        with col_hl:
+            st.markdown(hero_left_html(gs), unsafe_allow_html=True)
 
-        # Hedef tamamlanınca günde bir kez kutlama
-        if gs["done"] >= gs["goal"] and st.session_state.goal_celebrated != gs["today_iso"]:
-            st.session_state.goal_celebrated = gs["today_iso"]
-            play_celebration()
-            st.balloons()
+            # Hedef tamamlanınca günde bir kez kutlama
+            if gs["done"] >= gs["goal"] and st.session_state.goal_celebrated != gs["today_iso"]:
+                st.session_state.goal_celebrated = gs["today_iso"]
+                play_celebration()
+                st.balloons()
 
-        hb1, hb2, _sp = st.columns([1, 1, 3])
-        if hb1.button("🎡 Sihirli Çark", key="btn_hero_wheel", use_container_width=True):
-            picks = spin_wheel()
-            if picks:
-                st.session_state.current_featured_books = picks
-                st.session_state.featured_note = (
-                    f"🎡 Çark bugün için {len(picks)} kitap seçti!"
-                    if gs["remaining"] > 0
-                    else "🎉 Bugünkü hedef tamam! Çark sana 1 bonus kitap seçti."
-                )
-                st.rerun()
+            hb1, hb2 = st.columns(2)
+            if hb1.button("🎡 Sihirli Çarkı Çevir", key="btn_hero_wheel", use_container_width=True):
+                picks = spin_wheel()
+                if picks:
+                    st.session_state.current_featured_books = picks
+                    st.session_state.featured_note = (
+                        f"🎡 Çark bugün için {len(picks)} kitap seçti!"
+                        if gs["remaining"] > 0
+                        else "🎉 Bugünkü hedef tamam! Çark sana 1 bonus kitap seçti."
+                    )
+                    st.rerun()
 
-        if hb2.button("📚 Rastgele Öner", key="btn_hero_random", use_container_width=True):
-            picks = random_pick()
-            if picks:
-                st.session_state.current_featured_books = picks
-                st.session_state.featured_note = "📚 Senin için 4 macera seçtik!"
-                st.rerun()
+            if hb2.button("🎲 Rastgele 4 Kitap", key="btn_hero_random", use_container_width=True):
+                picks = random_pick()
+                if picks:
+                    st.session_state.current_featured_books = picks
+                    st.session_state.featured_note = "📚 Senin için 4 yeni macera seçtik!"
+                    st.rerun()
+
+        with col_hr:
+            st.markdown(hero_right_html(lvl, own_counts), unsafe_allow_html=True)
 
     # Bilgilendirme Notları
     pp = priority_progress()

@@ -8,7 +8,8 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 
 | Sürüm | Tarih | Odak Noktası | Durum |
 | :--- | :--- | :--- | :--- |
-| **v2.0.1** | 2026-10-23 | UI İyileştirmeleri, Hero HTML Kodu Düzeltmesi, Tarihe Göre Okuma İptali | 🚀 Canlıda |
+| **v2.0.2** | 2026-10-23 | Ergonomik Hero Yeniden Tasarımı, Ortalı Hemen Oku Butonları | 🚀 Canlıda |
+| **v2.0.1** | 2026-10-23 | UI İyileştirmeleri, Hero HTML Kodu Düzeltmesi, Tarihe Göre Okuma İptali | ✅ Tamamlandı |
 | **v2.0.0** | 2026-10-23 | Modüler Mimari, Anı Defteri, Caching, Kalite Bekçileri, Dinamik Kapaklar | ✅ Tamamlandı |
 | **v1.3.x** | 2026-10-12 | 5 Gruplu Yönetici Paneli, Ücretsiz Kategori Tarama, Çoklu Seri Önceliği | ✅ Tamamlandı |
 | **v1.2.x** | 2026-10-12 | Türkçe / Dutch Dil Ayrımı, Akşam Kuralı, Cin Ali Önceliği | ✅ Tamamlandı |
@@ -22,6 +23,14 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 ---
 
 ## 🚀 Sürüm Detayları
+
+### [v2.0.2] - 2026-10-23
+- **Ergonomik Hero ("Merhaba Atlas") Yeniden Tasarımı:**
+  - Hero alanı 2 dengeli bölüme ayrıldı:
+    - **Sol Alan (Karşılama & Görev):** "🚀 Günlük Okuma Macerası" rozeti, sıcak selamlama, dinamik motivasyon cümlesi, görsel görev çubuğu (yuvalar, hedef oranı ve seri rozeti), ve hemen altında 50-50 simetrik yerleştirilmiş iki adet büyük, dokunmatik dostu beyaz aksiyon butonu (`🎡 Sihirli Çarkı Çevir`, `🎲 Rastgele 4 Kitap`).
+    - **Sağ Alan (Glassmorphic Başarı Kartı):** Buzlu cam efektli şık kart içerisinde Seviye, seviye unvanı ("Kitap Kaşifi"), altın ışıltılı XP ilerleme çubuğu, sonraki seviyeye kalan XP ve yan yana iki mini başarı kutucuğu ("👦 Kendim Okudum", "📅 Bu Ay Toplam").
+- **Ortalı Kitap Altı Butonları ("Hemen Oku"):**
+  - Kitap kartlarının altındaki `📖 Hemen Oku` butonları, görsellerin altına tam ortalanacak şekilde hap (pill) biçiminde (`max-width: 200px`, `border-radius: 99px`) ortalandı.
 
 ### [v2.0.1] - 2026-10-23
 - **Ana Sayfa UI & Buton Düzeni İyileştirmesi:**

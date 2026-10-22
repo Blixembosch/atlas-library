@@ -67,7 +67,7 @@ def _ensure_shims() -> None:
                 def caption(self, *a, **k): pass
                 def text_input(self, *a, **k): return ""
 
-            st_mock.columns = lambda n: [MockCol() for _ in range(n if isinstance(n, int) else len(n))]
+            st_mock.columns = lambda n, *a, **k: [MockCol() for _ in range(n if isinstance(n, int) else len(n))]
             st_mock.sidebar = MockCol()
             st_mock.container = lambda *a, **k: MockCol()
             st_mock.expander = lambda *a, **k: MockCol()

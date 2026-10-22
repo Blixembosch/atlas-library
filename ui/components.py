@@ -53,8 +53,8 @@ def show_table(df: pd.DataFrame, **kw: Any) -> None:
     st.dataframe(df, height=h, **kw)
 
 
-def render_hero(gs: Dict[str, Any], lvl: Dict[str, int], own_counts: Dict[str, int]) -> None:
-    """Ana sayfa için renkli tebrik, hedef ve seviye kutusunu çizer."""
+def hero_left_html(gs: Dict[str, Any]) -> str:
+    """Hero alanının sol karşılama ve görev bölümü HTML'ini döner."""
     slots = "".join(
         '<div class="goal-slot done">✅</div>'
         if i < gs["done"]
@@ -67,30 +67,92 @@ def render_hero(gs: Dict[str, Any], lvl: Dict[str, int], own_counts: Dict[str, i
     )
 
     if gs["done"] >= gs["goal"]:
-        goal_msg = "🎉 Bugünkü görevi tamamladın!"
+        goal_msg = "🎉 Süpersin! Bugünkü okuma görevini tamamladın!"
         if gs["done"] > gs["goal"]:
-            goal_msg += f" (+{gs['done'] - gs['goal']} bonus)"
+            goal_msg += f" (+{gs['done'] - gs['goal']} bonus macera)"
     elif gs["pending"] > 0:
-        goal_msg = "⏳ Onay bekleniyor, annen ya da baban onaylayınca yuva dolar."
+        goal_msg = "⏳ Okuman kaydedildi, ebeveyn onayı bekleniyor."
     else:
-        goal_msg = f"Bugün {gs['remaining']} kitap daha oku!"
+        goal_msg = f"✨ Bugün {gs['remaining']} kitap daha okuyarak hedefini tamamla!"
 
     streak_html = (
-        f'<span class="goal-streak">🔥 {gs["streak"]} gün üst üste</span>'
+        f'<span class="goal-streak">🔥 {gs["streak"]} gün seri</span>'
         if gs["streak"] > 0
         else ""
     )
 
-    hero_html = "".join([
-        '<div class="hero-top"><div class="hero-left">',
-        '<div class="hero-title">👋 Merhaba Atlas</div>',
-        f'<div class="hero-goalline"><span>🎯</span><div class="goal-slots">{slots}</div>',
-        f'<b>{min(gs["done"], gs["goal"])}/{gs["goal"]}</b>{streak_html}</div>',
-        f'<div class="goal-msg">{goal_msg}</div></div>',
-        f'<div class="hero-right"><b>⭐ Seviye {lvl["level"]}</b>{level_bar_html(lvl)}',
-        f'<div class="hero-own">👦 Kendi okuduklarım: <b>{own_counts["total"]}</b> · bu ay <b>{own_counts["month"]}</b></div></div></div>',
+    return "".join([
+        '<div class="hero-welcome">',
+        '<div class="hero-badge-pill">🚀 Günlük Okuma Macerası</div>',
+        '<h1 class="hero-heading">👋 Merhaba Atlas!</h1>',
+        f'<p class="hero-subheading">{goal_msg}</p>',
+        '</div>',
+        '<div class="hero-mission-bar">',
+        '<span class="mission-title">🎯 Günün Görevi:</span>',
+        f'<div class="mission-slots">{slots}</div>',
+        f'<span class="mission-count"><b>{min(gs["done"], gs["goal"])} / {gs["goal"]}</b> Kitap</span>',
+        streak_html,
+        '</div>',
     ])
-    st.markdown(hero_html, unsafe_allow_html=True)
+
+
+def hero_right_html(lvl: Dict[str, int], own_counts: Dict[str, int]) -> str:
+    """Hero alanının sağ oyunlaştırma ve başarı kartı HTML'ini döner."""
+    level = lvl.get("level", 1)
+    xp = lvl.get("xp", 0)
+    pct = lvl.get("pct", 0)
+    to_next = lvl.get("to_next", 0)
+
+    titles = {
+        1: "Kitap Kaşifi",
+        2: "Macera Avcısı",
+        3: "Hikaye Ustası",
+        4: "Bilgi Büyücüsü",
+        5: "Efsanevi Okur",
+    }
+    level_title = titles.get(level, "Sihirli Okur")
+
+    return "".join([
+        '<div class="hero-achievement-card">',
+        '<div class="achieve-header">',
+        f'<div class="achieve-level">⭐ Seviye {level}</div>',
+        f'<div class="achieve-xp-badge">{xp} XP</div>',
+        '</div>',
+        f'<div class="achieve-title">{level_title}</div>',
+        '<div class="hero-xp-track">',
+        f'<div class="hero-xp-fill" style="width:{pct}%"></div>',
+        '</div>',
+        '<div class="achieve-xp-info">',
+        f'<span>Seviye {level + 1} için</span>',
+        f'<b>{to_next} XP kaldı</b>',
+        '</div>',
+        '<div class="achieve-stats-grid">',
+        '<div class="achieve-stat-box">',
+        '<span class="stat-emoji">👦</span>',
+        '<div>',
+        f'<div class="stat-num">{own_counts.get("total", 0)}</div>',
+        '<div class="stat-label">Kendim Okudum</div>',
+        '</div>',
+        '</div>',
+        '<div class="achieve-stat-box">',
+        '<span class="stat-emoji">📅</span>',
+        '<div>',
+        f'<div class="stat-num">{own_counts.get("month", 0)}</div>',
+        '<div class="stat-label">Bu Ay Toplam</div>',
+        '</div>',
+        '</div>',
+        '</div>',
+        '</div>',
+    ])
+
+
+def render_hero(gs: Dict[str, Any], lvl: Dict[str, int], own_counts: Dict[str, int]) -> None:
+    """Ana sayfa için renkli tebrik, hedef ve seviye kutusunu çizer."""
+    col_l, col_r = st.columns([1.5, 1.1], gap="medium")
+    with col_l:
+        st.markdown(hero_left_html(gs), unsafe_allow_html=True)
+    with col_r:
+        st.markdown(hero_right_html(lvl, own_counts), unsafe_allow_html=True)
 
 
 @st.dialog("📖 Kitap Detayları ve Okuma İşlemleri", width="large")
@@ -226,7 +288,7 @@ def book_card(b: pd.Series | Dict[str, Any], prefix: str, cover_h: int = 170) ->
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
-    if st.button("📖 Hemen Oku", key=f"{prefix}_{b_dict['id']}"):
+    if st.button("📖 Hemen Oku", key=f"{prefix}_{b_dict['id']}", use_container_width=True):
         show_book_detail(b_dict["id"])
 
 

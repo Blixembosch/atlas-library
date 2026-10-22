@@ -107,138 +107,224 @@ section[data-testid="stSidebar"] {
   margin-top: 8px;
 }
 
-/* Hero Bölümü */
+/* Hero Bölümü (Modern Ergonomik Kart) */
 .st-key-hero_box, .hero-box {
-  background: linear-gradient(135deg, #4F7CFF 0%, #7C4DFF 100%);
-  border-radius: var(--r-card);
-  padding: 14px 20px 10px;
-  box-shadow: var(--shadow);
-  margin-bottom: 14px;
-}
-
-.st-key-hero_box div.stButton>button {
-  background: #fff;
-  color: #4F7CFF !important;
-  box-shadow: none;
-  font-weight: 700;
-}
-
-.hero-top {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 28px;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.hero-left {
-  flex: 1 1 280px;
-  min-width: 0;
-}
-
-.hero-right {
-  flex: 0 1 260px;
-  min-width: 200px;
+  background: linear-gradient(135deg, #4361EE 0%, #7209B7 60%, #3A0CA3 100%);
+  border-radius: 24px;
+  padding: 18px 22px 16px;
+  box-shadow: 0 10px 30px rgba(67, 97, 238, 0.28);
+  margin-bottom: 16px;
   color: #fff;
-  font-size: .85rem;
 }
 
-.hero-right .xp-track {
-  height: 8px;
-  margin: 4px 0 2px;
-  background: rgba(255, 255, 255, .3);
-  border-radius: 99px;
-  overflow: hidden;
+/* Hero Aksiyon Butonları */
+.st-key-hero_box div.stButton > button {
+  background: #ffffff !important;
+  color: #3A0CA3 !important;
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  border-radius: 14px !important;
+  font-weight: 800 !important;
+  font-size: 0.92rem !important;
+  padding: 10px 14px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+  transition: all 0.2s ease !important;
+  width: 100% !important;
 }
 
-.hero-right .xp-fill {
-  background: #fff;
-  height: 100%;
-  border-radius: 99px;
+.st-key-hero_box div.stButton > button:hover {
+  background: #f8fafc !important;
+  color: #4361EE !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18) !important;
 }
 
-.hero-right .xp-text {
-  color: #fff;
-  opacity: .9;
-  font-size: .75rem;
-  font-weight: 600;
-}
-
-.hero-own {
-  margin-top: 6px;
-  background: rgba(255, 255, 255, .18);
+/* Sol Alan: Karşılama ve Görev */
+.hero-badge-pill {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 99px;
   padding: 2px 10px;
-  display: inline-block;
-  font-size: .78rem;
-  font-weight: 600;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
   color: #fff;
+  margin-bottom: 4px;
 }
 
-.hero-title {
-  font-size: 1.35rem;
+.hero-heading {
+  font-size: 1.55rem;
   font-weight: 900;
-  color: #fff;
-  margin-bottom: 2px;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+  line-height: 1.2;
 }
 
-.hero-goalline {
+.hero-subheading {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0 0 10px 0;
+  line-height: 1.35;
+}
+
+.hero-mission-bar {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  padding: 6px 12px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mission-title {
+  font-size: 0.8rem;
+  font-weight: 800;
   color: #fff;
-  margin: 2px 0;
 }
 
-.hero-goalline b {
-  font-size: .95rem;
-}
-
-/* Günlük Hedef Yuvaları */
-.goal-slots {
+.mission-slots {
   display: flex;
-  gap: 6px;
+  gap: 5px;
+  align-items: center;
 }
 
 .goal-slot {
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  border: 2px dashed rgba(255, 255, 255, .7);
+  border: 2px dashed rgba(255, 255, 255, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: .9rem;
+  font-size: 0.82rem;
 }
 
 .goal-slot.done {
-  background: #fff;
-  border: 2px solid #fff;
+  background: #ffffff;
+  border: 2px solid #ffffff;
 }
 
 .goal-slot.wait {
-  background: rgba(255, 255, 255, .3);
-  border: 2px solid rgba(255, 255, 255, .8);
+  background: rgba(255, 255, 255, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.9);
 }
 
-.goal-msg {
-  font-size: .82rem;
-  font-weight: 600;
+.mission-count {
+  font-size: 0.82rem;
   color: #fff;
-  opacity: .95;
-  margin-top: 2px;
+}
+
+.mission-count b {
+  font-size: 0.95rem;
 }
 
 .goal-streak {
   display: inline-block;
-  background: #fff;
-  color: #F97316;
+  background: #ffffff;
+  color: #ea580c;
   border-radius: 99px;
-  padding: 1px 10px;
+  padding: 1px 9px;
   font-weight: 800;
-  font-size: .78rem;
+  font-size: 0.75rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Sağ Alan: Glassmorphic Başarı & Oyunlaştırma Kartı */
+.hero-achievement-card {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 20px;
+  padding: 12px 16px;
+  color: #ffffff;
+  backdrop-filter: blur(8px);
+}
+
+.achieve-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.achieve-level {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.achieve-xp-badge {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 99px;
+  padding: 1px 9px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.achieve-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 4px;
+}
+
+.hero-xp-track {
+  height: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 5px 0 3px;
+}
+
+.hero-xp-fill {
+  background: linear-gradient(90deg, #FFD166, #FFFFFF);
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.3s ease;
+}
+
+.achieve-xp-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.88);
+  margin-bottom: 8px;
+}
+
+.achieve-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.achieve-stat-box {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 5px 8px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.stat-emoji {
+  font-size: 1.15rem;
+}
+
+.stat-num {
+  font-size: 0.95rem;
+  font-weight: 900;
+  line-height: 1.1;
+  color: #ffffff;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 600;
 }
 
 /* XP İlerleme Çubuğu (Genel) */
@@ -366,6 +452,35 @@ div[class*="st-key-catON_"] button {
   font-size: .8rem;
   color: #64748b;
   line-height: 1.6;
+}
+
+/* Kitap Altı 'Hemen Oku' Butonunu Ortalama */
+div[data-testid="stColumn"] div.stButton {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-top: 4px !important;
+}
+
+div[data-testid="stColumn"] div.stButton > button {
+  display: inline-flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  margin: 0 auto !important;
+  border-radius: 99px !important;
+  font-weight: 700 !important;
+  padding: 8px 18px !important;
+  width: 100% !important;
+  max-width: 200px !important;
+  box-shadow: 0 2px 8px rgba(79, 124, 255, 0.15) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+div[data-testid="stColumn"] div.stButton > button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 14px rgba(79, 124, 255, 0.25) !important;
 }
 
 /* Son Okunanlar */

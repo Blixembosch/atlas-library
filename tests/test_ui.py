@@ -10,6 +10,8 @@ from ui.audio import play_chime, play_celebration
 from ui.components import (
     level_bar_html,
     lang_card_html,
+    hero_left_html,
+    hero_right_html,
     show_table,
     render_hero,
     show_book_detail,
@@ -55,6 +57,14 @@ class TestUI(unittest.TestCase):
         card = lang_card_html("Türkçe", {"month": 2, "year": 10, "total": 25})
         self.assertIn("Türkçe", card)
         self.assertIn("25", card)
+
+        hl = hero_left_html({"goal": 2, "done": 1, "pending": 0, "remaining": 1, "streak": 3, "today_iso": "2026-10-23"})
+        self.assertIn("Merhaba Atlas", hl)
+        self.assertIn("Günün Görevi", hl)
+
+        hr = hero_right_html({"xp": 50, "level": 1, "pct": 50, "to_next": 50}, {"total": 5, "month": 2, "year": 5})
+        self.assertIn("Seviye 1", hr)
+        self.assertIn("Kendim Okudum", hr)
 
         mem = {
             "book_title": "Minik Ayı",
