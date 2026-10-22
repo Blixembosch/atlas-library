@@ -110,10 +110,10 @@ section[data-testid="stSidebar"] {
 /* Hero Bölümü (Modern Ergonomik Kart) */
 .st-key-hero_box, .hero-box {
   background: linear-gradient(135deg, #4361EE 0%, #7209B7 60%, #3A0CA3 100%);
-  border-radius: 24px;
-  padding: 18px 22px 16px;
-  box-shadow: 0 10px 30px rgba(67, 97, 238, 0.28);
-  margin-bottom: 16px;
+  border-radius: 20px;
+  padding: 14px 18px 12px;
+  box-shadow: 0 8px 24px rgba(67, 97, 238, 0.25);
+  margin-bottom: 14px;
   color: #fff;
 }
 
@@ -122,11 +122,11 @@ section[data-testid="stSidebar"] {
   background: #ffffff !important;
   color: #3A0CA3 !important;
   border: 1px solid rgba(255, 255, 255, 0.9) !important;
-  border-radius: 14px !important;
+  border-radius: 12px !important;
   font-weight: 800 !important;
-  font-size: 0.92rem !important;
-  padding: 10px 14px !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+  font-size: 0.86rem !important;
+  padding: 7px 10px !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1) !important;
   transition: all 0.2s ease !important;
   width: 100% !important;
 }
@@ -135,71 +135,59 @@ section[data-testid="stSidebar"] {
   background: #f8fafc !important;
   color: #4361EE !important;
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Sol Alan: Karşılama ve Görev */
-.hero-badge-pill {
-  display: inline-block;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 99px;
-  padding: 2px 10px;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  color: #fff;
-  margin-bottom: 4px;
-}
-
 .hero-heading {
-  font-size: 1.55rem;
+  font-size: 1.45rem;
   font-weight: 900;
   color: #ffffff;
-  margin: 0 0 4px 0;
-  line-height: 1.2;
+  margin: 0 0 2px 0;
+  line-height: 1.15;
 }
 
 .hero-subheading {
-  font-size: 0.88rem;
+  font-size: 0.84rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.92);
-  margin: 0 0 10px 0;
-  line-height: 1.35;
+  margin: 0 0 7px 0;
+  line-height: 1.3;
 }
 
 .hero-mission-bar {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
   background: rgba(255, 255, 255, 0.14);
-  border-radius: 16px;
-  padding: 6px 12px;
-  margin-bottom: 12px;
+  border-radius: 14px;
+  padding: 4px 10px;
+  margin-bottom: 8px;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .mission-title {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 800;
   color: #fff;
 }
 
 .mission-slots {
   display: flex;
-  gap: 5px;
+  gap: 4px;
   align-items: center;
 }
 
 .goal-slot {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   border: 2px dashed rgba(255, 255, 255, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
 }
 
 .goal-slot.done {
@@ -236,8 +224,8 @@ section[data-testid="stSidebar"] {
 .hero-achievement-card {
   background: rgba(255, 255, 255, 0.16);
   border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 20px;
-  padding: 12px 16px;
+  border-radius: 18px;
+  padding: 10px 14px;
   color: #ffffff;
   backdrop-filter: blur(8px);
 }

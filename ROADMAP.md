@@ -8,7 +8,8 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 
 | Sürüm | Tarih | Odak Noktası | Durum |
 | :--- | :--- | :--- | :--- |
-| **v2.0.2** | 2026-10-23 | Ergonomik Hero Yeniden Tasarımı, Ortalı Hemen Oku Butonları | 🚀 Canlıda |
+| **v2.0.3** | 2026-10-23 | Hero Sol Panel Dikey Kompaktlaştırma ve Yükseklik Eşitleme | 🚀 Canlıda |
+| **v2.0.2** | 2026-10-23 | Ergonomik Hero Yeniden Tasarımı, Ortalı Hemen Oku Butonları | ✅ Tamamlandı |
 | **v2.0.1** | 2026-10-23 | UI İyileştirmeleri, Hero HTML Kodu Düzeltmesi, Tarihe Göre Okuma İptali | ✅ Tamamlandı |
 | **v2.0.0** | 2026-10-23 | Modüler Mimari, Anı Defteri, Caching, Kalite Bekçileri, Dinamik Kapaklar | ✅ Tamamlandı |
 | **v1.3.x** | 2026-10-12 | 5 Gruplu Yönetici Paneli, Ücretsiz Kategori Tarama, Çoklu Seri Önceliği | ✅ Tamamlandı |
@@ -23,6 +24,13 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 ---
 
 ## 🚀 Sürüm Detayları
+
+### [v2.0.3] - 2026-10-23
+- **Hero Sol Alan Dikey Kompaktlaştırma:**
+  - Fazlalık oluşturan `🚀 Günlük Okuma Macerası` hap rozeti kaldırıldı.
+  - Başlık (`1.45rem`) ve alt başlık (`0.84rem`) font ve satır aralıkları optimize edildi.
+  - Görev çubuğu ve slot boyutları kompaktlaştırılarak (`24px`) gereksiz dikey alan tüketimi engellendi.
+  - Aksiyon butonları dolgu ve yazı boyutları (`0.86rem`, `padding: 7px 10px`) revize edildi; böylece sol karşılama bölümü sağdaki başarı kartı ile aynı dikey yüksekliğe eşitlendi.
 
 ### [v2.0.2] - 2026-10-23
 - **Ergonomik Hero ("Merhaba Atlas") Yeniden Tasarımı:**

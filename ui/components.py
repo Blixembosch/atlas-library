@@ -83,7 +83,6 @@ def hero_left_html(gs: Dict[str, Any]) -> str:
 
     return "".join([
         '<div class="hero-welcome">',
-        '<div class="hero-badge-pill">🚀 Günlük Okuma Macerası</div>',
         '<h1 class="hero-heading">👋 Merhaba Atlas!</h1>',
         f'<p class="hero-subheading">{goal_msg}</p>',
         '</div>',
