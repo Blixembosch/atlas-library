@@ -1,0 +1,1 @@
+"""Atlas Library - Core Module."""

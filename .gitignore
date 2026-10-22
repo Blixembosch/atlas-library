@@ -3,5 +3,8 @@ __pycache__/
 *.py[cod]
 .streamlit/secrets.toml
 data/*.db
+*.db-shm
+*.db-wal
+*_backup.db
 .DS_Store
 atlas_library.db
