@@ -26,12 +26,12 @@ from services.reading_service import get_all_logs, approved_logs, period_counts
 from ui.styles import get_app_css
 
 # Sayfa Fonksiyonları
-from app_pages.home import render_page as render_home
-from app_pages.library import render_page as render_lib
-from app_pages.journey import render_page as render_journey
-from app_pages.badges import render_page as render_badges
-from app_pages.memories import render_page as render_memories
-from app_pages.admin import render_page as render_admin
+from app_pages.home import render_home_page
+from app_pages.library import render_library_page
+from app_pages.journey import render_journey_page
+from app_pages.badges import render_badges_page
+from app_pages.memories import render_memories_page
+from app_pages.admin import render_admin_page
 
 # 1. Streamlit Sayfa Yapılandırması
 st.set_page_config(
@@ -77,12 +77,12 @@ if app_password and not st.session_state.app_unlocked:
     st.stop()
 
 # 5. Modern Sayfa Navigasyonu (st.navigation & st.Page)
-p_home = st.Page(render_home, title="Ana Sayfa", icon="🏠", default=True)
-p_lib = st.Page(render_lib, title="Kütüphane", icon="📖")
-p_journey = st.Page(render_journey, title="Okuma Yolculuğu", icon="🏆")
-p_badges = st.Page(render_badges, title="Rozetler", icon="🎖️")
-p_memories = st.Page(render_memories, title="Anı Defteri", icon="✨")
-p_admin = st.Page(render_admin, title="Yönetici Paneli", icon="⚙️")
+p_home = st.Page(render_home_page, title="Ana Sayfa", icon="🏠", url_path="home", default=True)
+p_lib = st.Page(render_library_page, title="Kütüphane", icon="📖", url_path="library")
+p_journey = st.Page(render_journey_page, title="Okuma Yolculuğu", icon="🏆", url_path="journey")
+p_badges = st.Page(render_badges_page, title="Rozetler", icon="🎖️", url_path="badges")
+p_memories = st.Page(render_memories_page, title="Anı Defteri", icon="✨", url_path="memories")
+p_admin = st.Page(render_admin_page, title="Yönetici Paneli", icon="⚙️", url_path="admin")
 
 nav = st.navigation([p_home, p_lib, p_journey, p_badges, p_memories, p_admin])
 

@@ -64,7 +64,7 @@ from ui.styles import get_admin_css
 from ui.components import show_table
 
 
-def render_page() -> None:
+def render_admin_page() -> None:
     st.markdown(get_admin_css(), unsafe_allow_html=True)
     st.markdown(
         '<div class="admin-head"><h2>Yönetim Paneli</h2>'
@@ -593,6 +593,8 @@ def render_page() -> None:
                 reset_all_counters()
                 st.success("Tüm sayaçlar sıfırlandı.")
                 st.rerun()
+
+render_page = render_admin_page
 
 
 if __name__ == "__main__":

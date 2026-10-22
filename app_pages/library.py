@@ -7,7 +7,7 @@ from services.book_service import get_books_df, filter_books
 from ui.components import book_card
 
 
-def render_page() -> None:
+def render_library_page() -> None:
     st.markdown("### 📖 Kütüphane Arşivi")
 
     books_df = get_books_df()
@@ -60,6 +60,8 @@ def render_page() -> None:
         for c_idx, (_, b) in enumerate(filtered_lib.iloc[start : start + 4].iterrows()):
             with cols[c_idx]:
                 book_card(b, "lib_page", 210)
+
+render_page = render_library_page
 
 
 if __name__ == "__main__":

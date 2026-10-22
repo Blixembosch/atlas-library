@@ -25,7 +25,7 @@ from ui.components import render_hero, book_card
 from ui.audio import play_celebration
 
 
-def render_page() -> None:
+def render_home_page() -> None:
     books_df = get_books_df()
     home_df = books_df[books_df["is_school"] == 0]
     eligible_df = home_df[home_df["is_outgrown"] == 0]
@@ -162,6 +162,8 @@ def render_page() -> None:
             )
     else:
         st.info("Henüz okunan kitap yok. İlk maceranı başlat! 🚀")
+
+render_page = render_home_page
 
 
 if __name__ == "__main__":

@@ -68,6 +68,7 @@ def _ensure_shims() -> None:
                 def text_input(self, *a, **k): return ""
 
             st_mock.columns = lambda n: [MockCol() for _ in range(n if isinstance(n, int) else len(n))]
+            st_mock.sidebar = MockCol()
             st_mock.container = lambda *a, **k: MockCol()
             st_mock.expander = lambda *a, **k: MockCol()
             st_mock.form = lambda *a, **k: MockCol()
@@ -90,10 +91,11 @@ def _ensure_shims() -> None:
             st_mock.components.v1 = comp_v1
 
             class MockPage:
-                def __init__(self, page, title=None, icon=None, default=False):
+                def __init__(self, page, title=None, icon=None, url_path=None, default=False):
                     self.page = page
                     self.title = title
                     self.icon = icon
+                    self.url_path = url_path
                     self.default = default
 
             st_mock.Page = MockPage

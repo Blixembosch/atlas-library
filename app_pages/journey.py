@@ -15,7 +15,7 @@ from services.reading_service import (
 from ui.components import lang_card_html
 
 
-def render_page() -> None:
+def render_journey_page() -> None:
     st.markdown("### 🏆 Okuma Karnesi ve Detaylı İstatistikler")
 
     books_df = get_books_df()
@@ -129,6 +129,8 @@ def render_page() -> None:
                 """,
                 unsafe_allow_html=True,
             )
+
+render_page = render_journey_page
 
 
 if __name__ == "__main__":

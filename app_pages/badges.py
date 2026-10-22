@@ -13,7 +13,7 @@ from services.reading_service import (
 from ui.components import level_bar_html
 
 
-def render_page() -> None:
+def render_badges_page() -> None:
     st.markdown("### 🎖️ Atlas'ın Başarı Rozetleri")
     st.markdown("Okuduğun kitap sayısına göre kazandığın sihirli rozetler burada listelenir!")
 
@@ -74,6 +74,8 @@ def render_page() -> None:
                 """,
                 unsafe_allow_html=True,
             )
+
+render_page = render_badges_page
 
 
 if __name__ == "__main__":

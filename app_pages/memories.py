@@ -12,7 +12,7 @@ from services.memory_service import (
 from ui.components import render_memory_card
 
 
-def render_page() -> None:
+def render_memories_page() -> None:
     st.markdown("### ✨ Atlas'ın Sihirli Anı Defteri")
     st.markdown(
         "Birlikte okuduğumuz kitaplardan kalan unutulmaz anılar, sevilen karakterler, "
@@ -95,6 +95,8 @@ def render_page() -> None:
                 delete_memory(m["id"])
                 st.toast("Anı silindi.", icon="🗑️")
                 st.rerun()
+
+render_page = render_memories_page
 
 
 if __name__ == "__main__":
