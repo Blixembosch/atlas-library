@@ -78,6 +78,7 @@ def _ensure_shims() -> None:
             st_mock.text_area = lambda *a, **k: k.get("value", "")
             st_mock.number_input = lambda *a, **k: k.get("value", 1)
             st_mock.selectbox = lambda *a, **k: a[1][0] if len(a) > 1 and a[1] else (k.get("options", [""])[0] if k.get("options") else "")
+            st_mock.radio = lambda *a, **k: a[1][0] if len(a) > 1 and a[1] else (k.get("options", [""])[0] if k.get("options") else "")
             st_mock.multiselect = lambda *a, **k: k.get("default", [])
             st_mock.checkbox = lambda *a, **k: k.get("value", False)
             st_mock.slider = lambda *a, **k: k.get("value", 5)

@@ -48,34 +48,34 @@ def render_home_page() -> None:
     if "goal_celebrated" not in st.session_state:
         st.session_state.goal_celebrated = ""
 
-    # Hero Kutusu
-    render_hero(gs, lvl, own_counts)
+    # Hero Kutusu ve Aksiyon Butonları (Tek Bir Kart İçinde)
+    with st.container(key="hero_box"):
+        render_hero(gs, lvl, own_counts)
 
-    # Hedef tamamlanınca günde bir kez kutlama
-    if gs["done"] >= gs["goal"] and st.session_state.goal_celebrated != gs["today_iso"]:
-        st.session_state.goal_celebrated = gs["today_iso"]
-        play_celebration()
-        st.balloons()
+        # Hedef tamamlanınca günde bir kez kutlama
+        if gs["done"] >= gs["goal"] and st.session_state.goal_celebrated != gs["today_iso"]:
+            st.session_state.goal_celebrated = gs["today_iso"]
+            play_celebration()
+            st.balloons()
 
-    # Çark ve Rastgele Butonları
-    hb1, hb2, _sp = st.columns([1, 1, 3])
-    if hb1.button("🎡 Sihirli Çark", key="btn_hero_wheel"):
-        picks = spin_wheel()
-        if picks:
-            st.session_state.current_featured_books = picks
-            st.session_state.featured_note = (
-                f"🎡 Çark bugün için {len(picks)} kitap seçti!"
-                if gs["remaining"] > 0
-                else "🎉 Bugünkü hedef tamam! Çark sana 1 bonus kitap seçti."
-            )
-            st.rerun()
+        hb1, hb2, _sp = st.columns([1, 1, 3])
+        if hb1.button("🎡 Sihirli Çark", key="btn_hero_wheel", use_container_width=True):
+            picks = spin_wheel()
+            if picks:
+                st.session_state.current_featured_books = picks
+                st.session_state.featured_note = (
+                    f"🎡 Çark bugün için {len(picks)} kitap seçti!"
+                    if gs["remaining"] > 0
+                    else "🎉 Bugünkü hedef tamam! Çark sana 1 bonus kitap seçti."
+                )
+                st.rerun()
 
-    if hb2.button("📚 Rastgele Öner", key="btn_hero_random"):
-        picks = random_pick()
-        if picks:
-            st.session_state.current_featured_books = picks
-            st.session_state.featured_note = "📚 Senin için 4 macera seçtik!"
-            st.rerun()
+        if hb2.button("📚 Rastgele Öner", key="btn_hero_random", use_container_width=True):
+            picks = random_pick()
+            if picks:
+                st.session_state.current_featured_books = picks
+                st.session_state.featured_note = "📚 Senin için 4 macera seçtik!"
+                st.rerun()
 
     # Bilgilendirme Notları
     pp = priority_progress()
@@ -94,28 +94,35 @@ def render_home_page() -> None:
 
     st.markdown("#### ✨ Keşfetmek İstediğin Dünyayı Seç")
     categories = [
-        ("🌟", "Tümü"),
-        ("🐉", "Hikaye"),
-        ("🚀", "Bilgi & Keşif"),
-        ("💡", "İlk Okuma"),
-        ("🌍", "Doğa & Hayvanlar"),
-        ("🔬", "Bilim"),
-        ("💛", "Değerler"),
+        ("🌟", "Tümü", "Tümü"),
+        ("🐉", "Hikaye", "Hikaye"),
+        ("🚀", "Bilgi", "Bilgi & Keşif"),
+        ("💡", "İlk Okuma", "İlk Okuma"),
+        ("🌍", "Doğa", "Doğa & Hayvanlar"),
+        ("🔬", "Bilim", "Bilim"),
+        ("💛", "Değerler", "Değerler"),
     ]
 
+    cat_counts = eligible_df["category"].value_counts().to_dict()
     cat_cols = st.columns(len(categories))
-    for idx, (icon, cat_name) in enumerate(categories):
-        with cat_cols[idx]:
-            is_active = st.session_state.home_active_category == cat_name
-            label = f"{icon} {cat_name}"
-            btn_type = "primary" if is_active else "secondary"
-            if st.button(label, key=f"cat_btn_{cat_name}", type=btn_type):
-                st.session_state.home_active_category = cat_name
-                st.session_state.current_featured_books = recommend_books(4, cat=cat_name)
-                st.session_state.featured_note = f"📂 '{cat_name}' dünyasından kitaplar:"
-                st.rerun()
+    for idx, (icon, label, actual) in enumerate(categories):
+        n = len(eligible_df) if actual == "Tümü" else cat_counts.get(actual, 0)
+        is_on = st.session_state.home_active_category == actual
+        if cat_cols[idx].button(
+            f"{icon} **{label}**\n\n({n})",
+            key=f"{'catON' if is_on else 'cat'}_{idx}",
+            use_container_width=True,
+        ):
+            st.session_state.home_active_category = actual
+            st.session_state.current_featured_books = (
+                recommend_books(4, cat=actual) if actual != "Tümü" else []
+            )
+            st.session_state.featured_note = (
+                f"📂 '{actual}' dünyasından kitaplar:" if actual != "Tümü" else ""
+            )
+            st.rerun()
 
-    st.markdown("---")
+    st.markdown("<br>", unsafe_allow_html=True)
 
     # Önerilen Kitaplar
     note = st.session_state.featured_note or "⭐ Senin İçin Seçtiklerimiz"

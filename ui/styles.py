@@ -108,19 +108,25 @@ section[data-testid="stSidebar"] {
 }
 
 /* Hero Bölümü */
-.hero-box {
+.st-key-hero_box, .hero-box {
   background: linear-gradient(135deg, #4F7CFF 0%, #7C4DFF 100%);
   border-radius: var(--r-card);
-  padding: 16px 22px 14px;
+  padding: 14px 20px 10px;
   box-shadow: var(--shadow);
-  margin-bottom: 16px;
-  color: #fff;
+  margin-bottom: 14px;
+}
+
+.st-key-hero_box div.stButton>button {
+  background: #fff;
+  color: #4F7CFF !important;
+  box-shadow: none;
+  font-weight: 700;
 }
 
 .hero-top {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px 28px;
+  gap: 10px 28px;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 8px;
@@ -138,11 +144,43 @@ section[data-testid="stSidebar"] {
   font-size: .85rem;
 }
 
+.hero-right .xp-track {
+  height: 8px;
+  margin: 4px 0 2px;
+  background: rgba(255, 255, 255, .3);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.hero-right .xp-fill {
+  background: #fff;
+  height: 100%;
+  border-radius: 99px;
+}
+
+.hero-right .xp-text {
+  color: #fff;
+  opacity: .9;
+  font-size: .75rem;
+  font-weight: 600;
+}
+
+.hero-own {
+  margin-top: 6px;
+  background: rgba(255, 255, 255, .18);
+  border-radius: 99px;
+  padding: 2px 10px;
+  display: inline-block;
+  font-size: .78rem;
+  font-weight: 600;
+  color: #fff;
+}
+
 .hero-title {
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   font-weight: 900;
   color: #fff;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .hero-goalline {
@@ -151,17 +189,11 @@ section[data-testid="stSidebar"] {
   gap: 10px;
   flex-wrap: wrap;
   color: #fff;
-  margin: 4px 0;
+  margin: 2px 0;
 }
 
-.hero-own {
-  margin-top: 6px;
-  background: rgba(255, 255, 255, .18);
-  border-radius: 99px;
-  padding: 3px 12px;
-  display: inline-block;
-  font-size: .78rem;
-  font-weight: 600;
+.hero-goalline b {
+  font-size: .95rem;
 }
 
 /* Günlük Hedef Yuvaları */
@@ -171,14 +203,14 @@ section[data-testid="stSidebar"] {
 }
 
 .goal-slot {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   border: 2px dashed rgba(255, 255, 255, .7);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: .95rem;
+  font-size: .9rem;
 }
 
 .goal-slot.done {
@@ -192,11 +224,11 @@ section[data-testid="stSidebar"] {
 }
 
 .goal-msg {
-  font-size: .85rem;
+  font-size: .82rem;
   font-weight: 600;
   color: #fff;
   opacity: .95;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .goal-streak {
@@ -204,31 +236,52 @@ section[data-testid="stSidebar"] {
   background: #fff;
   color: #F97316;
   border-radius: 99px;
-  padding: 2px 10px;
+  padding: 1px 10px;
   font-weight: 800;
-  font-size: .8rem;
+  font-size: .78rem;
 }
 
-/* XP İlerleme Çubuğu */
+/* XP İlerleme Çubuğu (Genel) */
 .xp-track {
-  background: rgba(255, 255, 255, .3);
+  background: #e2e8f0;
   border-radius: 99px;
-  height: 10px;
+  height: 12px;
   overflow: hidden;
   margin: 6px 0 4px;
 }
 
 .xp-fill {
-  background: #fff;
+  background: linear-gradient(90deg, #4F7CFF, #7C4DFF);
   height: 100%;
   border-radius: 99px;
-  transition: width .3s ease;
 }
 
 .xp-text {
-  font-size: .78rem;
+  font-size: .8rem;
   font-weight: 600;
-  color: #fff;
+}
+
+/* Category cards */
+div[class*="st-key-cat_"] button, div[class*="st-key-catON_"] button {
+  background: #fff;
+  color: #1e293b !important;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  min-height: 64px;
+  padding: 6px 8px !important;
+  white-space: normal;
+}
+
+div[class*="st-key-cat_"] button p, div[class*="st-key-catON_"] button p {
+  margin: 0;
+  line-height: 1.2;
+  font-size: 0.82rem;
+}
+
+div[class*="st-key-catON_"] button {
+  border: 2px solid #4F7CFF !important;
+  background: #eff6ff !important;
 }
 
 /* Kitap Kartları */

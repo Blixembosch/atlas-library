@@ -8,7 +8,8 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 
 | Sürüm | Tarih | Odak Noktası | Durum |
 | :--- | :--- | :--- | :--- |
-| **v2.0.0** | 2026-10-23 | Modüler Mimari, Anı Defteri, Caching, Kalite Bekçileri, Dinamik Kapaklar | 🚀 Canlıda |
+| **v2.0.1** | 2026-10-23 | UI İyileştirmeleri, Hero HTML Kodu Düzeltmesi, Tarihe Göre Okuma İptali | 🚀 Canlıda |
+| **v2.0.0** | 2026-10-23 | Modüler Mimari, Anı Defteri, Caching, Kalite Bekçileri, Dinamik Kapaklar | ✅ Tamamlandı |
 | **v1.3.x** | 2026-10-12 | 5 Gruplu Yönetici Paneli, Ücretsiz Kategori Tarama, Çoklu Seri Önceliği | ✅ Tamamlandı |
 | **v1.2.x** | 2026-10-12 | Türkçe / Dutch Dil Ayrımı, Akşam Kuralı, Cin Ali Önceliği | ✅ Tamamlandı |
 | **v1.1.x** | 2026-10-12 | GitHub `data` Branch Kalıcı Senkronizasyon, "Atlas Okudu" Ayrımı | ✅ Tamamlandı |
@@ -21,6 +22,16 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 ---
 
 ## 🚀 Sürüm Detayları
+
+### [v2.0.1] - 2026-10-23
+- **Ana Sayfa UI & Buton Düzeni İyileştirmesi:**
+  - Hero kutusu aksiyon butonları (`Sihirli Çark` ve `Rastgele Öner`) hero kutusunun içine alındı; butonlar beyaz renk ve `use_container_width=True` ile derli toplu hale getirildi.
+  - Kategori filtre butonları orijinal beyaz kart formatına (`min-height: 64px`, `box-shadow`, kitap sayıları ve seçili kart kenarlığı) geri getirildi, butonlar arasındaki anlamsız boşluklar giderildi.
+- **Hero HTML Kod Bloğu Düzeltmesi:**
+  - Sağ üstteki Seviye ve Atlas'ın kendi okudukları alanındaki çok satırlı boşluk kaynaklı `<pre><code>` raw HTML görünümü sıfırlandı.
+- **Tarihe Göre Okuma İptali (Undo Reading):**
+  - Yönetici panelindeki "Son okumayı geri al" sekmesinde kitaplar **en son okunma tarihine göre azalan sırada (en son okunan ilk)** listelendi.
+  - Kullanıcı tercihine göre opsiyonel olarak **🔤 Alfabetik (A-Z)** sıralama seçeneği eklendi.
 
 ### [v2.0.0] - 2026-10-23 (Büyük Mimari ve Kalite Dönüşümü)
 * **Modüler Mimari Refactoring:**

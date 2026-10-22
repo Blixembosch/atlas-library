@@ -24,25 +24,26 @@ from ui.audio import play_chime
 
 def level_bar_html(lv: Dict[str, int]) -> str:
     """XP ilerleme çubuğu HTML'i döner."""
-    return f"""
-    <div class="xp-track"><div class="xp-fill" style="width:{lv['pct']}%"></div></div>
-    <div class="xp-text">Seviye {lv['level'] + 1}'e {lv['to_next']} XP kaldı</div>
-    """
+    pct = lv.get("pct", 0)
+    lvl_next = lv.get("level", 0) + 1
+    to_next = lv.get("to_next", 0)
+    return (
+        f'<div class="xp-track"><div class="xp-fill" style="width:{pct}%"></div></div>'
+        f'<div class="xp-text">Seviye {lvl_next}\'e {to_next} XP kaldı</div>'
+    )
 
 
 def lang_card_html(title: str, d: Optional[Dict[str, int]] = None) -> str:
     """Dillere göre okuma özet kartı HTML'i döner."""
     data = d or {"month": 0, "year": 0, "total": 0}
-    return f"""
-    <div class="lang-card">
-        <div class="lang-title">{html.escape(title)}</div>
-        <div class="lang-row">
-            <div><b>{data['month']}</b><span>Bu Ay</span></div>
-            <div><b>{data['year']}</b><span>Bu Yıl</span></div>
-            <div><b>{data['total']}</b><span>Toplam</span></div>
-        </div>
-    </div>
-    """
+    return (
+        f'<div class="lang-card"><div class="lang-title">{html.escape(title)}</div>'
+        f'<div class="lang-row">'
+        f'<div><b>{data["month"]}</b><span>Bu Ay</span></div>'
+        f'<div><b>{data["year"]}</b><span>Bu Yıl</span></div>'
+        f'<div><b>{data["total"]}</b><span>Toplam</span></div>'
+        f'</div></div>'
+    )
 
 
 def show_table(df: pd.DataFrame, **kw: Any) -> None:
@@ -80,27 +81,15 @@ def render_hero(gs: Dict[str, Any], lvl: Dict[str, int], own_counts: Dict[str, i
         else ""
     )
 
-    hero_html = f"""
-    <div class="hero-box">
-        <div class="hero-top">
-            <div class="hero-left">
-                <div class="hero-title">👋 Merhaba Atlas</div>
-                <div class="hero-goalline">
-                    <span>🎯</span>
-                    <div class="goal-slots">{slots}</div>
-                    <b>{min(gs['done'], gs['goal'])}/{gs['goal']}</b>
-                    {streak_html}
-                </div>
-                <div class="goal-msg">{goal_msg}</div>
-            </div>
-            <div class="hero-right">
-                <b>⭐ Seviye {lvl['level']}</b>
-                {level_bar_html(lvl)}
-                <div class="hero-own">👦 Kendi okuduklarım: <b>{own_counts['total']}</b> · bu ay <b>{own_counts['month']}</b></div>
-            </div>
-        </div>
-    </div>
-    """
+    hero_html = "".join([
+        '<div class="hero-top"><div class="hero-left">',
+        '<div class="hero-title">👋 Merhaba Atlas</div>',
+        f'<div class="hero-goalline"><span>🎯</span><div class="goal-slots">{slots}</div>',
+        f'<b>{min(gs["done"], gs["goal"])}/{gs["goal"]}</b>{streak_html}</div>',
+        f'<div class="goal-msg">{goal_msg}</div></div>',
+        f'<div class="hero-right"><b>⭐ Seviye {lvl["level"]}</b>{level_bar_html(lvl)}',
+        f'<div class="hero-own">👦 Kendi okuduklarım: <b>{own_counts["total"]}</b> · bu ay <b>{own_counts["month"]}</b></div></div></div>',
+    ])
     st.markdown(hero_html, unsafe_allow_html=True)
 
 

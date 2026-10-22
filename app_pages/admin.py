@@ -184,13 +184,47 @@ def render_admin_page() -> None:
         with adm_tab_undo:
             st.subheader("↩ En Son Okumayı Geri Al")
             read_books_adm = books_df[books_df["read_count"] > 0]
-            for _, rb in read_books_adm.iterrows():
-                col_rb1, col_rb2 = st.columns([3, 1])
-                col_rb1.write(f"📖 **{rb['title']}** (Okunma: {int(rb['read_count'])})")
-                if col_rb2.button("Geri Al", key=f"undo_{rb['id']}"):
-                    undo_last_read(rb["id"])
-                    st.toast("Okuma geri alındı.", icon="↩")
-                    st.rerun()
+
+            if len(read_books_adm) == 0:
+                st.info("Henüz okunmuş kitap kaydı bulunmuyor.")
+            else:
+                # Her kitap için en son onaylı okuma tarihini bul
+                latest_reads = {}
+                for l in all_logs:
+                    if l.get("status") != "pending":
+                        b_id = l.get("book_id")
+                        r_at = l.get("read_at") or ""
+                        if b_id and (b_id not in latest_reads or r_at > latest_reads[b_id]):
+                            latest_reads[b_id] = r_at
+
+                u_col1, u_col2 = st.columns([2, 1])
+                with u_col1:
+                    undo_sort = st.radio(
+                        "Sıralama:",
+                        ["📅 En Son Okunan İlk (Varsayılan)", "🔤 Alfabetik (A-Z)"],
+                        horizontal=True,
+                        key="undo_sort_mode",
+                    )
+
+                read_df_copy = read_books_adm.copy()
+                read_df_copy["last_read_at"] = read_df_copy["id"].map(lambda x: latest_reads.get(x, ""))
+
+                if undo_sort == "🔤 Alfabetik (A-Z)":
+                    sorted_books = read_df_copy.sort_values(by="title", ascending=True)
+                else:
+                    sorted_books = read_df_copy.sort_values(by="last_read_at", ascending=False)
+
+                st.caption(f"Toplam **{len(sorted_books)}** okunmuş kitap listeleniyor:")
+
+                for _, rb in sorted_books.iterrows():
+                    col_rb1, col_rb2 = st.columns([3.5, 1])
+                    last_dt = latest_reads.get(rb["id"], "")
+                    dt_label = f" — 🕒 *{last_dt[:16]}*" if last_dt else ""
+                    col_rb1.markdown(f"📖 **{rb['title']}** (Okunma: {int(rb['read_count'])}){dt_label}")
+                    if col_rb2.button("↩ Geri Al", key=f"undo_{rb['id']}", use_container_width=True):
+                        undo_last_read(rb["id"])
+                        st.toast(f"'{rb['title']}' okuması geri alındı.", icon="↩")
+                        st.rerun()
 
     # 2. SEKME: KİTAPLAR
     with g_kitap:
