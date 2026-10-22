@@ -4,7 +4,7 @@ INSERT INTO "books" VALUES('BÇ-1','Almanca İlk Bin Sözcük','1001 Çiçek',64
 INSERT INTO "books" VALUES('BÇ-2','Ayıcık Kızgın Değil','1001 Çiçek',24,'Louison Nielman','','3+','Değerler','Duygular & Sosyal Gelişim','https://covers.openlibrary.org/b/id/12223527-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('BÇ-3','Büyük Bilim İnsanı Galileo','1001 Çiçek',40,'Gerry Bailey; Karen Foster','9786053410720','7+','Bilgi & Keşif','Bilim & Teknoloji','https://img.kitapyurdu.com/v1/getImage/fn:11645071/wi:500/wh:2afded8f9','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('BÇ-4','Denizler Altında Yirmi Bin Fersah','1001 Çiçek',24,'Jules Verne','9786053414292','3+','Hikaye','Doğa & Hayvanlar','https://cdn.kitapsec.com/image/urun/2018/01/04/d1515061959.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
-INSERT INTO "books" VALUES('BÇ-5','Gauguin Arkadaşım Paul','1001 Çiçek',36,'Anna Obiols','9786054525966','3+','Bilgi & Keşif','Sanat & Yaratıcılık','https://img.kitapyurdu.com/v1/getImage/fn:234404/mh:1000/wh:711148f0d','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
+INSERT INTO "books" VALUES('BÇ-5','Gauguin Arkadaşım Paul','1001 Çiçek',36,'Anna Obiols','9786054525966','3+','Bilgi & Keşif','Sanat & Yaratıcılık','https://img.kitapyurdu.com/v1/getImage/fn:234404/mh:1000/wh:711148f0d','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('BÇ-6','İlk Satranç Kitabım','1001 Çiçek',36,'Patricia Geis','9786053416678','4+','Aktivite','Satranç','https://covers.openlibrary.org/b/id/12223529-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('BÇ-7','Kendine Güvenen Fil','1001 Çiçek',32,'Louison Nielman','','3+','Değerler','Duygular & Sosyal Gelişim','https://covers.openlibrary.org/b/id/12123463-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('BÇ-8','Konsantre Olabilen Kanguru','1001 Çiçek',24,'Louison Nielman','9786053417125','3+','Değerler','Duygular & Sosyal Gelişim','https://covers.openlibrary.org/b/id/12123467-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
@@ -257,7 +257,7 @@ INSERT INTO "books" VALUES('TİB-9','Dünyayı Öğreniyorum: Arkadaşım Bahçe
 INSERT INTO "books" VALUES('TİB-10','Dünyayı Öğreniyorum: Arkadaşım Balerin','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://img.iskultur.com.tr/webp/2013/08/arkadasim-balerin-1-270x270.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-11','Dünyayı Öğreniyorum: Arkadaşım Çiftçi','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://covers.openlibrary.org/b/id/12125751-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-12','Dünyayı Öğreniyorum: Arkadaşım Dişçi','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://covers.openlibrary.org/b/id/12226216-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
-INSERT INTO "books" VALUES('TİB-13','Dünyayı Öğreniyorum: Arkadaşım Fırıncı','Türkiye İş Bankası Yayınları',16,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://img.iskultur.com.tr/webp/2014/01/arkadasim-firinci-270x270.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
+INSERT INTO "books" VALUES('TİB-13','Dünyayı Öğreniyorum: Arkadaşım Fırıncı','Türkiye İş Bankası Yayınları',16,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://img.iskultur.com.tr/webp/2014/01/arkadasim-firinci-270x270.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-14','Dünyayı Öğreniyorum: Arkadaşım Futbolcu','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://covers.openlibrary.org/b/id/12226251-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-15','Dünyayı Öğreniyorum: Arkadaşım Hemşire','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://img.iskultur.com.tr/webp/2016/10/arkadasim-hemsire-270x270.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-16','Dünyayı Öğreniyorum: Arkadaşım İnşaat Ustası','Türkiye İş Bankası Yayınları',24,'Ralf Butschkow','','4+','Bilgi & Keşif','Meslekler','https://img.iskultur.com.tr/webp/2016/09/arkadasim-insaat-ustasi-270x270.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
@@ -365,8 +365,8 @@ INSERT INTO "reading_log" VALUES(35,'TİB-15','read','2026-10-20T19:00:00',1,0);
 INSERT INTO "reading_log" VALUES(37,'RH-17','read','2026-10-20T19:00:00',1,0);
 INSERT INTO "reading_log" VALUES(38,'TİB-26','read','2026-10-21T19:08:30',1,0);
 INSERT INTO "reading_log" VALUES(39,'TİB-65','read','2026-10-21T19:08:43',1,0);
-INSERT INTO "reading_log" VALUES(40,'BÇ-5','pending','2026-10-22T22:32:28',1,0);
-INSERT INTO "reading_log" VALUES(41,'TİB-13','pending','2026-10-22T22:32:45',1,0);
+INSERT INTO "reading_log" VALUES(40,'BÇ-5','read','2026-10-22T22:32:28',1,0);
+INSERT INTO "reading_log" VALUES(41,'TİB-13','read','2026-10-22T22:32:45',1,0);
 CREATE TABLE recommendations(period_key TEXT PRIMARY KEY,book_ids TEXT,created_at TEXT,mode TEXT);
 CREATE TABLE settings(key TEXT PRIMARY KEY, value TEXT);
 INSERT INTO "settings" VALUES('lang_migrated_v1','1');
