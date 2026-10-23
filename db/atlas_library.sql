@@ -367,6 +367,7 @@ INSERT INTO "reading_log" VALUES(38,'TİB-26','read','2026-10-21T19:08:30',1,0);
 INSERT INTO "reading_log" VALUES(39,'TİB-65','read','2026-10-21T19:08:43',1,0);
 INSERT INTO "reading_log" VALUES(40,'BÇ-5','read','2026-10-22T22:32:28',1,0);
 INSERT INTO "reading_log" VALUES(41,'TİB-13','read','2026-10-22T22:32:45',1,0);
+INSERT INTO "reading_log" VALUES(42,'TİB-52','pending','2026-10-23T20:41:53',1,0);
 CREATE TABLE reading_memories (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     book_id TEXT NOT NULL,
@@ -392,5 +393,5 @@ CREATE INDEX idx_books_is_school ON books(is_school);
 CREATE INDEX idx_books_is_outgrown ON books(is_outgrown);
 CREATE INDEX idx_memories_book_id ON reading_memories(book_id);
 DELETE FROM "sqlite_sequence";
-INSERT INTO "sqlite_sequence" VALUES('reading_log',41);
+INSERT INTO "sqlite_sequence" VALUES('reading_log',42);
 COMMIT;
