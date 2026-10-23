@@ -19,7 +19,7 @@ CATEGORY_REVIEW_FILE = BASE_DIR / "category_review.csv"
 # Uygulama Bilgileri
 APP_TITLE = "Atlas'ın Sihirli Kütüphanesi"
 APP_ICON = "🏰"
-APP_VERSION = "v2.0.4"
+APP_VERSION = "v2.0.5"
 TZ = ZoneInfo("Europe/Amsterdam")
 
 # Standart Kitap Kategorileri

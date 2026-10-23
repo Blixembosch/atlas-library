@@ -161,6 +161,39 @@ section[data-testid="stSidebar"] {
 }
 
 /* Sol Alan: Karşılama ve Görev */
+.hero-welcome-dock {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2px 0 4px 0;
+}
+
+.hero-welcome-dock .hero-heading {
+  font-size: 1.30rem !important;
+  font-weight: 900 !important;
+  color: #ffffff !important;
+  margin: 0 0 2px 0 !important;
+  line-height: 1.15 !important;
+}
+
+.hero-welcome-dock .hero-subheading {
+  font-size: 0.80rem !important;
+  font-weight: 600 !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+  margin: 0 !important;
+  line-height: 1.25 !important;
+}
+
+/* Günün Görevi İkiz Kartı */
+.mission-fill {
+  background: linear-gradient(90deg, #06D6A0, #4CC9F0) !important;
+}
+
+.streak-badge {
+  background: rgba(255, 255, 255, 0.28) !important;
+  color: #fff !important;
+}
+
 .hero-left-wrapper {
   display: flex;
   flex-direction: column;

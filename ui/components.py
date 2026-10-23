@@ -53,47 +53,92 @@ def show_table(df: pd.DataFrame, **kw: Any) -> None:
     st.dataframe(df, height=h, **kw)
 
 
-def hero_left_html(gs: Dict[str, Any]) -> str:
-    """Hero alanının sol karşılama ve görev bölümü HTML'ini döner."""
-    slots = "".join(
-        '<div class="goal-slot done">⭐</div>'
-        if i < gs["done"]
-        else (
-            '<div class="goal-slot wait">⏳</div>'
-            if i < gs["done"] + gs["pending"]
-            else '<div class="goal-slot"></div>'
-        )
-        for i in range(gs["goal"])
-    )
+def hero_welcome_html() -> str:
+    """Hero alanının sol karşılama başlığı ve motivasyon metnini döner."""
+    return "".join([
+        '<div class="hero-welcome-dock">',
+        '<div class="hero-heading">👋 Merhaba Atlas!</div>',
+        '<div class="hero-subheading">Bugün yeni bir maceraya hazır mısın?</div>',
+        '</div>',
+    ])
 
-    if gs["done"] >= gs["goal"]:
-        bonus = gs["done"] - gs["goal"]
-        goal_msg = "🎉 Görev tamamlandı!" + (f" (+{bonus} bonus)" if bonus > 0 else "")
-    elif gs["pending"] > 0:
-        goal_msg = "⏳ Okuma kaydedildi, onay bekleniyor"
+
+def hero_mission_html(gs: Dict[str, Any]) -> str:
+    """Hero alanının Günün Görevi cam kartı HTML'ini döner (Seviye kartı ile ikiz tasarım)."""
+    goal = max(1, gs.get("goal", 2))
+    done = gs.get("done", 0)
+    pending = gs.get("pending", 0)
+    remaining = gs.get("remaining", max(0, goal - done))
+    streak = gs.get("streak", 0)
+
+    pct = min(100, int((done / goal) * 100))
+
+    if done >= goal:
+        bonus = done - goal
+        goal_msg = "🎉 Harikasın! Görev Tamam!" + (f" (+{bonus} bonus)" if bonus > 0 else "")
+    elif pending > 0:
+        goal_msg = "⏳ Okuma kaydedildi, onayda"
     else:
-        goal_msg = f"✨ Hedefe {gs['remaining']} kitap kaldı"
+        goal_msg = f"✨ Hedefe {remaining} kitap kaldı"
 
-    streak_html = (
-        f'<span class="goal-streak">🔥 {gs["streak"]} gün seri</span>'
-        if gs["streak"] > 0
-        else ""
+    streak_badge = (
+        f'<div class="achieve-xp-badge streak-badge">🔥 {streak} Gün Seri</div>'
+        if streak > 0
+        else '<div class="achieve-xp-badge streak-badge">✨ Günlük Hedef</div>'
     )
+
+    if pending > 0:
+        box2_emoji = "⏳"
+        box2_num = pending
+        box2_label = "Onay Bekliyor"
+    elif remaining > 0:
+        box2_emoji = "🎯"
+        box2_num = remaining
+        box2_label = "Kalan Hedef"
+    else:
+        box2_emoji = "🌟"
+        box2_num = done - goal if done > goal else "✓"
+        box2_label = "Bonus Macera" if done > goal else "Tamamlandı"
 
     return "".join([
-        '<div class="hero-left-wrapper">',
-        '<div class="hero-header-row">',
-        '<div class="hero-heading">👋 Merhaba Atlas!</div>',
-        streak_html,
+        '<div class="hero-achievement-card hero-mission-card">',
+        '<div class="achieve-header">',
+        '<div class="achieve-level">🎯 Günün Görevi</div>',
+        streak_badge,
         '</div>',
-        '<div class="hero-mission-bar">',
-        '<span class="mission-title">🎯 Günün Görevi:</span>',
-        f'<div class="mission-slots">{slots}</div>',
-        f'<span class="mission-count"><b>{min(gs["done"], gs["goal"])} / {gs["goal"]}</b></span>',
-        '<span class="mission-sep">•</span>',
-        f'<span class="mission-msg">{goal_msg}</span>',
+        f'<div class="achieve-title">{goal_msg}</div>',
+        '<div class="hero-xp-track">',
+        f'<div class="hero-xp-fill mission-fill" style="width:{pct}%"></div>',
+        '</div>',
+        '<div class="achieve-xp-info">',
+        f'<span><b>{min(done, goal)} / {goal}</b> Kitap</span>',
+        f'<b>%{pct} Tamamlandı</b>',
+        '</div>',
+        '<div class="achieve-stats-grid">',
+        '<div class="achieve-stat-box">',
+        '<span class="stat-emoji">📖</span>',
+        '<div>',
+        f'<div class="stat-num">{done}</div>',
+        '<div class="stat-label">Bugün Okundu</div>',
         '</div>',
         '</div>',
+        '<div class="achieve-stat-box">',
+        f'<span class="stat-emoji">{box2_emoji}</span>',
+        '<div>',
+        f'<div class="stat-num">{box2_num}</div>',
+        f'<div class="stat-label">{box2_label}</div>',
+        '</div>',
+        '</div>',
+        '</div>',
+        '</div>',
+    ])
+
+
+def hero_left_html(gs: Dict[str, Any]) -> str:
+    """Geriye dönük uyumluluk: Karşılama ve görev bölümü HTML'ini döner."""
+    return "".join([
+        hero_welcome_html(),
+        hero_mission_html(gs),
     ])
 
 
@@ -148,10 +193,12 @@ def hero_right_html(lvl: Dict[str, int], own_counts: Dict[str, int]) -> str:
 
 
 def render_hero(gs: Dict[str, Any], lvl: Dict[str, int], own_counts: Dict[str, int]) -> None:
-    """Ana sayfa için renkli tebrik, hedef ve seviye kutusunu çizer."""
-    col_l, col_r = st.columns([1.5, 1.1], gap="medium")
+    """Ana sayfa için renkli tebrik, görev ve seviye kutularını çizer."""
+    col_l, col_m, col_r = st.columns([1.15, 1.0, 1.0], gap="medium")
     with col_l:
-        st.markdown(hero_left_html(gs), unsafe_allow_html=True)
+        st.markdown(hero_welcome_html(), unsafe_allow_html=True)
+    with col_m:
+        st.markdown(hero_mission_html(gs), unsafe_allow_html=True)
     with col_r:
         st.markdown(hero_right_html(lvl, own_counts), unsafe_allow_html=True)
 

@@ -8,7 +8,8 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 
 | Sürüm | Tarih | Odak Noktası | Durum |
 | :--- | :--- | :--- | :--- |
-| **v2.0.4** | 2026-10-23 | Hero Sol Panel Ultra-Kompakt Düzen & Dikey Alan Optimizasyonu | 🚀 Canlıda |
+| **v2.0.5** | 2026-10-23 | 3 Sütunlu Hero Mimarisi: "Günün Görevi" ve "Seviye" İkiz Cam Kartları | 🚀 Canlıda |
+| **v2.0.4** | 2026-10-23 | Hero Sol Panel Ultra-Kompakt Düzen & Dikey Alan Optimizasyonu | ✅ Tamamlandı |
 | **v2.0.3** | 2026-10-23 | Hero Sol Panel Dikey Kompaktlaştırma ve Yükseklik Eşitleme | ✅ Tamamlandı |
 | **v2.0.2** | 2026-10-23 | Ergonomik Hero Yeniden Tasarımı, Ortalı Hemen Oku Butonları | ✅ Tamamlandı |
 | **v2.0.1** | 2026-10-23 | UI İyileştirmeleri, Hero HTML Kodu Düzeltmesi, Tarihe Göre Okuma İptali | ✅ Tamamlandı |
@@ -25,6 +26,15 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 ---
 
 ## 🚀 Sürüm Detayları
+
+### [v2.0.5] - 2026-10-23
+- **3 Sütunlu Dengeli Hero ve İkiz Cam Kartlar:**
+  - "Günün Görevi" bölümü, Seviye kartı ile birebir aynı estetik ve yapıya sahip bağımsız bir glassmorphic karta dönüştürüldü (`hero_mission_html`).
+  - Hero alanı 3 eşit/dengeli sütuna ayrıldı:
+    1. **Sol:** Karşılama (`👋 Merhaba Atlas!`) ve iki tam genişlikli hızlı aksiyon butonu (`🎡 Sihirli Çarkı Çevir`, `🎲 Rastgele 4 Kitap`).
+    2. **Orta:** `🎯 Günün Görevi` ikiz cam kartı (seri rozeti, görev durumu, zümrüt ilerleme çubuğu, tamamlanma yüzdesi, `Bugün Okundu` ve `Kalan Hedef` mini kutucukları).
+    3. **Sağ:** `⭐ Seviye` ikiz cam kartı (XP rozeti, unvan, altın ilerleme çubuğu, `Kendim Okudum` ve `Bu Ay Toplam` mini kutucukları).
+  - Üç sütun da dikeyde birebir aynı yükseklikte (~120px) hizalanarak mükemmel bir simetri sağlandı.
 
 ### [v2.0.4] - 2026-10-23
 - **Hero Sol Alan Ultra-Kompakt Düzen:**
