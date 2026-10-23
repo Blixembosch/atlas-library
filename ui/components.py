@@ -56,7 +56,7 @@ def show_table(df: pd.DataFrame, **kw: Any) -> None:
 def hero_left_html(gs: Dict[str, Any]) -> str:
     """Hero alanının sol karşılama ve görev bölümü HTML'ini döner."""
     slots = "".join(
-        '<div class="goal-slot done">✅</div>'
+        '<div class="goal-slot done">⭐</div>'
         if i < gs["done"]
         else (
             '<div class="goal-slot wait">⏳</div>'
@@ -67,13 +67,12 @@ def hero_left_html(gs: Dict[str, Any]) -> str:
     )
 
     if gs["done"] >= gs["goal"]:
-        goal_msg = "🎉 Süpersin! Bugünkü okuma görevini tamamladın!"
-        if gs["done"] > gs["goal"]:
-            goal_msg += f" (+{gs['done'] - gs['goal']} bonus macera)"
+        bonus = gs["done"] - gs["goal"]
+        goal_msg = "🎉 Görev tamamlandı!" + (f" (+{bonus} bonus)" if bonus > 0 else "")
     elif gs["pending"] > 0:
-        goal_msg = "⏳ Okuman kaydedildi, ebeveyn onayı bekleniyor."
+        goal_msg = "⏳ Okuma kaydedildi, onay bekleniyor"
     else:
-        goal_msg = f"✨ Bugün {gs['remaining']} kitap daha okuyarak hedefini tamamla!"
+        goal_msg = f"✨ Hedefe {gs['remaining']} kitap kaldı"
 
     streak_html = (
         f'<span class="goal-streak">🔥 {gs["streak"]} gün seri</span>'
@@ -82,15 +81,18 @@ def hero_left_html(gs: Dict[str, Any]) -> str:
     )
 
     return "".join([
-        '<div class="hero-welcome">',
-        '<h1 class="hero-heading">👋 Merhaba Atlas!</h1>',
-        f'<p class="hero-subheading">{goal_msg}</p>',
+        '<div class="hero-left-wrapper">',
+        '<div class="hero-header-row">',
+        '<div class="hero-heading">👋 Merhaba Atlas!</div>',
+        streak_html,
         '</div>',
         '<div class="hero-mission-bar">',
         '<span class="mission-title">🎯 Günün Görevi:</span>',
         f'<div class="mission-slots">{slots}</div>',
-        f'<span class="mission-count"><b>{min(gs["done"], gs["goal"])} / {gs["goal"]}</b> Kitap</span>',
-        streak_html,
+        f'<span class="mission-count"><b>{min(gs["done"], gs["goal"])} / {gs["goal"]}</b></span>',
+        '<span class="mission-sep">•</span>',
+        f'<span class="mission-msg">{goal_msg}</span>',
+        '</div>',
         '</div>',
     ])
 

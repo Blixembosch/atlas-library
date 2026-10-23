@@ -8,7 +8,8 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 
 | Sürüm | Tarih | Odak Noktası | Durum |
 | :--- | :--- | :--- | :--- |
-| **v2.0.3** | 2026-10-23 | Hero Sol Panel Dikey Kompaktlaştırma ve Yükseklik Eşitleme | 🚀 Canlıda |
+| **v2.0.4** | 2026-10-23 | Hero Sol Panel Ultra-Kompakt Düzen & Dikey Alan Optimizasyonu | 🚀 Canlıda |
+| **v2.0.3** | 2026-10-23 | Hero Sol Panel Dikey Kompaktlaştırma ve Yükseklik Eşitleme | ✅ Tamamlandı |
 | **v2.0.2** | 2026-10-23 | Ergonomik Hero Yeniden Tasarımı, Ortalı Hemen Oku Butonları | ✅ Tamamlandı |
 | **v2.0.1** | 2026-10-23 | UI İyileştirmeleri, Hero HTML Kodu Düzeltmesi, Tarihe Göre Okuma İptali | ✅ Tamamlandı |
 | **v2.0.0** | 2026-10-23 | Modüler Mimari, Anı Defteri, Caching, Kalite Bekçileri, Dinamik Kapaklar | ✅ Tamamlandı |
@@ -24,6 +25,12 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 ---
 
 ## 🚀 Sürüm Detayları
+
+### [v2.0.4] - 2026-10-23
+- **Hero Sol Alan Ultra-Kompakt Düzen:**
+  - `👋 Merhaba Atlas!` başlığı ve `🔥 Seri` rozeti tek bir yatay satırda birleştirildi (`hero-header-row`).
+  - Görev durumu, yuvalar ve motivasyon mesajı (`🎯 Günün Görevi: [⭐] [ ] 1/2 • ✨ Hedefe 1 kitap kaldı`) tek bir kapsül çubukta birleştirilerek dikeyde 2 ayrı satır yerine tek satıra indirgendi.
+  - Streamlit dikey blok boşlukları (`[data-testid="stVerticalBlock"] gap: 5px !important`), buton padding'leri ve sütun arası boşlukları (`gap="medium"`, `gap="small"`) daraltılarak toplam hero yüksekliği yarı yarıya düşürüldü; sağ kart ile dikey yükseklik birebir eşitlendi.
 
 ### [v2.0.3] - 2026-10-23
 - **Hero Sol Alan Dikey Kompaktlaştırma:**

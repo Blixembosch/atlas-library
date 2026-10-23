@@ -110,23 +110,45 @@ section[data-testid="stSidebar"] {
 /* Hero Bölümü (Modern Ergonomik Kart) */
 .st-key-hero_box, .hero-box {
   background: linear-gradient(135deg, #4361EE 0%, #7209B7 60%, #3A0CA3 100%);
-  border-radius: 20px;
-  padding: 14px 18px 12px;
-  box-shadow: 0 8px 24px rgba(67, 97, 238, 0.25);
-  margin-bottom: 14px;
+  border-radius: 18px;
+  padding: 10px 16px 8px;
+  box-shadow: 0 6px 20px rgba(67, 97, 238, 0.25);
+  margin-bottom: 12px;
   color: #fff;
 }
 
+/* Hero Container İçi Boşlukları Sıkılaştırma */
+.st-key-hero_box [data-testid="stVerticalBlock"] {
+  gap: 5px !important;
+}
+
+.st-key-hero_box [data-testid="stHorizontalBlock"] {
+  gap: 8px !important;
+  align-items: center !important;
+}
+
+.st-key-hero_box div[data-testid="stMarkdownContainer"] p {
+  margin-bottom: 0 !important;
+}
+
 /* Hero Aksiyon Butonları */
+.st-key-hero_box div.stButton {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 .st-key-hero_box div.stButton > button {
   background: #ffffff !important;
   color: #3A0CA3 !important;
   border: 1px solid rgba(255, 255, 255, 0.9) !important;
-  border-radius: 12px !important;
+  border-radius: 10px !important;
   font-weight: 800 !important;
-  font-size: 0.86rem !important;
-  padding: 7px 10px !important;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1) !important;
+  font-size: 0.82rem !important;
+  padding: 5px 8px !important;
+  min-height: 33px !important;
+  height: 33px !important;
+  line-height: 1.1 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
   transition: all 0.2s ease !important;
   width: 100% !important;
 }
@@ -134,98 +156,119 @@ section[data-testid="stSidebar"] {
 .st-key-hero_box div.stButton > button:hover {
   background: #f8fafc !important;
   color: #4361EE !important;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
 }
 
 /* Sol Alan: Karşılama ve Görev */
-.hero-heading {
-  font-size: 1.45rem;
-  font-weight: 900;
-  color: #ffffff;
-  margin: 0 0 2px 0;
-  line-height: 1.15;
+.hero-left-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.hero-subheading {
-  font-size: 0.84rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.92);
-  margin: 0 0 7px 0;
-  line-height: 1.3;
+.hero-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.hero-heading {
+  font-size: 1.32rem !important;
+  font-weight: 900 !important;
+  color: #ffffff !important;
+  margin: 0 !important;
+  line-height: 1.15 !important;
 }
 
 .hero-mission-bar {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
   background: rgba(255, 255, 255, 0.14);
-  border-radius: 14px;
-  padding: 4px 10px;
-  margin-bottom: 8px;
+  border-radius: 10px;
+  padding: 3px 8px;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .mission-title {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 800;
   color: #fff;
+  white-space: nowrap;
 }
 
 .mission-slots {
   display: flex;
-  gap: 4px;
+  gap: 3px;
   align-items: center;
 }
 
 .goal-slot {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  border: 2px dashed rgba(255, 255, 255, 0.7);
+  border: 1.5px dashed rgba(255, 255, 255, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
 }
 
 .goal-slot.done {
   background: #ffffff;
-  border: 2px solid #ffffff;
+  border: 1.5px solid #ffffff;
 }
 
 .goal-slot.wait {
   background: rgba(255, 255, 255, 0.35);
-  border: 2px solid rgba(255, 255, 255, 0.9);
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
 }
 
 .mission-count {
-  font-size: 0.82rem;
+  font-size: 0.76rem;
   color: #fff;
+  white-space: nowrap;
 }
 
 .mission-count b {
-  font-size: 0.95rem;
+  font-size: 0.86rem;
+}
+
+.mission-sep {
+  opacity: 0.6;
+  font-size: 0.74rem;
+  color: #fff;
+}
+
+.mission-msg {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  white-space: nowrap;
 }
 
 .goal-streak {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   background: #ffffff;
   color: #ea580c;
   border-radius: 99px;
-  padding: 1px 9px;
+  padding: 2px 8px;
   font-weight: 800;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
 }
 
 /* Sağ Alan: Glassmorphic Başarı & Oyunlaştırma Kartı */
 .hero-achievement-card {
   background: rgba(255, 255, 255, 0.16);
   border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 18px;
-  padding: 10px 14px;
+  border-radius: 16px;
+  padding: 8px 12px;
   color: #ffffff;
   backdrop-filter: blur(8px);
 }

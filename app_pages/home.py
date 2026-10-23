@@ -55,7 +55,7 @@ def render_home_page() -> None:
 
     # Hero Kutusu ve Aksiyon Butonları (Tek Bir Kart İçinde)
     with st.container(key="hero_box"):
-        col_hl, col_hr = st.columns([1.55, 1.1], gap="large")
+        col_hl, col_hr = st.columns([1.45, 1.1], gap="medium")
         with col_hl:
             st.markdown(hero_left_html(gs), unsafe_allow_html=True)
 
@@ -65,7 +65,7 @@ def render_home_page() -> None:
                 play_celebration()
                 st.balloons()
 
-            hb1, hb2 = st.columns(2)
+            hb1, hb2 = st.columns(2, gap="small")
             if hb1.button("🎡 Sihirli Çarkı Çevir", key="btn_hero_wheel", use_container_width=True):
                 picks = spin_wheel()
                 if picks:
