@@ -135,10 +135,52 @@ def hero_mission_html(gs: Dict[str, Any]) -> str:
 
 
 def hero_left_html(gs: Dict[str, Any]) -> str:
-    """Geriye dönük uyumluluk: Karşılama ve görev bölümü HTML'ini döner."""
+    """Hero alanının sol karşılama, hedef ve görev çubuğu HTML'ini döner."""
+    done = gs.get("done", 0)
+    goal = gs.get("goal", 2)
+    pending = gs.get("pending", 0)
+    remaining = gs.get("remaining", max(0, goal - done))
+    streak = gs.get("streak", 0)
+
+    slots = "".join(
+        '<div class="goal-slot done">⭐</div>'
+        if i < done
+        else (
+            '<div class="goal-slot wait">⏳</div>'
+            if i < done + pending
+            else '<div class="goal-slot"></div>'
+        )
+        for i in range(goal)
+    )
+
+    if done >= goal:
+        bonus = done - goal
+        goal_msg = "🎉 Süpersin! Bugünkü hedefini tamamladın!" + (f" (+{bonus} bonus)" if bonus > 0 else "")
+    elif pending > 0:
+        goal_msg = "⏳ Okuman kaydedildi, ebeveyn onayı bekleniyor."
+    else:
+        goal_msg = f"✨ Bugün {remaining} kitap daha okuyarak hedefini tamamla!"
+
+    streak_html = (
+        f'<span class="goal-streak">🔥 {streak} gün seri</span>'
+        if streak > 0
+        else ""
+    )
+
     return "".join([
-        hero_welcome_html(),
-        hero_mission_html(gs),
+        '<div class="hero-left-zone">',
+        '<div class="hero-heading-row">',
+        '<div class="hero-heading">👋 Merhaba Atlas!</div>',
+        streak_html,
+        '</div>',
+        '<div class="hero-mission-bar">',
+        '<span class="mission-title">🎯 Günün Görevi:</span>',
+        f'<div class="mission-slots">{slots}</div>',
+        f'<span class="mission-count"><b>{min(done, goal)} / {goal}</b> Kitap</span>',
+        '<span class="mission-sep">•</span>',
+        f'<span class="hero-subheading">{goal_msg}</span>',
+        '</div>',
+        '</div>',
     ])
 
 
@@ -194,11 +236,9 @@ def hero_right_html(lvl: Dict[str, int], own_counts: Dict[str, int]) -> str:
 
 def render_hero(gs: Dict[str, Any], lvl: Dict[str, int], own_counts: Dict[str, int]) -> None:
     """Ana sayfa için renkli tebrik, görev ve seviye kutularını çizer."""
-    col_l, col_m, col_r = st.columns([1.15, 1.0, 1.0], gap="medium")
+    col_l, col_r = st.columns([1.5, 1.05], gap="large")
     with col_l:
-        st.markdown(hero_welcome_html(), unsafe_allow_html=True)
-    with col_m:
-        st.markdown(hero_mission_html(gs), unsafe_allow_html=True)
+        st.markdown(hero_left_html(gs), unsafe_allow_html=True)
     with col_r:
         st.markdown(hero_right_html(lvl, own_counts), unsafe_allow_html=True)
 

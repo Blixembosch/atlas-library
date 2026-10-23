@@ -55,11 +55,11 @@ def render_home_page() -> None:
     if "goal_celebrated" not in st.session_state:
         st.session_state.goal_celebrated = ""
 
-    # Hero Kutusu ve Aksiyon Butonları (Tek Bir Kart İçinde 3 Dengeli Bölüm)
+    # Hero Kutusu ve Aksiyon Butonları (Tek Bir Kart İçinde Dengeli 2 Bölüm)
     with st.container(key="hero_box"):
-        col_welcome, col_mission, col_level = st.columns([1.15, 1.0, 1.0], gap="medium")
-        with col_welcome:
-            st.markdown(hero_welcome_html(), unsafe_allow_html=True)
+        col_hl, col_hr = st.columns([1.5, 1.05], gap="large")
+        with col_hl:
+            st.markdown(hero_left_html(gs), unsafe_allow_html=True)
 
             # Hedef tamamlanınca günde bir kez kutlama
             if gs["done"] >= gs["goal"] and st.session_state.goal_celebrated != gs["today_iso"]:
@@ -67,7 +67,8 @@ def render_home_page() -> None:
                 play_celebration()
                 st.balloons()
 
-            if st.button("🎡 Sihirli Çarkı Çevir", key="btn_hero_wheel", use_container_width=True):
+            hb1, hb2 = st.columns(2, gap="small")
+            if hb1.button("🎡 Sihirli Çarkı Çevir", key="btn_hero_wheel", use_container_width=True):
                 picks = spin_wheel()
                 if picks:
                     st.session_state.current_featured_books = picks
@@ -78,17 +79,14 @@ def render_home_page() -> None:
                     )
                     st.rerun()
 
-            if st.button("🎲 Rastgele 4 Kitap", key="btn_hero_random", use_container_width=True):
+            if hb2.button("🎲 Rastgele 4 Kitap", key="btn_hero_random", use_container_width=True):
                 picks = random_pick()
                 if picks:
                     st.session_state.current_featured_books = picks
                     st.session_state.featured_note = "📚 Senin için 4 yeni macera seçtik!"
                     st.rerun()
 
-        with col_mission:
-            st.markdown(hero_mission_html(gs), unsafe_allow_html=True)
-
-        with col_level:
+        with col_hr:
             st.markdown(hero_right_html(lvl, own_counts), unsafe_allow_html=True)
 
     # Bilgilendirme Notları

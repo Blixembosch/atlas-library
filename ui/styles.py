@@ -110,20 +110,20 @@ section[data-testid="stSidebar"] {
 /* Hero Bölümü (Modern Ergonomik Kart) */
 .st-key-hero_box, .hero-box {
   background: linear-gradient(135deg, #4361EE 0%, #7209B7 60%, #3A0CA3 100%);
-  border-radius: 18px;
-  padding: 10px 16px 8px;
-  box-shadow: 0 6px 20px rgba(67, 97, 238, 0.25);
-  margin-bottom: 12px;
+  border-radius: 20px;
+  padding: 14px 18px 12px;
+  box-shadow: 0 8px 24px rgba(67, 97, 238, 0.25);
+  margin-bottom: 14px;
   color: #fff;
 }
 
 /* Hero Container İçi Boşlukları Sıkılaştırma */
 .st-key-hero_box [data-testid="stVerticalBlock"] {
-  gap: 5px !important;
+  gap: 7px !important;
 }
 
 .st-key-hero_box [data-testid="stHorizontalBlock"] {
-  gap: 8px !important;
+  gap: 10px !important;
   align-items: center !important;
 }
 
@@ -132,83 +132,59 @@ section[data-testid="stSidebar"] {
 }
 
 /* Hero Aksiyon Butonları */
+.st-key-hero_box div[data-testid="stColumn"] div.stButton,
 .st-key-hero_box div.stButton {
+  display: block !important;
+  width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
 }
 
+.st-key-hero_box div[data-testid="stColumn"] div.stButton > button,
 .st-key-hero_box div.stButton > button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   background: #ffffff !important;
   color: #3A0CA3 !important;
   border: 1px solid rgba(255, 255, 255, 0.9) !important;
-  border-radius: 10px !important;
+  border-radius: 12px !important;
   font-weight: 800 !important;
-  font-size: 0.82rem !important;
-  padding: 5px 8px !important;
-  min-height: 33px !important;
-  height: 33px !important;
-  line-height: 1.1 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
-  transition: all 0.2s ease !important;
+  font-size: 0.86rem !important;
+  padding: 8px 12px !important;
+  min-height: 38px !important;
+  height: 38px !important;
+  max-width: 100% !important;
   width: 100% !important;
+  margin: 0 !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.2s ease !important;
 }
 
+.st-key-hero_box div[data-testid="stColumn"] div.stButton > button:hover,
 .st-key-hero_box div.stButton > button:hover {
   background: #f8fafc !important;
   color: #4361EE !important;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Sol Alan: Karşılama ve Görev */
-.hero-welcome-dock {
+.hero-left-zone {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 2px 0 4px 0;
+  gap: 6px;
 }
 
-.hero-welcome-dock .hero-heading {
-  font-size: 1.30rem !important;
-  font-weight: 900 !important;
-  color: #ffffff !important;
-  margin: 0 0 2px 0 !important;
-  line-height: 1.15 !important;
-}
-
-.hero-welcome-dock .hero-subheading {
-  font-size: 0.80rem !important;
-  font-weight: 600 !important;
-  color: rgba(255, 255, 255, 0.92) !important;
-  margin: 0 !important;
-  line-height: 1.25 !important;
-}
-
-/* Günün Görevi İkiz Kartı */
-.mission-fill {
-  background: linear-gradient(90deg, #06D6A0, #4CC9F0) !important;
-}
-
-.streak-badge {
-  background: rgba(255, 255, 255, 0.28) !important;
-  color: #fff !important;
-}
-
-.hero-left-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.hero-header-row {
+.hero-heading-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 10px;
 }
 
 .hero-heading {
-  font-size: 1.32rem !important;
+  font-size: 1.40rem !important;
   font-weight: 900 !important;
   color: #ffffff !important;
   margin: 0 !important;
@@ -218,19 +194,92 @@ section[data-testid="stSidebar"] {
 .hero-mission-bar {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   flex-wrap: wrap;
   background: rgba(255, 255, 255, 0.14);
-  border-radius: 10px;
-  padding: 3px 8px;
+  border-radius: 12px;
+  padding: 4px 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .mission-title {
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   font-weight: 800;
   color: #fff;
   white-space: nowrap;
+}
+
+.mission-slots {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.goal-slot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.74rem;
+}
+
+.goal-slot.done {
+  background: #ffffff;
+  border: 1.5px solid #ffffff;
+}
+
+.goal-slot.wait {
+  background: rgba(255, 255, 255, 0.35);
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+}
+
+.mission-count {
+  font-size: 0.78rem;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.mission-count b {
+  font-size: 0.88rem;
+}
+
+.mission-sep {
+  opacity: 0.6;
+  font-size: 0.76rem;
+  color: #fff;
+}
+
+.hero-subheading {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  white-space: nowrap;
+}
+
+.goal-streak {
+  display: inline-flex;
+  align-items: center;
+  background: #ffffff;
+  color: #ea580c;
+  border-radius: 99px;
+  padding: 2px 9px;
+  font-weight: 800;
+  font-size: 0.74rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+/* Günün Görevi İkiz Kartı (Yardımcı Stiller) */
+.mission-fill {
+  background: linear-gradient(90deg, #06D6A0, #4CC9F0) !important;
+}
+
+.streak-badge {
+  background: rgba(255, 255, 255, 0.28) !important;
+  color: #fff !important;
 }
 
 .mission-slots {
@@ -518,8 +567,8 @@ div[class*="st-key-catON_"] button {
   line-height: 1.6;
 }
 
-/* Kitap Altı 'Hemen Oku' Butonunu Ortalama */
-div[data-testid="stColumn"] div.stButton {
+/* Kitap Altı 'Hemen Oku' Butonunu Ortalama (Hero Box Hariç) */
+div[data-testid="stColumn"]:not(.st-key-hero_box *) div.stButton {
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
@@ -527,7 +576,7 @@ div[data-testid="stColumn"] div.stButton {
   margin-top: 4px !important;
 }
 
-div[data-testid="stColumn"] div.stButton > button {
+div[data-testid="stColumn"]:not(.st-key-hero_box *) div.stButton > button {
   display: inline-flex !important;
   justify-content: center !important;
   align-items: center !important;
@@ -542,7 +591,7 @@ div[data-testid="stColumn"] div.stButton > button {
   transition: transform 0.15s ease, box-shadow 0.15s ease !important;
 }
 
-div[data-testid="stColumn"] div.stButton > button:hover {
+div[data-testid="stColumn"]:not(.st-key-hero_box *) div.stButton > button:hover {
   transform: translateY(-2px) !important;
   box-shadow: 0 4px 14px rgba(79, 124, 255, 0.25) !important;
 }

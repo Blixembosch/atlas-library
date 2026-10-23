@@ -8,7 +8,8 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 
 | Sürüm | Tarih | Odak Noktası | Durum |
 | :--- | :--- | :--- | :--- |
-| **v2.0.5** | 2026-10-23 | 3 Sütunlu Hero Mimarisi: "Günün Görevi" ve "Seviye" İkiz Cam Kartları | 🚀 Canlıda |
+| **v2.0.6** | 2026-10-23 | Dengeli 2 Bölümlü Hero Düzeni Restorasyonu & Buton Genişlik Düzeltmesi | 🚀 Canlıda |
+| **v2.0.5** | 2026-10-23 | 3 Sütunlu Hero Mimarisi: "Günün Görevi" ve "Seviye" İkiz Cam Kartları | ✅ Tamamlandı |
 | **v2.0.4** | 2026-10-23 | Hero Sol Panel Ultra-Kompakt Düzen & Dikey Alan Optimizasyonu | ✅ Tamamlandı |
 | **v2.0.3** | 2026-10-23 | Hero Sol Panel Dikey Kompaktlaştırma ve Yükseklik Eşitleme | ✅ Tamamlandı |
 | **v2.0.2** | 2026-10-23 | Ergonomik Hero Yeniden Tasarımı, Ortalı Hemen Oku Butonları | ✅ Tamamlandı |
@@ -26,6 +27,15 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 ---
 
 ## 🚀 Sürüm Detayları
+
+### [v2.0.6] - 2026-10-23
+- **Dengeli 2 Bölümlü Hero Düzeni Restorasyonu:**
+  - 3 sütunlu karmaşık yapı terk edilerek, kullanıcının beğendiği 2 bölümlü ana düzen (Sol ~60% Karşılama/Görev/Aksiyon, Sağ ~40% Seviye/XP Başarı Kartı) restore edildi.
+  - Sol alanda dikey uzamaya yol açan fazla satırlar 2 kompakt satıra indirgendi:
+    1. Satır: `👋 Merhaba Atlas!` ve `🔥 3 gün seri` rozeti tek satırda.
+    2. Satır: `🎯 Günün Görevi: [ ] [ ] 0/2 Kitap • ✨ Hedef mesajı` tek bir cam kapsülde.
+    3. Satır: `🎡 Sihirli Çarkı Çevir` ve `🎲 Rastgele 4 Kitap` 50-50 simetrik, geniş ve tam oturan beyaz butonlar.
+  - Hero butonlarının dar 200px haplara dönüşmesine yol açan CSS seçici çakışması (`div[data-testid="stColumn"] div.stButton`) giderildi; butonlar sütun genişliğini tam dolduracak şekilde düzeltildi.
 
 ### [v2.0.5] - 2026-10-23
 - **3 Sütunlu Dengeli Hero ve İkiz Cam Kartlar:**
