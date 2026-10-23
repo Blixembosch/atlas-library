@@ -8,7 +8,8 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 
 | Sürüm | Tarih | Odak Noktası | Durum |
 | :--- | :--- | :--- | :--- |
-| **v2.0.9** | 2026-10-23 | Kusursuz Hero Hizalama: Otomatik Alt Hizalama (margin-bottom: auto), Flex Daralma Koruması | 🚀 Canlıda |
+| **v2.0.10** | 2026-10-23 | Yan Yana Buton Düzeni (Sihirli Çark + Rastgele 4 Kitap), Genişletilmiş Mor Kutu Tabanı | 🚀 Canlıda |
+| **v2.0.9** | 2026-10-23 | Kusursuz Hero Hizalama: Otomatik Alt Hizalama (margin-bottom: auto), Flex Daralma Koruması | ✅ Tamamlandı |
 | **v2.0.8** | 2026-10-23 | Üst Üste Binme Düzeltmesi: Dikey Nefes Alanı, Eşit Kart Yükseklikleri & Kusursuz Boşluklar | ✅ Tamamlandı |
 | **v2.0.7** | 2026-10-23 | 3 Sütunlu Hero Formatı Korundu: Aşağı Sarkma Önleme & Mor Alan Düzeni | ✅ Tamamlandı |
 | **v2.0.6** | 2026-10-23 | Dengeli 2 Bölümlü Hero Düzeni Restorasyonu & Buton Genişlik Düzeltmesi | ✅ Tamamlandı |
@@ -30,6 +31,13 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 ---
 
 ## 🚀 Sürüm Detayları
+
+### [v2.0.10] - 2026-10-23
+- **Yan Yana Aksiyon Butonları & Aşağı Doğru Genişletilmiş Mor Kutu:**
+  - `🎡 Sihirli Çarkı Çevir` ve `🎲 Rastgele 4 Kitap` butonları sol sütunun alt kısmında yan yana 2 eşit kutu olarak konumlandırıldı (`st.columns(2)`).
+  - Butonlar karşılama metninin altına değil, sütunun alt tabanına yerleştirilerek üst kısımla olan tüm çakışma ve temaslar kalıcı olarak giderildi.
+  - Ana mor kutunun alt dolgusu genişletildi (`padding: 16px 20px 22px; min-height: 165px`) ve aşağıya doğru ferahlatıldı.
+  - Sütun oranları `[1.3, 1.0, 1.0]` yapılarak yan yana butonların metinleri için geniş alan sağlandı.
 
 ### [v2.0.9] - 2026-10-23
 - **Kusursuz Hero Hizalama ve Dikey Bütünlük:**

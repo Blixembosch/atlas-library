@@ -111,15 +111,16 @@ section[data-testid="stSidebar"] {
 .st-key-hero_box, .hero-box {
   background: linear-gradient(135deg, #4361EE 0%, #7209B7 60%, #3A0CA3 100%);
   border-radius: 20px;
-  padding: 14px 18px;
-  box-shadow: 0 8px 24px rgba(67, 97, 238, 0.25);
-  margin-bottom: 14px;
+  padding: 16px 20px 22px;
+  min-height: 165px;
+  box-shadow: 0 8px 26px rgba(67, 97, 238, 0.28);
+  margin-bottom: 16px;
   color: #fff;
   box-sizing: border-box;
 }
 
 /* Hero Container İçi Boşlukları ve Sütun Yükseklik Eşitleme */
-.st-key-hero_box [data-testid="stHorizontalBlock"] {
+.st-key-hero_box > div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"] {
   gap: 14px !important;
   align-items: stretch !important;
 }
@@ -129,11 +130,11 @@ section[data-testid="stSidebar"] {
   flex-direction: column !important;
 }
 
-.st-key-hero_box div[data-testid="stColumn"] > div[data-testid="stVerticalBlock"] {
+.st-key-hero_box > div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] > div[data-testid="stVerticalBlock"] {
   height: 100% !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 8px !important;
+  justify-content: space-between !important;
 }
 
 .st-key-hero_box div[data-testid="stColumn"] div[data-testid="element-container"] {
@@ -149,25 +150,32 @@ section[data-testid="stSidebar"] {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 4px 0 0 0;
-  margin: 0 0 auto 0 !important;
-  flex-shrink: 0 !important;
+  padding: 2px 0 0 0;
+  margin-bottom: 14px;
 }
 
 .hero-welcome-dock .hero-heading {
-  font-size: 1.30rem !important;
+  font-size: 1.35rem !important;
   font-weight: 900 !important;
   color: #ffffff !important;
-  margin: 0 0 3px 0 !important;
+  margin: 0 0 4px 0 !important;
   line-height: 1.2 !important;
 }
 
 .hero-welcome-dock .hero-subheading {
-  font-size: 0.80rem !important;
+  font-size: 0.82rem !important;
   font-weight: 600 !important;
   color: rgba(255, 255, 255, 0.92) !important;
   margin: 0 !important;
   line-height: 1.3 !important;
+}
+
+/* Sol Sütun Buton Satırı (Yan Yana ve Aşağı Konumlandırma) */
+.st-key-hero_box div[data-testid="stColumn"]:first-child div[data-testid="stHorizontalBlock"] {
+  gap: 10px !important;
+  margin-top: auto !important;
+  padding-top: 8px !important;
+  align-items: center !important;
 }
 
 /* Hero Aksiyon Butonları */
@@ -189,14 +197,15 @@ section[data-testid="stSidebar"] {
   border: 1px solid rgba(255, 255, 255, 0.9) !important;
   border-radius: 12px !important;
   font-weight: 800 !important;
-  font-size: 0.84rem !important;
-  padding: 6px 12px !important;
-  min-height: 35px !important;
-  height: 35px !important;
+  font-size: 0.82rem !important;
+  padding: 7px 10px !important;
+  min-height: 38px !important;
+  height: 38px !important;
   max-width: 100% !important;
   width: 100% !important;
   margin: 0 !important;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1) !important;
+  white-space: nowrap !important;
   transition: all 0.2s ease !important;
 }
 
@@ -388,8 +397,8 @@ section[data-testid="stSidebar"] {
 .hero-achievement-card {
   background: rgba(255, 255, 255, 0.16);
   border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 15px;
-  padding: 9px 13px;
+  border-radius: 16px;
+  padding: 10px 14px 11px;
   color: #ffffff;
   backdrop-filter: blur(8px);
   box-sizing: border-box;
