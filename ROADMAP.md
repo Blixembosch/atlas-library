@@ -8,7 +8,8 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 
 | Sürüm | Tarih | Odak Noktası | Durum |
 | :--- | :--- | :--- | :--- |
-| **v2.0.6** | 2026-10-23 | Dengeli 2 Bölümlü Hero Düzeni Restorasyonu & Buton Genişlik Düzeltmesi | 🚀 Canlıda |
+| **v2.0.7** | 2026-10-23 | 3 Sütunlu Hero Formatı Korundu: Aşağı Sarkma Önleme & Mor Alan Düzeni | 🚀 Canlıda |
+| **v2.0.6** | 2026-10-23 | Dengeli 2 Bölümlü Hero Düzeni Restorasyonu & Buton Genişlik Düzeltmesi | ✅ Tamamlandı |
 | **v2.0.5** | 2026-10-23 | 3 Sütunlu Hero Mimarisi: "Günün Görevi" ve "Seviye" İkiz Cam Kartları | ✅ Tamamlandı |
 | **v2.0.4** | 2026-10-23 | Hero Sol Panel Ultra-Kompakt Düzen & Dikey Alan Optimizasyonu | ✅ Tamamlandı |
 | **v2.0.3** | 2026-10-23 | Hero Sol Panel Dikey Kompaktlaştırma ve Yükseklik Eşitleme | ✅ Tamamlandı |
@@ -27,6 +28,13 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 ---
 
 ## 🚀 Sürüm Detayları
+
+### [v2.0.7] - 2026-10-23
+- **3 Sütunlu Hero Formatı Korundu & Aşağı Sarkma Tamamen Engellendi:**
+  - Kullanıcının onayladığı 3 sütunlu yapı (`Merhaba Atlas + Butonlar`, `🎯 Günün Görevi`, `⭐ Seviye`) korundu.
+  - Kartların mor container dışına taşmasına ("aşağı sarkma") yol açan aşırı dikey dolgular ve stat kutusu boyutları kompaktlaştırılarak kart yüksekliği ~96px'e çekildi.
+  - Mor hero container (`.st-key-hero_box`) tüm sütunları tam saracak şekilde `align-items: stretch` ve `padding: 12px 16px` ile dengelendi; kartların mor kutudan dışarı taşması tamamen engellendi.
+  - Sol alandaki butonların dar 200px haplara dönüşmesi engellendi; sol sütun genişliğini tam doldurarak ortadaki boşluk giderildi.
 
 ### [v2.0.6] - 2026-10-23
 - **Dengeli 2 Bölümlü Hero Düzeni Restorasyonu:**

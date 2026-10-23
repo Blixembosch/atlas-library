@@ -111,24 +111,49 @@ section[data-testid="stSidebar"] {
 .st-key-hero_box, .hero-box {
   background: linear-gradient(135deg, #4361EE 0%, #7209B7 60%, #3A0CA3 100%);
   border-radius: 20px;
-  padding: 14px 18px 12px;
+  padding: 12px 16px 12px;
   box-shadow: 0 8px 24px rgba(67, 97, 238, 0.25);
   margin-bottom: 14px;
   color: #fff;
+  box-sizing: border-box;
 }
 
 /* Hero Container İçi Boşlukları Sıkılaştırma */
 .st-key-hero_box [data-testid="stVerticalBlock"] {
-  gap: 7px !important;
+  gap: 5px !important;
 }
 
 .st-key-hero_box [data-testid="stHorizontalBlock"] {
-  gap: 10px !important;
-  align-items: center !important;
+  gap: 12px !important;
+  align-items: stretch !important;
 }
 
 .st-key-hero_box div[data-testid="stMarkdownContainer"] p {
   margin-bottom: 0 !important;
+}
+
+/* Sol Alan: Karşılama ve Görev Dock */
+.hero-welcome-dock {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-bottom: 6px;
+}
+
+.hero-welcome-dock .hero-heading {
+  font-size: 1.30rem !important;
+  font-weight: 900 !important;
+  color: #ffffff !important;
+  margin: 0 0 2px 0 !important;
+  line-height: 1.15 !important;
+}
+
+.hero-welcome-dock .hero-subheading {
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  color: rgba(255, 255, 255, 0.90) !important;
+  margin: 0 !important;
+  line-height: 1.25 !important;
 }
 
 /* Hero Aksiyon Butonları */
@@ -136,7 +161,7 @@ section[data-testid="stSidebar"] {
 .st-key-hero_box div.stButton {
   display: block !important;
   width: 100% !important;
-  margin: 0 !important;
+  margin: 0 0 6px 0 !important;
   padding: 0 !important;
 }
 
@@ -150,10 +175,10 @@ section[data-testid="stSidebar"] {
   border: 1px solid rgba(255, 255, 255, 0.9) !important;
   border-radius: 12px !important;
   font-weight: 800 !important;
-  font-size: 0.86rem !important;
-  padding: 8px 12px !important;
-  min-height: 38px !important;
-  height: 38px !important;
+  font-size: 0.84rem !important;
+  padding: 6px 12px !important;
+  min-height: 34px !important;
+  height: 34px !important;
   max-width: 100% !important;
   width: 100% !important;
   margin: 0 !important;
@@ -165,8 +190,8 @@ section[data-testid="stSidebar"] {
 .st-key-hero_box div.stButton > button:hover {
   background: #f8fafc !important;
   color: #4361EE !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Sol Alan: Karşılama ve Görev */
@@ -349,46 +374,53 @@ section[data-testid="stSidebar"] {
 .hero-achievement-card {
   background: rgba(255, 255, 255, 0.16);
   border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 16px;
-  padding: 8px 12px;
+  border-radius: 14px;
+  padding: 6px 10px 7px;
   color: #ffffff;
   backdrop-filter: blur(8px);
+  box-sizing: border-box;
 }
 
 .achieve-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 2px;
 }
 
 .achieve-level {
-  font-size: 1.15rem;
+  font-size: 1.0rem;
   font-weight: 900;
   color: #ffffff;
+  line-height: 1.1;
 }
 
-.achieve-xp-badge {
+.achieve-xp-badge, .streak-badge {
   background: rgba(255, 255, 255, 0.25);
   border-radius: 99px;
-  padding: 1px 9px;
-  font-size: 0.72rem;
+  padding: 1px 7px;
+  font-size: 0.68rem;
   font-weight: 800;
   color: #ffffff;
+  white-space: nowrap;
 }
 
 .achieve-title {
-  font-size: 0.76rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 4px;
+  color: rgba(255, 255, 255, 0.88);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .hero-xp-track {
-  height: 8px;
+  height: 6px;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 99px;
   overflow: hidden;
-  margin: 5px 0 3px;
+  margin: 3px 0 2px;
 }
 
 .hero-xp-fill {
@@ -398,46 +430,55 @@ section[data-testid="stSidebar"] {
   transition: width 0.3s ease;
 }
 
+.mission-fill {
+  background: linear-gradient(90deg, #06D6A0, #4CC9F0) !important;
+}
+
 .achieve-xp-info {
   display: flex;
   justify-content: space-between;
-  font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.88);
-  margin-bottom: 8px;
+  font-size: 0.66rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 3px;
 }
 
 .achieve-stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 4px;
+  gap: 5px;
+  margin-top: 2px;
 }
 
 .achieve-stat-box {
   background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  padding: 5px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 9px;
+  padding: 3px 6px;
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 5px;
+  min-width: 0;
 }
 
 .stat-emoji {
-  font-size: 1.15rem;
+  font-size: 0.92rem;
+  flex-shrink: 0;
 }
 
 .stat-num {
-  font-size: 0.95rem;
+  font-size: 0.82rem;
   font-weight: 900;
   line-height: 1.1;
   color: #ffffff;
 }
 
 .stat-label {
-  font-size: 0.65rem;
+  font-size: 0.58rem;
   color: rgba(255, 255, 255, 0.82);
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* XP İlerleme Çubuğu (Genel) */

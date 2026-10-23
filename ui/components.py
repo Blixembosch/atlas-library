@@ -236,9 +236,11 @@ def hero_right_html(lvl: Dict[str, int], own_counts: Dict[str, int]) -> str:
 
 def render_hero(gs: Dict[str, Any], lvl: Dict[str, int], own_counts: Dict[str, int]) -> None:
     """Ana sayfa için renkli tebrik, görev ve seviye kutularını çizer."""
-    col_l, col_r = st.columns([1.5, 1.05], gap="large")
+    col_l, col_m, col_r = st.columns([1.1, 1.0, 1.0], gap="medium")
     with col_l:
-        st.markdown(hero_left_html(gs), unsafe_allow_html=True)
+        st.markdown(hero_welcome_html(), unsafe_allow_html=True)
+    with col_m:
+        st.markdown(hero_mission_html(gs), unsafe_allow_html=True)
     with col_r:
         st.markdown(hero_right_html(lvl, own_counts), unsafe_allow_html=True)
 
