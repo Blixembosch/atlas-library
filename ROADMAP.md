@@ -8,7 +8,8 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 
 | Sürüm | Tarih | Odak Noktası | Durum |
 | :--- | :--- | :--- | :--- |
-| **v2.0.8** | 2026-10-23 | Üst Üste Binme Düzeltmesi: Dikey Nefes Alanı, Eşit Kart Yükseklikleri & Kusursuz Boşluklar | 🚀 Canlıda |
+| **v2.0.9** | 2026-10-23 | Kusursuz Hero Hizalama: Otomatik Alt Hizalama (margin-bottom: auto), Flex Daralma Koruması | 🚀 Canlıda |
+| **v2.0.8** | 2026-10-23 | Üst Üste Binme Düzeltmesi: Dikey Nefes Alanı, Eşit Kart Yükseklikleri & Kusursuz Boşluklar | ✅ Tamamlandı |
 | **v2.0.7** | 2026-10-23 | 3 Sütunlu Hero Formatı Korundu: Aşağı Sarkma Önleme & Mor Alan Düzeni | ✅ Tamamlandı |
 | **v2.0.6** | 2026-10-23 | Dengeli 2 Bölümlü Hero Düzeni Restorasyonu & Buton Genişlik Düzeltmesi | ✅ Tamamlandı |
 | **v2.0.5** | 2026-10-23 | 3 Sütunlu Hero Mimarisi: "Günün Görevi" ve "Seviye" İkiz Cam Kartları | ✅ Tamamlandı |
@@ -29,6 +30,12 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 ---
 
 ## 🚀 Sürüm Detayları
+
+### [v2.0.9] - 2026-10-23
+- **Kusursuz Hero Hizalama ve Dikey Bütünlük:**
+  - Sol sütun dikey bloğu `height: 100%` yapılarak `hero-welcome-dock` öğesine `margin-bottom: auto !important` verildi; böylece üst karşılama metni kart başlıklarıyla üstte, aksiyon buton grubu ise kartların alt tabanıyla altta piksel piksel kusursuz hizalandı.
+  - Streamlit'in `element-container` elemanlarına `flex-shrink: 0 !important` atanarak karşılama başlığının butonlar tarafından sıkıştırılması ve üst üste binmesi kesin olarak önlendi.
+  - İkiz cam kartlar (`.hero-achievement-card`) 15px radius, 9px 13px dengeli padding ve ferah XP track payları (`margin: 5px 0 4px`) ile estetik ve simetrik hale getirildi.
 
 ### [v2.0.8] - 2026-10-23
 - **Üst Üste Binmeler Tamamen Giderildi & Dikey Uyum Sağlandı:**

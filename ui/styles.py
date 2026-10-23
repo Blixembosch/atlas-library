@@ -118,14 +118,26 @@ section[data-testid="stSidebar"] {
   box-sizing: border-box;
 }
 
-/* Hero Container İçi Boşlukları Sıkılaştırma */
-.st-key-hero_box [data-testid="stVerticalBlock"] {
+/* Hero Container İçi Boşlukları ve Sütun Yükseklik Eşitleme */
+.st-key-hero_box [data-testid="stHorizontalBlock"] {
+  gap: 14px !important;
+  align-items: stretch !important;
+}
+
+.st-key-hero_box div[data-testid="stColumn"] {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.st-key-hero_box div[data-testid="stColumn"] > div[data-testid="stVerticalBlock"] {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
   gap: 8px !important;
 }
 
-.st-key-hero_box [data-testid="stHorizontalBlock"] {
-  gap: 12px !important;
-  align-items: stretch !important;
+.st-key-hero_box div[data-testid="stColumn"] div[data-testid="element-container"] {
+  flex-shrink: 0 !important;
 }
 
 .st-key-hero_box div[data-testid="stMarkdownContainer"] p {
@@ -137,15 +149,16 @@ section[data-testid="stSidebar"] {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 2px 0 8px 0;
-  margin: 0;
+  padding: 4px 0 0 0;
+  margin: 0 0 auto 0 !important;
+  flex-shrink: 0 !important;
 }
 
 .hero-welcome-dock .hero-heading {
   font-size: 1.30rem !important;
   font-weight: 900 !important;
   color: #ffffff !important;
-  margin: 0 0 2px 0 !important;
+  margin: 0 0 3px 0 !important;
   line-height: 1.2 !important;
 }
 
@@ -375,8 +388,8 @@ section[data-testid="stSidebar"] {
 .hero-achievement-card {
   background: rgba(255, 255, 255, 0.16);
   border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 14px;
-  padding: 8px 12px;
+  border-radius: 15px;
+  padding: 9px 13px;
   color: #ffffff;
   backdrop-filter: blur(8px);
   box-sizing: border-box;
@@ -413,7 +426,7 @@ section[data-testid="stSidebar"] {
 .achieve-title {
   font-size: 0.74rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.88);
+  color: rgba(255, 255, 255, 0.90);
   margin-bottom: 3px;
   white-space: nowrap;
   overflow: hidden;
@@ -422,10 +435,10 @@ section[data-testid="stSidebar"] {
 
 .hero-xp-track {
   height: 6px;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.22);
   border-radius: 99px;
   overflow: hidden;
-  margin: 4px 0;
+  margin: 5px 0 4px;
 }
 
 .hero-xp-fill {
@@ -444,19 +457,19 @@ section[data-testid="stSidebar"] {
   justify-content: space-between;
   font-size: 0.68rem;
   color: rgba(255, 255, 255, 0.88);
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
 
 .achieve-stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6px;
-  margin-top: 3px;
+  margin-top: 2px;
 }
 
 .achieve-stat-box {
-  background: rgba(255, 255, 255, 0.13);
-  border: 1px solid rgba(255, 255, 255, 0.20);
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 10px;
   padding: 4px 7px;
   display: flex;
