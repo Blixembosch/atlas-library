@@ -111,7 +111,7 @@ section[data-testid="stSidebar"] {
 .st-key-hero_box, .hero-box {
   background: linear-gradient(135deg, #4361EE 0%, #7209B7 60%, #3A0CA3 100%);
   border-radius: 20px;
-  padding: 12px 16px 12px;
+  padding: 14px 18px;
   box-shadow: 0 8px 24px rgba(67, 97, 238, 0.25);
   margin-bottom: 14px;
   color: #fff;
@@ -120,7 +120,7 @@ section[data-testid="stSidebar"] {
 
 /* Hero Container İçi Boşlukları Sıkılaştırma */
 .st-key-hero_box [data-testid="stVerticalBlock"] {
-  gap: 5px !important;
+  gap: 8px !important;
 }
 
 .st-key-hero_box [data-testid="stHorizontalBlock"] {
@@ -137,7 +137,8 @@ section[data-testid="stSidebar"] {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin-bottom: 6px;
+  padding: 2px 0 8px 0;
+  margin: 0;
 }
 
 .hero-welcome-dock .hero-heading {
@@ -145,15 +146,15 @@ section[data-testid="stSidebar"] {
   font-weight: 900 !important;
   color: #ffffff !important;
   margin: 0 0 2px 0 !important;
-  line-height: 1.15 !important;
+  line-height: 1.2 !important;
 }
 
 .hero-welcome-dock .hero-subheading {
-  font-size: 0.78rem !important;
+  font-size: 0.80rem !important;
   font-weight: 600 !important;
-  color: rgba(255, 255, 255, 0.90) !important;
+  color: rgba(255, 255, 255, 0.92) !important;
   margin: 0 !important;
-  line-height: 1.25 !important;
+  line-height: 1.3 !important;
 }
 
 /* Hero Aksiyon Butonları */
@@ -161,7 +162,7 @@ section[data-testid="stSidebar"] {
 .st-key-hero_box div.stButton {
   display: block !important;
   width: 100% !important;
-  margin: 0 0 6px 0 !important;
+  margin: 0 !important;
   padding: 0 !important;
 }
 
@@ -177,8 +178,8 @@ section[data-testid="stSidebar"] {
   font-weight: 800 !important;
   font-size: 0.84rem !important;
   padding: 6px 12px !important;
-  min-height: 34px !important;
-  height: 34px !important;
+  min-height: 35px !important;
+  height: 35px !important;
   max-width: 100% !important;
   width: 100% !important;
   margin: 0 !important;
@@ -375,10 +376,14 @@ section[data-testid="stSidebar"] {
   background: rgba(255, 255, 255, 0.16);
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 14px;
-  padding: 6px 10px 7px;
+  padding: 8px 12px;
   color: #ffffff;
   backdrop-filter: blur(8px);
   box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .achieve-header {
@@ -389,27 +394,27 @@ section[data-testid="stSidebar"] {
 }
 
 .achieve-level {
-  font-size: 1.0rem;
+  font-size: 1.05rem;
   font-weight: 900;
   color: #ffffff;
-  line-height: 1.1;
+  line-height: 1.15;
 }
 
 .achieve-xp-badge, .streak-badge {
   background: rgba(255, 255, 255, 0.25);
   border-radius: 99px;
-  padding: 1px 7px;
-  font-size: 0.68rem;
+  padding: 2px 8px;
+  font-size: 0.70rem;
   font-weight: 800;
   color: #ffffff;
   white-space: nowrap;
 }
 
 .achieve-title {
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.88);
-  margin-bottom: 2px;
+  margin-bottom: 3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -420,7 +425,7 @@ section[data-testid="stSidebar"] {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 99px;
   overflow: hidden;
-  margin: 3px 0 2px;
+  margin: 4px 0;
 }
 
 .hero-xp-fill {
@@ -437,44 +442,44 @@ section[data-testid="stSidebar"] {
 .achieve-xp-info {
   display: flex;
   justify-content: space-between;
-  font-size: 0.66rem;
-  color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 3px;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.88);
+  margin-bottom: 4px;
 }
 
 .achieve-stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 5px;
-  margin-top: 2px;
+  gap: 6px;
+  margin-top: 3px;
 }
 
 .achieve-stat-box {
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 9px;
-  padding: 3px 6px;
+  background: rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  border-radius: 10px;
+  padding: 4px 7px;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   min-width: 0;
 }
 
 .stat-emoji {
-  font-size: 0.92rem;
+  font-size: 1.0rem;
   flex-shrink: 0;
 }
 
 .stat-num {
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   font-weight: 900;
   line-height: 1.1;
   color: #ffffff;
 }
 
 .stat-label {
-  font-size: 0.58rem;
-  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.84);
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;

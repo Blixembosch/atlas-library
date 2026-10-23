@@ -8,7 +8,8 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 
 | Sürüm | Tarih | Odak Noktası | Durum |
 | :--- | :--- | :--- | :--- |
-| **v2.0.7** | 2026-10-23 | 3 Sütunlu Hero Formatı Korundu: Aşağı Sarkma Önleme & Mor Alan Düzeni | 🚀 Canlıda |
+| **v2.0.8** | 2026-10-23 | Üst Üste Binme Düzeltmesi: Dikey Nefes Alanı, Eşit Kart Yükseklikleri & Kusursuz Boşluklar | 🚀 Canlıda |
+| **v2.0.7** | 2026-10-23 | 3 Sütunlu Hero Formatı Korundu: Aşağı Sarkma Önleme & Mor Alan Düzeni | ✅ Tamamlandı |
 | **v2.0.6** | 2026-10-23 | Dengeli 2 Bölümlü Hero Düzeni Restorasyonu & Buton Genişlik Düzeltmesi | ✅ Tamamlandı |
 | **v2.0.5** | 2026-10-23 | 3 Sütunlu Hero Mimarisi: "Günün Görevi" ve "Seviye" İkiz Cam Kartları | ✅ Tamamlandı |
 | **v2.0.4** | 2026-10-23 | Hero Sol Panel Ultra-Kompakt Düzen & Dikey Alan Optimizasyonu | ✅ Tamamlandı |
@@ -28,6 +29,14 @@ Bu doküman, **Atlas'ın Sihirli Kütüphanesi** projesinin başlangıcından bu
 ---
 
 ## 🚀 Sürüm Detayları
+
+### [v2.0.8] - 2026-10-23
+- **Üst Üste Binmeler Tamamen Giderildi & Dikey Uyum Sağlandı:**
+  - Sol panelde karşılama metni (`Bugün yeni bir maceraya hazır mısın?`) ile `🎡 Sihirli Çarkı Çevir` butonu arasındaki dikey sıkışma ve üst üste binme giderildi.
+  - Karşılama dock'una `padding: 2px 0 8px 0` ve dikey flex bloklarına `gap: 8px` atanarak metin ve butonlar arasında 18px net nefes payı oluşturuldu.
+  - Cam kartlar (`.hero-achievement-card`) `height: 100%` ve `display: flex; flex-direction: column; justify-content: space-between;` ile sol sütun yüksekliğine (~135px) kusursuz eşitlendi.
+  - İlerleme çubuğu (`.hero-xp-track`) ile altındaki metinler arasındaki dikey paylar genişletilerek (`margin: 4px 0`) kart içi metinlerin çubuğa temas etmesi engellendi.
+  - Sütun oranları `[1.15, 1.0, 1.0]` olarak dengelenerek sol butonların yatayda da ferah yerleşimi güvenceye alındı.
 
 ### [v2.0.7] - 2026-10-23
 - **3 Sütunlu Hero Formatı Korundu & Aşağı Sarkma Tamamen Engellendi:**

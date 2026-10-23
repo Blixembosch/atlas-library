@@ -57,7 +57,7 @@ def render_home_page() -> None:
 
     # Hero Kutusu ve Aksiyon Butonları (Tek Bir Kart İçinde 3 Dengeli Bölüm)
     with st.container(key="hero_box"):
-        col_welcome, col_mission, col_level = st.columns([1.1, 1.0, 1.0], gap="medium")
+        col_welcome, col_mission, col_level = st.columns([1.15, 1.0, 1.0], gap="medium")
         with col_welcome:
             st.markdown(hero_welcome_html(), unsafe_allow_html=True)
 
