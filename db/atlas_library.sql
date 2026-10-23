@@ -244,7 +244,7 @@ INSERT INTO "books" VALUES('TB-61','O Kutup Bu Kutup Değil!','TÜBİTAK Yayınl
 INSERT INTO "books" VALUES('TB-62','Sığırcığın Sırrı','TÜBİTAK Yayınları',36,'Keely Parrack','9786053126645','7+','Hikaye','Macera & Mizah','https://yayinlar.tubitak.gov.tr/2987-home_default/sigircigin-sirri.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TB-63','Uğurböceği Kapınızı Çalarsa','TÜBİTAK Yayınları',48,'Şermin Korkusuz Aslan','','7+','Doğa & Hayvanlar','Doğa & Hayvanlar','https://yayinlar.tubitak.gov.tr/2204-large_default/ugurbocegi-kapinizi-calarsa.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TB-64','Üç Kayıp Tohum','TÜBİTAK Yayınları',36,'Stephie Morton','9786053125235','7+','Doğa & Hayvanlar','Doğa & Hayvanlar','https://yayinlar.tubitak.gov.tr/2229-home_default/uec-kayip-tohum-.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
-INSERT INTO "books" VALUES('TB-65','Yaz Uykucuları: Yaz Uykusuna Yatan Hayvanlar','TÜBİTAK Yayınları',40,'Melissa Stewart','','6+','Doğa & Hayvanlar','Doğa & Hayvanlar','https://yayinlar.tubitak.gov.tr/1580-home_default/yaz-uykuculari.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
+INSERT INTO "books" VALUES('TB-65','Yaz Uykucuları: Yaz Uykusuna Yatan Hayvanlar','TÜBİTAK Yayınları',40,'Melissa Stewart','','6+','Doğa & Hayvanlar','Doğa & Hayvanlar','https://yayinlar.tubitak.gov.tr/1580-home_default/yaz-uykuculari.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-1','Bu Ses De Ne?','Türkiye İş Bankası Yayınları',24,'Stephanie Moss','9786052956137','3+','Hikaye','Macera & Mizah','https://covers.openlibrary.org/b/id/12218076-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-2','Büyüdüğüm Zaman','Türkiye İş Bankası Yayınları',24,'Melanie Joyce','9786052956113','3+','Hikaye','Macera & Mizah','https://img.iskultur.com.tr/webp/2018/09/buyudugum-zaman-2-270x270.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-3','Çevremizdeki Dünya: Orman','Türkiye İş Bankası Yayınları',16,'Yazar belirtilmemiş','9786257070263','3+','Doğa & Hayvanlar','Doğa & Hayvanlar','https://covers.openlibrary.org/b/id/12254946-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
@@ -296,7 +296,7 @@ INSERT INTO "books" VALUES('TİB-48','Hayvanat Bahçesinde Diş Fırçalama Gün
 INSERT INTO "books" VALUES('TİB-49','İlk Okuma Kitabım: Çağlar Bisiklet Sürmeyi Öğreniyor','Türkiye İş Bankası Yayınları',24,'Christian Tielmann','','3+','Hikaye','Okuma Becerisi','https://covers.openlibrary.org/b/id/12218052-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-50','İlk Okuma Kitabım: Çağlar Doğum Gününü Kutluyor','Türkiye İş Bankası Yayınları',24,'Christian Tielmann','','3+','Hikaye','Okuma Becerisi','https://img.iskultur.com.tr/webp/2022/06/caglardogumgununukutluyor-270x270.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-51','İlk Okuma Kitabım: Çağlar’ın Bahçesi','Türkiye İş Bankası Yayınları',24,'Christian Tielmann','','3+','Hikaye','Okuma Becerisi','https://img.iskultur.com.tr/webp/2019/04/caglarin-bahcesi-2-270x270.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
-INSERT INTO "books" VALUES('TİB-52','İlk Okuma Kitabım: Çağlar''ın Kış Macerası','Türkiye İş Bankası Yayınları',24,'Christian Tielmann','','3+','Hikaye','Okuma Becerisi','https://covers.openlibrary.org/b/id/12218040-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
+INSERT INTO "books" VALUES('TİB-52','İlk Okuma Kitabım: Çağlar''ın Kış Macerası','Türkiye İş Bankası Yayınları',24,'Christian Tielmann','','3+','Hikaye','Okuma Becerisi','https://covers.openlibrary.org/b/id/12218040-L.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-53','İlk Okuma Kitabım: Çağlar Karanlıktan Korkmuyor','Türkiye İş Bankası Yayınları',24,'Christian Tielmann','','3+','Hikaye','Okuma Becerisi','https://covers.openlibrary.org/b/id/12253318-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-54','İlk Okuma Kitabım: Çağlar Makarna Pişiriyor','Türkiye İş Bankası Yayınları',24,'Christian Tielmann','','3+','Hikaye','Okuma Becerisi','https://covers.openlibrary.org/b/id/12217877-L.jpg','Türkçe',1,'2026-10-02T18:45:55.919320+02:00',0,0);
 INSERT INTO "books" VALUES('TİB-55','İlk Okuma Kitabım: Çağlar Okula Başlıyor','Türkiye İş Bankası Yayınları',24,'Christian Tielmann','','3+','Hikaye','Okuma Becerisi','https://covers.openlibrary.org/b/id/12218053-L.jpg','Türkçe',0,'2026-10-02T18:45:55.919320+02:00',0,0);
@@ -367,8 +367,8 @@ INSERT INTO "reading_log" VALUES(38,'TİB-26','read','2026-10-21T19:08:30',1,0);
 INSERT INTO "reading_log" VALUES(39,'TİB-65','read','2026-10-21T19:08:43',1,0);
 INSERT INTO "reading_log" VALUES(40,'BÇ-5','read','2026-10-22T22:32:28',1,0);
 INSERT INTO "reading_log" VALUES(41,'TİB-13','read','2026-10-22T22:32:45',1,0);
-INSERT INTO "reading_log" VALUES(42,'TİB-52','pending','2026-10-23T20:41:53',1,0);
-INSERT INTO "reading_log" VALUES(43,'TB-65','pending','2026-10-23T20:41:57',1,0);
+INSERT INTO "reading_log" VALUES(42,'TİB-52','read','2026-10-23T20:41:53',1,0);
+INSERT INTO "reading_log" VALUES(43,'TB-65','read','2026-10-23T20:41:57',1,0);
 CREATE TABLE reading_memories (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     book_id TEXT NOT NULL,
